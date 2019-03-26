@@ -1,0 +1,17 @@
+﻿@model shrtlnk.Models.Objects.RedirectItem
+
+@{
+    ViewData["Title"] = "shrtlnk - Simple Link Shortener";
+}
+
+<html>
+<head>
+    <title>ShrtLnk</title>
+</head>
+<body>
+    <form method="get" asp-controller="Home" asp-action="Index">
+        <input type="text" asp-for="@Model.URL" />
+        <input type="submit" value="Create Short Link" />
+    </form>
+</body>
+</html>
