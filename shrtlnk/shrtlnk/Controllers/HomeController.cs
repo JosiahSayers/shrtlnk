@@ -31,22 +31,33 @@ namespace shrtlnk.Controllers
             }
         }
 
-        public IActionResult redirect(RedirectItem input)
+        public IActionResult L(string id)
         {
-            if (_DAL.CheckIfItemExistsInDatabase(input))
+            RedirectItem input = new RedirectItem();
+
+            input.Key = RouteData.Values["url"].ToString();
+
+            input = _DAL.GetRedirectItem(input);
+
+            if (!String.IsNullOrWhiteSpace(input.URL))
             {
-                input = _DAL.GetRedirectItem(input);
-                return View("redirect", input);
+                return View("Redirect", input);
             }
             else
             {
-                RedirectItem redirect = new RedirectItem();
-                redirect.Key = input.Key;
-
-                redirect = _DAL.AddNewRedirectItem(redirect);
-
-                return View("NewRedirectAdded", redirect);
+                return View("LinkNotFound", input);
             }
+        }
+
+        [HttpPost]
+        public IActionResult NewRedirectAdded(RedirectItem input)
+        {
+            RedirectItem redirect = new RedirectItem();
+            redirect.URL = input.URL;
+
+            redirect = _DAL.AddNewRedirectItem(redirect);
+
+            return View(redirect);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

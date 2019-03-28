@@ -1,0 +1,21 @@
+﻿@model GcpShrtlnk.Models.Objects.RedirectItem
+
+@{
+    ViewData["Title"] = "shrtlnk - Simple Link Shortener";
+}
+
+<html>
+<head>
+    <title>ShrtLnk</title>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/index.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <form method="post" asp-controller="Home" asp-action="NewRedirectAdded">
+        <h1>URL To Shorten:</h1>
+        <input class="text" type="text" asp-for="@Model.URL" />
+        <input class="button" type="submit" value="Create Short Link" />
+    </form>
+</body>
+</html>

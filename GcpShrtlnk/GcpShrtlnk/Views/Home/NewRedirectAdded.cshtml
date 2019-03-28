@@ -1,0 +1,22 @@
+﻿@model GcpShrtlnk.Models.Objects.RedirectItem
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>NewRedirectAdded</title>
+</head>
+<body>
+
+    <div>
+        <h4>New Link Created</h4>
+        <p>Shortened URL: <a href="/@Model.Key">@Model.Key</a></p>
+        <p>Full URL: <a href="@Model.URL">@Model.URL</a></p>
+    </div>
+</body>
+</html>

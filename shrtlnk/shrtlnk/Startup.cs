@@ -58,9 +58,18 @@ namespace shrtlnk
 
             app.UseMvc(routes =>
             {
+                // default routes plus any other custom routes
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+
+                // Catch all Route - catches anything not caught be other routes
+                routes.MapRoute(
+                    name: "catch-all",
+                    template: "{*url}",
+                    defaults: new { controller = "Home", action = "L" }
+                );
             });
         }
     }

@@ -27,3 +27,6 @@ C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Release\netco
 C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Release\netcoreapp2.1\shrtlnk.dll
 C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Release\netcoreapp2.1\shrtlnk.pdb
 C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Release\netcoreapp2.1\shrtlnk.csproj.CopyComplete
+C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Release\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Release\netcoreapp2.1\Razor\Views\Home\NewRedirectAdded.g.cshtml.cs
+C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Release\netcoreapp2.1\Razor\Views\Home\Redirect.g.cshtml.cs

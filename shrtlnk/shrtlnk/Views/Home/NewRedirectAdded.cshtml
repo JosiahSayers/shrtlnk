@@ -13,33 +13,10 @@
 </head>
 <body>
 
-<div>
-    <h4>RedirectItem</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Key)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Key)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.URL)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.URL)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <h4>New Link Created</h4>
+        <p>Shortened URL: <a href="/@Model.Key">@Model.Key</a></p>
+        <p>Full URL: <a href="@Model.URL">@Model.URL</a></p>
+    </div>
 </body>
 </html>
