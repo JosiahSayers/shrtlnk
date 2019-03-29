@@ -1,23 +1,31 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
-for details on configuring this project to bundle and minify static web assets. */
-body {
+﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
     background-color: #3498db;
     min-width: 320px;
+    color: rgb(51, 51, 51);
 }
 
 h1 {
-    font-family: 'Luckiest Guy', cursive;
+    font-family: 'Luckiest Guy';
 }
 
     h1.title {
-        font-size: 3em;
+        font-size: 5em;
         text-align: center;
         text-align: center;
         margin: 0;
         padding: 2vh;
+        transform: rotate(-10deg);
     }
+
+h1.box-title {
+    font-size: 3em;
+    text-align: center;
+    text-align: center;
+    margin: 0;
+    padding: 2vh;
+}
 
 h1.title span {
     padding: 0;

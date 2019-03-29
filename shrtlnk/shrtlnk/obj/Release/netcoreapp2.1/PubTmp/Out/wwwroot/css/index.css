@@ -30,7 +30,6 @@ form {
     width: auto;
     overflow: visible;
     background: transparent;
-    /* inherit font & color from ancestor */
     color: white;
     font: inherit;
     /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
