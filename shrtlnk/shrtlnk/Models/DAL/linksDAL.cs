@@ -22,10 +22,11 @@ namespace shrtlnk.Models.DAL
 
         public RedirectItem AddNewRedirectItem(RedirectItem input)
         {
-            int httpsSubstring = input.URL.Length > 11 ? 12 : input.URL.Length;
-            if(input.URL.Substring(0, httpsSubstring) != "https://www." || input.URL.Substring(0,httpsSubstring - 1) != "http://www.")
+            if(input.URL.Contains("https://") || input.URL.Contains("http://"))
+            {}
+            else
             {
-                input.URL = "http://www." + input.URL;
+                input.URL = "http://" + input.URL;
             }
 
             if (CheckIfUrlExistsInDatabase(input))

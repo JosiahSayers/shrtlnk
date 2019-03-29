@@ -60,7 +60,7 @@ using shrtlnk.Models;
             WriteLiteral("\r\n<!DOCTYPE html>\r\n\r\n<html>\r\n");
             EndContext();
             BeginContext(100, 80, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f0b5cb187c69495dbe76016c01b6feed", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "eea313db52ea4a44aa54296e8c975351", async() => {
                 BeginContext(106, 32, true);
                 WriteLiteral("\r\n    <meta http-equiv=\"refresh\"");
                 EndContext();
@@ -93,7 +93,7 @@ WriteAttributeValue("", 156, Model.URL, 156, 10, false);
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(182, 15, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d471f89e9aa94ff388338f3ddcc76cbe", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "bb08f01b83e64dd8ab983bda92b1151d", async() => {
                 BeginContext(188, 2, true);
                 WriteLiteral("\r\n");
                 EndContext();

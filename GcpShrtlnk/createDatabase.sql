@@ -1,8 +1,0 @@
-CREATE DATABASE `links` /*!40100 DEFAULT CHARACTER SET utf8 */;
-CREATE TABLE `links` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `url_key` varchar(6) NOT NULL,
-  `url` text NOT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `url_key_UNIQUE` (`url_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;

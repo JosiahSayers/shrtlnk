@@ -7,11 +7,22 @@
 <html>
 <head>
     <title>ShrtLnk</title>
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+
     <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/css/index.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
+    <h1 class="title">
+        <span>S</span>
+        <span>h</span>
+        <span>r</span>
+        <span>t</span>
+        <span>L</span>
+        <span>n</span>
+        <span>k</span>
+    </h1>
     <form method="post" asp-controller="Home" asp-action="NewRedirectAdded">
         <h1>URL To Shorten:</h1>
         <input class="text" type="text" asp-for="@Model.URL" />

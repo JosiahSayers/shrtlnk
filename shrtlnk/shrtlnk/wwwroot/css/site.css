@@ -4,4 +4,22 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
     background-color: #3498db;
+    min-width: 320px;
+}
+
+h1 {
+    font-family: 'Luckiest Guy', cursive;
+}
+
+    h1.title {
+        font-size: 3em;
+        text-align: center;
+        text-align: center;
+        margin: 0;
+        padding: 2vh;
+    }
+
+h1.title span {
+    padding: 0;
+    margin: 0;
 }
