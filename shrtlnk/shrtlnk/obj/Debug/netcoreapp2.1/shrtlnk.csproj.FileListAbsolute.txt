@@ -30,3 +30,4 @@ C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Debug\netcore
 C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Debug\netcoreapp2.1\shrtlnk.csproj.CopyComplete
 C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Debug\netcoreapp2.1\Razor\Views\Home\redirect.g.cshtml.cs
 C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Debug\netcoreapp2.1\Razor\Views\Home\NewRedirectAdded.g.cshtml.cs
+C:\Users\josiahs\code\Side Projects\Short Link\shrtlnk\shrtlnk\obj\Debug\netcoreapp2.1\Razor\Views\Home\LinkNotFound.g.cshtml.cs

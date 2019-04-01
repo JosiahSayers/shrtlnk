@@ -15,6 +15,9 @@ namespace shrtlnk.Models.DAL
         private readonly string _SQL_GetRedirectItemFromUrl = "SELECT * FROM links WHERE url = @url";
         private readonly string _SQL_AddNewRedirectItem = "INSERT INTO links (url_key, url) VALUES (@key, @url);";
 
+        string[] characters = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+
+
         public linksDAL(string connectionString)
         {
             _connectionString = connectionString;
@@ -144,7 +147,7 @@ namespace shrtlnk.Models.DAL
                     RedirectItem ri = new RedirectItem()
                     {
                         Id = Convert.ToInt32(reader["Id"]),
-                        Key = Convert.ToString(reader["key"]),
+                        Key = Convert.ToString(reader["url_key"]),
                         URL = Convert.ToString(reader["url"])
                     };
 
@@ -161,12 +164,37 @@ namespace shrtlnk.Models.DAL
         {
             string output = "";
             Random random = new Random();
-
-            string[] characters = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
             
             for(int i=0; i<6; i++)
             {
                 output += characters[random.Next(0, characters.Length)];
+            }
+
+            return output;
+        }
+
+        public bool IsValidLinkCode(string code)
+        {
+            bool output = true;
+
+            if (!string.IsNullOrWhiteSpace(code))
+            {
+                for (int i = 0; i < code.Length; i++)
+                {
+                    bool codeResult = false;
+                    for (int j = 0; j < characters.Length; j++)
+                    {
+                        if (i == j)
+                        {
+                            codeResult = true;
+                        }
+                    }
+
+                    if (codeResult == false)
+                    {
+                        output = false;
+                    }
+                }
             }
 
             return output;

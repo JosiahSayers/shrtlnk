@@ -1,0 +1,12 @@
+﻿h1 {
+    font-family: 'Luckiest Guy';
+}
+
+h1.title {
+    font-size: 4em;
+    text-align: center;
+    text-align: center;
+    margin: 0;
+    padding: 2vh;
+    transform: rotate(0);
+}

@@ -37,11 +37,18 @@ namespace shrtlnk.Controllers
 
             input.Key = RouteData.Values["url"].ToString();
 
-            input = _DAL.GetRedirectItem(input);
-
-            if (!String.IsNullOrWhiteSpace(input.URL))
+            if(_DAL.IsValidLinkCode(input.Key))
             {
-                return View("Redirect", input);
+                input = _DAL.GetRedirectItem(input);
+
+                if (!string.IsNullOrEmpty(input.URL))
+                {
+                    return View("Redirect", input);
+                }
+                else
+                {
+                    return View("LinkNotFound", input);
+                }
             }
             else
             {
