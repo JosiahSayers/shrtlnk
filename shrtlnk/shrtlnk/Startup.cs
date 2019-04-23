@@ -32,7 +32,7 @@ namespace shrtlnk
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            string connectionString = Configuration.GetConnectionString("Default");
+            string connectionString = Configuration.GetConnectionString("AppHarbor");
 
             services.AddScoped<linksDAL>(c => new linksDAL(connectionString));
 

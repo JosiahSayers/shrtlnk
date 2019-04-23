@@ -1,1 +1,9 @@
 Planning
+shrtlnk/shrtlnk/bin
+shrtlnk/.vs
+*/.DS_Store
+.DS_Store
+shrtlnk/shrtlnk/Properties
+shrtlnk/shrtlnk/Properties/PublishProfiles
+shrtlnk/shrtlnk/appsettings.json
+shrtlnk/shrtlnk/obj/Release
