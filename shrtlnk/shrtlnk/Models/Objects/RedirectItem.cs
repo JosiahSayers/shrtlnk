@@ -12,5 +12,9 @@ namespace shrtlnk.Models.Objects
         public string Key { get; set; }
 
         public string URL { get; set; }
+
+        public DateTime DateAdded { get; set; }
+
+        public int TimesLoaded { get; set; }
     }
 }

@@ -13,9 +13,11 @@ namespace shrtlnk.Models.DAL
         private readonly string _SQL_CheckIfUrlExistsInDatabase = "SELECT * FROM links WHERE url = @url;";
         private readonly string _SQL_GetRedirectItem = "SELECT * FROM links WHERE url_key = @key";
         private readonly string _SQL_GetRedirectItemFromUrl = "SELECT * FROM links WHERE url = @url";
-        private readonly string _SQL_AddNewRedirectItem = "INSERT INTO links (url_key, url) VALUES (@key, @url);";
-
-        string[] characters = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        private readonly string _SQL_AddNewRedirectItem = "INSERT INTO links (url_key, url, date_added, times_loaded) VALUES (@key, @url, @date_added, @times_loaded);";
+        private readonly string _SQL_IncrementLoadCount = "UPDATE links SET times_loaded = @times_loaded WHERE url_key = @url_key";
+        private readonly string[] characters =
+            { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
+            "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 
         public linksDAL(string connectionString)
@@ -25,9 +27,7 @@ namespace shrtlnk.Models.DAL
 
         public RedirectItem AddNewRedirectItem(RedirectItem input)
         {
-            if(input.URL.Contains("https://") || input.URL.Contains("http://"))
-            {}
-            else
+            if(!(input.URL.Contains("https://") || input.URL.Contains("http://")))
             {
                 input.URL = "http://" + input.URL;
             }
@@ -53,6 +53,8 @@ namespace shrtlnk.Models.DAL
                     SqlCommand cmd = new SqlCommand(_SQL_AddNewRedirectItem, conn);
                     cmd.Parameters.AddWithValue("@key", input.Key);
                     cmd.Parameters.AddWithValue("@url", input.URL);
+                    cmd.Parameters.AddWithValue("@date_added", input.DateAdded);
+                    cmd.Parameters.AddWithValue("@times_loaded", input.TimesLoaded);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -76,8 +78,11 @@ namespace shrtlnk.Models.DAL
                     output.Id = Convert.ToInt32(reader["Id"]);
                     output.Key = Convert.ToString(reader["url_key"]);
                     output.URL = Convert.ToString(reader["url"]);
+                    output.DateAdded = Convert.ToDateTime(reader["date_added"]);
+                    output.TimesLoaded = Convert.ToInt32(reader["times_loaded"]);
                 }
             }
+            output.TimesLoaded = IncrementLoadCount(output);
             return output;
         }
 
@@ -97,6 +102,8 @@ namespace shrtlnk.Models.DAL
                     output.Id = Convert.ToInt32(reader["Id"]);
                     output.Key = Convert.ToString(reader["url_key"]);
                     output.URL = Convert.ToString(reader["url"]);
+                    output.DateAdded = Convert.ToDateTime(reader["date_added"]);
+                    output.TimesLoaded = Convert.ToInt32(reader["times_loaded"]);
                 }
             }
             return output;
@@ -119,7 +126,9 @@ namespace shrtlnk.Models.DAL
                     {
                         Id = Convert.ToInt32(reader["Id"]),
                         Key = Convert.ToString(reader["url_key"]),
-                        URL = Convert.ToString(reader["url"])
+                        URL = Convert.ToString(reader["url"]),
+                        DateAdded = Convert.ToDateTime(reader["date_added"]),
+                        TimesLoaded = Convert.ToInt32(reader["times_loaded"])
                     };
 
                     if (!String.IsNullOrWhiteSpace(ri.Id.ToString()) && !String.IsNullOrWhiteSpace(ri.Key) && !String.IsNullOrWhiteSpace(ri.URL))
@@ -148,7 +157,9 @@ namespace shrtlnk.Models.DAL
                     {
                         Id = Convert.ToInt32(reader["Id"]),
                         Key = Convert.ToString(reader["url_key"]),
-                        URL = Convert.ToString(reader["url"])
+                        URL = Convert.ToString(reader["url"]),
+                        DateAdded = Convert.ToDateTime(reader["date_added"]),
+                        TimesLoaded = Convert.ToInt32(reader["times_loaded"])
                     };
 
                     if (!String.IsNullOrWhiteSpace(ri.Id.ToString()) && !String.IsNullOrWhiteSpace(ri.Key) && !String.IsNullOrWhiteSpace(ri.URL))
@@ -179,25 +190,28 @@ namespace shrtlnk.Models.DAL
 
             if (!string.IsNullOrWhiteSpace(code))
             {
-                for (int i = 0; i < code.Length; i++)
+                for (int i = 0; i < code.Length && output; i++)
                 {
-                    bool codeResult = false;
-                    for (int j = 0; j < characters.Length; j++)
-                    {
-                        if (i == j)
-                        {
-                            codeResult = true;
-                        }
-                    }
-
-                    if (codeResult == false)
-                    {
-                        output = false;
-                    }
+                    output = characters.Contains(code[i].ToString());
                 }
             }
 
             return output;
+        }
+
+        private int IncrementLoadCount(RedirectItem input)
+        {
+            input.TimesLoaded++;
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(_SQL_IncrementLoadCount, conn);
+                cmd.Parameters.AddWithValue("@url_key", input.Key);
+                cmd.Parameters.AddWithValue("@times_loaded", input.TimesLoaded);
+
+                cmd.ExecuteNonQuery();
+            }
+            return input.TimesLoaded;
         }
     }
 }

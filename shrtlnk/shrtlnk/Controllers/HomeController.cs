@@ -61,6 +61,8 @@ namespace shrtlnk.Controllers
         {
             RedirectItem redirect = new RedirectItem();
             redirect.URL = input.URL;
+            redirect.DateAdded = DateTime.Now;
+            redirect.TimesLoaded = 0;
 
             redirect = _DAL.AddNewRedirectItem(redirect);
 
