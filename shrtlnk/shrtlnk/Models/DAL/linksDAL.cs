@@ -82,7 +82,11 @@ namespace shrtlnk.Models.DAL
                     output.TimesLoaded = Convert.ToInt32(reader["times_loaded"]);
                 }
             }
-            output.TimesLoaded = IncrementLoadCount(output);
+
+            if (!string.IsNullOrWhiteSpace(output.URL))
+            {
+                output.TimesLoaded = IncrementLoadCount(output);
+            }
             return output;
         }
 
