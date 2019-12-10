@@ -3,10 +3,13 @@
     <Files>
       <File FileName="appsettings.json" Line="8" Column="286" />
       <File FileName="appsettings.Development.json" />
-      <File FileName="Startup.cs" Line="1" Column="1" />
-      <File FileName="Models/DAL/linksDAL.cs" Line="195" Column="1" />
+      <File FileName="Startup.cs" />
+      <File FileName="Models/DAL/linksDAL.cs" Line="66" Column="34" />
       <File FileName="Models/Objects/RedirectItem.cs" Line="18" Column="45" />
-      <File FileName="Controllers/HomeController.cs" Line="40" Column="48" />
+      <File FileName="Controllers/HomeController.cs" Line="15" Column="1" />
+      <File FileName="Controllers/APIController.cs" Line="27" Column="1" />
+      <File FileName="Models/Error/SimpleError.cs" Line="10" Column="36" />
+      <File FileName="Models/Objects/ApiPostResponse.cs" Line="14" Column="60" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,11 +17,16 @@
           <Node name="shrtlnk" expanded="True">
             <Node name="shrtlnk" expanded="True">
               <Node name="Controllers" expanded="True">
-                <Node name="HomeController.cs" selected="True" />
+                <Node name="API" expanded="True">
+                  <Node name="V1" expanded="True">
+                    <Node name="APIController.cs" selected="True" />
+                  </Node>
+                </Node>
               </Node>
               <Node name="Models" expanded="True">
                 <Node name="DAL" expanded="True" />
                 <Node name="Objects" expanded="True" />
+                <Node name="SimpleError" expanded="True" />
               </Node>
             </Node>
           </Node>

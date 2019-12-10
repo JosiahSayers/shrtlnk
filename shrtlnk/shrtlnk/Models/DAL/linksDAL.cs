@@ -47,16 +47,23 @@ namespace shrtlnk.Models.DAL
                     }
                 }
 
-                using (SqlConnection conn = new SqlConnection(_connectionString))
+                try
                 {
-                    conn.Open();
-                    SqlCommand cmd = new SqlCommand(_SQL_AddNewRedirectItem, conn);
-                    cmd.Parameters.AddWithValue("@key", input.Key);
-                    cmd.Parameters.AddWithValue("@url", input.URL);
-                    cmd.Parameters.AddWithValue("@date_added", input.DateAdded);
-                    cmd.Parameters.AddWithValue("@times_loaded", input.TimesLoaded);
+                    using (SqlConnection conn = new SqlConnection(_connectionString))
+                    {
+                        conn.Open();
+                        SqlCommand cmd = new SqlCommand(_SQL_AddNewRedirectItem, conn);
+                        cmd.Parameters.AddWithValue("@key", input.Key);
+                        cmd.Parameters.AddWithValue("@url", input.URL);
+                        cmd.Parameters.AddWithValue("@date_added", input.DateAdded);
+                        cmd.Parameters.AddWithValue("@times_loaded", input.TimesLoaded);
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    input = null;
                 }
             }
             return input;

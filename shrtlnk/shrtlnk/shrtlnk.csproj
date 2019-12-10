@@ -16,6 +16,9 @@
 
   <ItemGroup>
     <Folder Include="Models\View Models\" />
+    <Folder Include="Controllers\API\" />
+    <Folder Include="Controllers\API\V1\" />
+    <Folder Include="Models\SimpleError\" />
   </ItemGroup>
 
   <ItemGroup>
