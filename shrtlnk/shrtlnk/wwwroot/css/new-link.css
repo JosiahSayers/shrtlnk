@@ -1,4 +1,9 @@
-﻿a.home-link {
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+a.home-link {
     text-decoration: none;
 }
 

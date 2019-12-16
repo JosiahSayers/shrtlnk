@@ -1,0 +1,18 @@
+﻿.center {
+    text-align: center;
+}
+
+div.card-body {
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+h1 {
+    margin: 30px 0;
+}
+
+#blurb {
+    margin-bottom: 35px;
+}

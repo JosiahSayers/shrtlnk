@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Developer Portal - shrtlnk - Simple Link Shortener";
+}
+
+<html>
+<head>
+    <title>Developer Portal</title>
+    <link rel="stylesheet" type="text/css" href="~/css/Developer/Index.css" />
+</head>
+<body>
+    <div class="container">
+        <h1 class="center display-3">Welcome, artisan of the internet!</h1>
+
+        <div class="center" id="blurb">
+            <span class="lead">
+                Shrtlnk strives to be the easiest API to integrate into your project. <br />
+            </span>
+            <strong class="h4">Here's our onboarding process:</strong>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title">Create an account</h5>
+                            <p class="card-text">Click the button below to get started.</p>
+                        </div>
+                        <a asp-controller="Developer" asp-action="Register" class="btn btn-primary">Create Account</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title">Add an application</h5>
+                            <p class="card-text">You can have as many applications as you would like, we don't like limits here!</p>
+                        </div>
+                        <a asp-controller="Developer" asp-action="SignIn" class="btn btn-primary">Sign In</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title">Use the API</h5>
+                            <p class="card-text">Each application will be given a private API key, use that to call shrtlnk</p>
+                        </div>
+                        <a asp-controller="Developer" asp-action="Documentation" class="btn btn-primary">View Documentation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

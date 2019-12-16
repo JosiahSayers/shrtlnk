@@ -1,6 +1,8 @@
 ﻿body {
     width: 100vw;
     height: 100vh;
+    padding-top: 50px;
+    padding-bottom: 20px;
 }
 
 h1.title {
@@ -57,6 +59,15 @@ form {
 
 #URL:focus {
     border-style: none;
+}
+
+footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px 0;
 }
 
 @media only screen and (max-width: 400px) {
