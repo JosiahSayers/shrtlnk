@@ -1,36 +1,30 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="wwwroot/css/index.css">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/DeveloperController.cs">
     <Files>
-      <File FileName="Controllers/DeveloperController.cs" Line="26" Column="36" />
-      <File FileName="Views/Developer/Index.cshtml" Line="57" Column="15" />
-      <File FileName="wwwroot/css/Developer/Index.css" Line="22" Column="2" />
-      <File FileName="Views/Home/Index.cshtml" Line="37" Column="13" />
-      <File FileName="Views/Developer/_ViewStart.cshtml" Line="25" Column="88" />
-      <File FileName="Views/_ViewImports.cshtml" Line="1" Column="1" />
-      <File FileName="Views/Developer/Documentation.cshtml" Line="7" Column="18" />
-      <File FileName="Views/Developer/Register.cshtml" Line="7" Column="13" />
-      <File FileName="Views/Developer/LogIn.cshtml" Line="7" Column="9" />
-      <File FileName="wwwroot/css/index.css" Line="5" Column="26" />
+      <File FileName="Controllers/DeveloperController.cs" Line="14" Column="1" />
+      <File FileName="appsettings.json" Line="11" Column="4" />
+      <File FileName="Models/Developer/DatabaseSettings/DatabaseSettings.cs" Line="5" Column="68" />
+      <File FileName="Services/DAL/Developer/DeveloperAccountsService.cs" Line="37" Column="62" />
+      <File FileName="Models/Developer/DeveloperAccount.cs" Line="12" Column="31" />
+      <File FileName="Models/Developer/DTO/DeveloperApplication.cs" Line="11" Column="1" />
+      <File FileName="Services/DAL/Developer/DeveloperApplicationsService.cs" Line="23" Column="1" />
+      <File FileName="Services/Authentication/AuthenticationService.cs" Line="50" Column="10" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="shrtlnk" expanded="True">
             <Node name="shrtlnk" expanded="True">
-              <Node name="Controllers" expanded="True" />
+              <Node name="Controllers" expanded="True">
+                <Node name="DeveloperController.cs" selected="True" />
+              </Node>
               <Node name="Models" expanded="True">
-                <Node name="DAL" expanded="True" />
-                <Node name="Objects" expanded="True" />
-              </Node>
-              <Node name="Views" expanded="True">
-                <Node name="Developer" expanded="True" />
-                <Node name="Home" expanded="True" />
-              </Node>
-              <Node name="wwwroot" expanded="True">
-                <Node name="css" expanded="True">
-                  <Node name="Developer" expanded="True" />
-                  <Node name="index.css" selected="True" />
+                <Node name="Developer" expanded="True">
+                  <Node name="DTO" expanded="True" />
                 </Node>
+              </Node>
+              <Node name="Services" expanded="True">
+                <Node name="Authentication" expanded="True" />
               </Node>
             </Node>
           </Node>

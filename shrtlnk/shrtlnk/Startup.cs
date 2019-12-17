@@ -9,7 +9,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using shrtlnk.Models.DAL;
+using shrtlnk.Models.Developer.DatabaseSettings;
+using shrtlnk.Services.Authentication;
+using shrtlnk.Services.DAL.Developer;
 
 namespace shrtlnk
 {
@@ -31,6 +35,15 @@ namespace shrtlnk
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.Configure<DatabaseSettings>(
+                Configuration.GetSection(nameof(DatabaseSettings)));
+
+            services.AddSingleton<DatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+
+            services.AddSingleton<DeveloperAccountsService>();
+            services.AddSingleton<AuthenticationService>();
 
             string connectionString = Configuration.GetConnectionString("AppHarbor");
 

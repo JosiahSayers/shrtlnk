@@ -23,6 +23,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,13 @@
     <Folder Include="Models\SimpleError\" />
     <Folder Include="Views\Developer\" />
     <Folder Include="wwwroot\css\Developer\" />
+    <Folder Include="Models\Developer\" />
+    <Folder Include="Models\Developer\DTO\" />
+    <Folder Include="Models\Developer\DatabaseSettings\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\DAL\" />
+    <Folder Include="Services\DAL\Developer\" />
+    <Folder Include="Services\Authentication\" />
   </ItemGroup>
 
   <ItemGroup>
