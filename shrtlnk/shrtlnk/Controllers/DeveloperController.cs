@@ -5,37 +5,38 @@ using shrtlnk.Models.Developer.DTO;
 using shrtlnk.Models.Developer.FormObjects;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.Authentication.Exceptions;
-using shrtlnk.Services.DAL.Developer;
 
 namespace shrtlnk.Controllers
 {
     public class DeveloperController : Controller
     {
-        private readonly DeveloperAccountsService accounts;
         private readonly AuthenticationService auth;
         private readonly string sessionEmail = "_Email";
 
-        public DeveloperController(DeveloperAccountsService accounts, AuthenticationService auth)
+        public DeveloperController(AuthenticationService auth)
         {
-            this.accounts = accounts;
             this.auth = auth;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Documentation()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult Register(RegisterAccountForm registration)
         {
@@ -43,7 +44,7 @@ namespace shrtlnk.Controllers
             {
                 DeveloperAccountDTO account = auth.RegisterUser(registration);
                 HttpContext.Session.SetString(sessionEmail, account.Email);
-                return StatusCode(201, account);
+                return StatusCode(201);
             }
             catch
             {
@@ -51,6 +52,13 @@ namespace shrtlnk.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult SignIn(SignInForm signInForm)
         {
@@ -73,21 +81,5 @@ namespace shrtlnk.Controllers
                 }
             }
         }
-
-        [HttpGet]
-        public IActionResult SessionEmail()
-        {
-            return StatusCode(200, new TestObject(HttpContext.Session.GetString(sessionEmail)));
-        }
-    }
-}
-
-public class TestObject
-{
-    public string Email { get; set; }
-
-    public TestObject(string email)
-    {
-        Email = email;
     }
 }
