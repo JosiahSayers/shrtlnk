@@ -1,4 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace shrtlnk.Models.Developer.DTO
 {
@@ -7,8 +9,13 @@ namespace shrtlnk.Models.Developer.DTO
         [BsonId]
         public string Email { get; set; }
 
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public string Password { get; set; }
+
+        [BsonRepresentation(BsonType.DateTime)]
+        public DateTime AccountCreationDate { get; set; }
     }
 }

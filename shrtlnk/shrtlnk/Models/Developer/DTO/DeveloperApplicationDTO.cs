@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace shrtlnk.Models.Developer.DTO
@@ -18,5 +19,8 @@ namespace shrtlnk.Models.Developer.DTO
         public string DeveloperId { get; set; }
 
         public string ApiKey { get; set; }
+
+        [BsonRepresentation(BsonType.DateTime)]
+        public DateTime CreationDate { get; set; }
     }
 }

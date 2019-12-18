@@ -1,71 +1,73 @@
 ﻿using System;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using shrtlnk.Models.Developer.DTO;
+using shrtlnk.Models.Developer.FormObjects;
+using shrtlnk.Services.Authentication.Exceptions;
+using shrtlnk.Services.DAL.Developer;
 
 namespace shrtlnk.Services.Authentication
 {
     public class AuthenticationService
     {
-        private readonly int saltIndex = 0;
-        private readonly int keyIndex = 1;
+        private readonly PasswordService passwordService;
+        private readonly DeveloperAccountsService accountsService;
 
-        public string HashPassword(string password)
+        public AuthenticationService(DeveloperAccountsService accountsService)
         {
-            byte[] salt = GenerateSalt();
-            byte[] key = Encrypt(password, salt);
-
-            return $"{Convert.ToBase64String(salt)}.{Convert.ToBase64String(key)}";
+            passwordService = new PasswordService();
+            this.accountsService = accountsService;
         }
 
-        public bool VerifyPassword(string storedHash, string passwordToCheck)
+        public DeveloperAccountDTO AuthenticateUser(SignInForm signInForm)
         {
-            string[] parts = storedHash.Split('.');
-            byte[] salt = Convert.FromBase64String(parts[saltIndex]);
-            byte[] key = Convert.FromBase64String(parts[keyIndex]);
+            DeveloperAccountDTO account = accountsService.Get(signInForm.Email);
 
-            byte[] check = Encrypt(passwordToCheck, salt);
-
-            return CheckEquality(key, check);
-        }
-
-        private byte[] GenerateSalt()
-        {
-            byte[] salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
+            if (account == null || string.IsNullOrEmpty(account.Email))
             {
-                rng.GetBytes(salt);
+                throw new AccountNotFoundException();
             }
 
-            return salt;
-        }
+            bool correctPassword = passwordService.VerifyPassword(account.Password, signInForm.Password);
 
-        private byte[] Encrypt(string password, byte[] salt)
-        {
-            return KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA512,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8);
-        }
-
-        private bool CheckEquality(byte[] one, byte[] two)
-        {
-            bool equal = true;
-
-            if (one.Length == two.Length)
+            if (!correctPassword)
             {
-                for (int i=0; i<one.Length && equal; i++)
+                throw new IncorrectPasswordException();
+            }
+
+            return account;
+        }
+
+        public DeveloperAccountDTO RegisterUser(RegisterAccountForm registration)
+        {
+            DeveloperAccountDTO account;
+
+            try
+            {
+                string encryptedPassword = passwordService.HashPassword(registration.Password);
+
+                account = new DeveloperAccountDTO()
                 {
-                    equal = one[i] == two[i];
-                }
+                    FirstName = registration.FirstName,
+                    LastName = registration.LastName,
+                    Email = registration.Email,
+                    AccountCreationDate = DateTime.Now,
+                    Password = encryptedPassword
+                };
             }
-            else
+            catch
             {
-                equal = false;
+                throw new PasswordEncryptionException();
             }
 
-            return equal;
+            try
+            {
+                accountsService.Create(account);
+            }
+            catch
+            {
+                throw new DatabaseErrorException();
+            }
+
+            return account;
         }
     }
 }

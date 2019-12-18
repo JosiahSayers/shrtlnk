@@ -40,6 +40,8 @@
     <Folder Include="Services\DAL\" />
     <Folder Include="Services\DAL\Developer\" />
     <Folder Include="Services\Authentication\" />
+    <Folder Include="Models\Developer\FormObjects\" />
+    <Folder Include="Services\Authentication\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,4 +50,7 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Services\Session\SessionService.cs" />
+  </ItemGroup>
 </Project>

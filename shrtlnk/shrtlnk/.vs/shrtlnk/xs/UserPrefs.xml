@@ -1,30 +1,38 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/DeveloperController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Services/Authentication/AuthenticationService.cs">
     <Files>
-      <File FileName="Controllers/DeveloperController.cs" Line="14" Column="1" />
+      <File FileName="Controllers/DeveloperController.cs" Line="73" Column="97" />
       <File FileName="appsettings.json" Line="11" Column="4" />
       <File FileName="Models/Developer/DatabaseSettings/DatabaseSettings.cs" Line="5" Column="68" />
-      <File FileName="Services/DAL/Developer/DeveloperAccountsService.cs" Line="37" Column="62" />
-      <File FileName="Models/Developer/DeveloperAccount.cs" Line="12" Column="31" />
-      <File FileName="Models/Developer/DTO/DeveloperApplication.cs" Line="11" Column="1" />
+      <File FileName="Services/DAL/Developer/DeveloperAccountsService.cs" Line="22" Column="1" />
+      <File FileName="Models/Developer/DeveloperAccount.cs" Line="18" Column="48" />
+      <File FileName="Models/Developer/DTO/DeveloperApplication.cs" Line="23" Column="48" />
       <File FileName="Services/DAL/Developer/DeveloperApplicationsService.cs" Line="23" Column="1" />
-      <File FileName="Services/Authentication/AuthenticationService.cs" Line="50" Column="10" />
+      <File FileName="Services/Authentication/AuthenticationService.cs" Line="17" Column="53" />
+      <File FileName="Services/Authentication/AuthenticationService.cs" Line="42" Column="1" />
+      <File FileName="Models/Developer/FormObjects/SignInForm.cs" Line="7" Column="24" />
+      <File FileName="Models/Developer/FormObjects/RegisterAccountForm.cs" Line="12" Column="45" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="shrtlnk" expanded="True">
             <Node name="shrtlnk" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="DeveloperController.cs" selected="True" />
-              </Node>
+              <Node name="Controllers" expanded="True" />
               <Node name="Models" expanded="True">
                 <Node name="Developer" expanded="True">
                   <Node name="DTO" expanded="True" />
+                  <Node name="FormObjects" expanded="True" />
                 </Node>
               </Node>
               <Node name="Services" expanded="True">
-                <Node name="Authentication" expanded="True" />
+                <Node name="Authentication" expanded="True">
+                  <Node name="Exceptions" expanded="True" />
+                  <Node name="AuthenticationService.cs" selected="True" />
+                </Node>
+                <Node name="DAL" expanded="True">
+                  <Node name="Developer" expanded="True" />
+                </Node>
               </Node>
             </Node>
           </Node>
