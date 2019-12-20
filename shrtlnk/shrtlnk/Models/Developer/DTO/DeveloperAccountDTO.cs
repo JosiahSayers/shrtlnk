@@ -17,5 +17,13 @@ namespace shrtlnk.Models.Developer.DTO
 
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime AccountCreationDate { get; set; }
+
+        public string Role { get; set; }
+
+        public bool IsAdmin { get
+            {
+                return Role == "admin";
+            }
+        }
     }
 }
