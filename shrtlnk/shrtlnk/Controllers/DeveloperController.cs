@@ -8,10 +8,10 @@ using shrtlnk.Services.Authentication.Exceptions;
 
 namespace shrtlnk.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class DeveloperController : Controller
     {
         private readonly AuthenticationService auth;
-        private readonly string sessionEmail = "_Email";
 
         public DeveloperController(AuthenticationService auth)
         {
@@ -36,19 +36,24 @@ namespace shrtlnk.Controllers
             return View();
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult Register(RegisterAccountForm registration)
         {
             try
             {
-                DeveloperAccountDTO account = auth.RegisterUser(registration);
-                HttpContext.Session.SetString(sessionEmail, account.Email);
-                return StatusCode(201);
+                if (ModelState.IsValid)
+                {
+                    DeveloperAccountDTO account = auth.RegisterUser(registration);
+                    return RedirectToAction("AccountHome");
+                }
+                else
+                {
+                    return View();
+                }
             }
             catch
             {
-                return StatusCode(500);
+                return View();
             }
         }
 
@@ -58,28 +63,61 @@ namespace shrtlnk.Controllers
             return View();
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult SignIn(SignInForm signInForm)
         {
             try
             {
                 DeveloperAccountDTO account = auth.AuthenticateUser(signInForm);
-                HttpContext.Session.SetString(sessionEmail, account.Email);
-                return StatusCode(200);
+                return RedirectToAction("AccountHome");
             }
             catch (Exception e)
             {
                 if (e.GetType() == new IncorrectPasswordException().GetType() ||
                     e.GetType() == new AccountNotFoundException().GetType())
                 {
-                    return Unauthorized();
+                    // Add logging
                 }
-                else
-                {
-                    return StatusCode(500);
-                }
+                return View();
             }
+        }
+
+        public IActionResult AccountHome()
+        {
+            if (auth.IsSignedIn)
+            {
+                return View(auth.CurrentUser);
+            }
+            else
+            {
+                return View("SignIn");
+            }
+        }
+
+        public IActionResult SignOut()
+        {
+            auth.SignOut();
+            return View("Index");
+        }
+
+        public IActionResult SignedIn()
+        {
+            bool signedIn = auth.IsSignedIn;
+            return signedIn ? Ok() : StatusCode(401);
+        }
+
+        public IActionResult VerifyEmail(string verification)
+        {
+            try
+            {
+                auth.VerifyAccount(verification);
+            }
+            catch
+            {
+                return View("Hardfall");
+            }
+
+            return RedirectToAction("AccountHome");
         }
     }
 }

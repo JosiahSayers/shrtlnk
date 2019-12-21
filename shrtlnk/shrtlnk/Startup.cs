@@ -14,6 +14,7 @@ using shrtlnk.Models.DAL;
 using shrtlnk.Models.Developer.DatabaseSettings;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.DAL.Developer;
+using shrtlnk.Services.Email;
 
 namespace shrtlnk
 {
@@ -42,8 +43,17 @@ namespace shrtlnk
             services.AddSingleton<DatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
+            services.Configure<EmailSettings>(
+                Configuration.GetSection(nameof(EmailSettings)));
+
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<EmailSettings>>().Value);
+
             services.AddSingleton<DeveloperAccountsService>();
             services.AddSingleton<AuthenticationService>();
+            services.AddSingleton<AccountVerificationService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<EmailService>();
 
             string connectionString = Configuration.GetConnectionString("AppHarbor");
 

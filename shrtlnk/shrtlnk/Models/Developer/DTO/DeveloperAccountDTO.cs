@@ -25,5 +25,7 @@ namespace shrtlnk.Models.Developer.DTO
                 return Role == "admin";
             }
         }
+
+        public bool Verified { get; set; }
     }
 }
