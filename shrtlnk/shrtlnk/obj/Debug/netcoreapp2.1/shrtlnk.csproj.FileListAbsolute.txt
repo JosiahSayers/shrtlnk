@@ -27,6 +27,7 @@
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Home/NewRedirectAdded.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Home/redirect.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Shared/Error.cshtml.g.cs
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Shared/Hardfall.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Shared/_CookieConsentPartial.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Shared/_Layout.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Shared/_ValidationScriptsPartial.cshtml.g.cs
@@ -38,3 +39,5 @@
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.dll
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.pdb
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.csproj.CopyComplete
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.csprojAssemblyReference.cache
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/UnknownVerification.cshtml.g.cs

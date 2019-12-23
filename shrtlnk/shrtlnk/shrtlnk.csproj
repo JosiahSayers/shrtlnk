@@ -46,6 +46,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\swagger\swagger-ui.css" />
+    <Content Remove="wwwroot\swagger\favicon-32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="wwwroot\favicon.ico">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

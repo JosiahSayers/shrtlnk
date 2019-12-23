@@ -114,10 +114,17 @@ namespace shrtlnk.Services.Authentication
             {
                 verification = verificationService.Get(verificationId);
             }
-            catch
+            catch (Exception e)
             {
-                verification = null;
-                throw new DatabaseErrorException();
+                if (e.GetType() == typeof(FormatException) ||
+                    e.GetType() == typeof(InvalidOperationException))
+                {
+                    throw new UnknownVerificationIdException();
+                }
+                else
+                {
+                    throw new DatabaseErrorException();
+                }
             }
 
             if (verification != null)

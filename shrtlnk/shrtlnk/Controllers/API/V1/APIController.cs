@@ -32,7 +32,7 @@ namespace shrtlnk.Controllers.API.V1
 
             if (ri != null)
             {
-                return Ok(new ApiPostResponse(ri));
+                return StatusCode(201, new ApiPostResponse(ri));
             }
             else
             {

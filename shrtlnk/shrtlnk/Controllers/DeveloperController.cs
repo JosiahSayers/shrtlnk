@@ -27,7 +27,10 @@ namespace shrtlnk.Controllers
         [HttpGet]
         public IActionResult Documentation()
         {
-            return View();
+            string protocol = HttpContext.Request.IsHttps ? "https://" : "http://";
+            string baseUrl = HttpContext.Request.Host.ToUriComponent();
+            string swaggerUrl = "/swagger/shrtlnk_V1.json";
+            return View("Documentation", protocol + baseUrl + swaggerUrl);
         }
 
         [HttpGet]
@@ -73,8 +76,8 @@ namespace shrtlnk.Controllers
             }
             catch (Exception e)
             {
-                if (e.GetType() == new IncorrectPasswordException().GetType() ||
-                    e.GetType() == new AccountNotFoundException().GetType())
+                if (e.GetType() == typeof(IncorrectPasswordException) ||
+                    e.GetType() == typeof(AccountNotFoundException))
                 {
                     // Add logging
                 }
@@ -82,42 +85,47 @@ namespace shrtlnk.Controllers
             }
         }
 
+        [HttpGet]
         public IActionResult AccountHome()
         {
             if (auth.IsSignedIn)
             {
                 return View(auth.CurrentUser);
             }
-            else
-            {
-                return View("SignIn");
-            }
+            return View("SignIn");
         }
 
+        [HttpGet]
         public IActionResult SignOut()
         {
             auth.SignOut();
             return View("Index");
         }
 
-        public IActionResult SignedIn()
-        {
-            bool signedIn = auth.IsSignedIn;
-            return signedIn ? Ok() : StatusCode(401);
-        }
-
-        public IActionResult VerifyEmail(string verification)
+        [HttpGet]
+        public IActionResult VerifyEmail(string verificationId)
         {
             try
             {
-                auth.VerifyAccount(verification);
+                auth.VerifyAccount(verificationId);
             }
-            catch
+            catch (Exception e)
             {
+                if (e.GetType() == typeof(UnknownVerificationIdException))
+                {
+                    return View("UnknownVerification");
+                }
+
                 return View("Hardfall");
             }
 
             return RedirectToAction("AccountHome");
+        }
+
+        public IActionResult SignedIn()
+        {
+            bool signedIn = auth.IsSignedIn;
+            return signedIn ? Ok() : StatusCode(401);
         }
     }
 }
