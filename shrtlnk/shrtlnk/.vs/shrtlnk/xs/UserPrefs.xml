@@ -1,19 +1,5 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/DeveloperController.cs">
-    <Files>
-      <File FileName="Controllers/DeveloperController.cs" Line="50" Column="1" />
-      <File FileName="Services/Authentication/AuthenticationService.cs" Line="92" Column="1" />
-      <File FileName="Models/Developer/DTO/AccountVerificationDTO.cs" />
-      <File FileName="Views/Developer/AccountHome.cshtml" Line="3" Column="1" />
-      <File FileName="Views/Developer/UnknownVerification.cshtml" Line="4" Column="5" />
-      <File FileName="Views/Developer/Documentation.cshtml" Line="35" Column="23" />
-      <File FileName="wwwroot/swagger/shrtlnk_V1.json" Line="21" Column="56" />
-      <File FileName="Controllers/API/V1/APIController.cs" Line="35" Column="65" />
-      <File FileName="Services/Authentication/EmailAlreadyExistsError.cs" />
-      <File FileName="Views/Developer/Register.cshtml" Line="22" Column="35" />
-      <File FileName="Views/Developer/SignIn.cshtml" Line="13" Column="1" />
-      <File FileName="Services/DAL/Developer/AccountVerificationService.cs" Line="27" Column="39" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
@@ -23,7 +9,6 @@
                 <Node name="API" expanded="True">
                   <Node name="V1" expanded="True" />
                 </Node>
-                <Node name="DeveloperController.cs" selected="True" />
               </Node>
               <Node name="Models" expanded="True">
                 <Node name="DAL" expanded="True" />
@@ -38,7 +23,9 @@
                   <Node name="Exceptions" expanded="True" />
                 </Node>
                 <Node name="DAL" expanded="True">
-                  <Node name="Developer" expanded="True" />
+                  <Node name="Developer" expanded="True">
+                    <Node name="AccountVerificationService.cs" selected="True" />
+                  </Node>
                 </Node>
                 <Node name="Email" expanded="True" />
               </Node>
@@ -59,11 +46,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.shrtlnk PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/Controllers/DeveloperController.cs" relfile="Controllers/DeveloperController.cs" line="66" column="1" />
-      <Breakpoint file="/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/Services/Authentication/AuthenticationService.cs" relfile="Services/Authentication/AuthenticationService.cs" line="102" column="1" />
-      <Breakpoint file="/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/Services/Authentication/AuthenticationService.cs" relfile="Services/Authentication/AuthenticationService.cs" line="90" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
