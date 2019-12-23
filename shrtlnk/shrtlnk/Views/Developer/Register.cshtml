@@ -5,6 +5,27 @@
 <div class="container">
     <h1>Register</h1>
 
+    @if (ViewBag.EmailAlreadyExists == true)
+    {
+        <div class="alert alert-warning" role="alert">
+          That email already exists, would you like to <a asp-controller="Developer" asp-action="SignIn">sign in</a>?
+        </div>
+    }
+
+    @if (ViewBag.DatabaseError == true)
+    {
+        <div class="alert alert-danger" role="alert">
+          Sorry about this, but something unexpected happened on our end. Please submit the form again.
+        </div>
+    }
+
+    @if (ViewBag.FormError == true)
+    {
+        <div class="alert alert-warning" role="alert">
+          Please fix the errors below.
+        </div>
+    }
+
     <div class="card pt-4 pb-4 pr-4 pl-4">
         <form asp-controller="Developer" asp-action="Register" method="post">
             <div class="form-group">

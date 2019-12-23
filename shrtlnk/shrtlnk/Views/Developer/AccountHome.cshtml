@@ -1,14 +1,22 @@
 ﻿@model DeveloperAccountDTO
 
+<div class="container">
+    @if (ViewBag.EmailVerified == true)
+    {
+        <div class="alert alert-success" role="alert">
+          Your email has been successfully verified, thanks!
+        </div>
+    }
 
-@if (Model.Verified)
-{
+    @if (!Model.Verified)
+    {
+        <div class="alert alert-warning" role="alert">
+            Please complete your account verification. You can do this by clicking on the verification link in the email we sent you. Make sure to check your spam folder!
+        </div>
+    }
+
     <p>@Model.Email</p>
     <p>@Model.FirstName</p>
     <p>@Model.LastName</p>
     <p>@Model.Role</p>
-}
-else
-{
-    <p>Please complete your account verification. You can do this by clicking on the verification link in the email we sent you. Make sure to check your spam folder!</p>
-}
+</div>

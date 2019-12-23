@@ -3,6 +3,14 @@
 <partial name="_ValidationScriptsPartial" />
 
 <div class="container">
+
+    @if (ViewBag.EmailVerified == true)
+    {
+        <div class="alert alert-success" role="alert">
+          Your email has been successfully verified, thanks!
+        </div>
+    }
+
     <h1>Sign In</h1>
 
     <div class="card pt-4 pb-4 pr-4 pl-4">

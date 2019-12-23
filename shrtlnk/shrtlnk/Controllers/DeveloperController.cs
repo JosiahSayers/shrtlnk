@@ -12,6 +12,7 @@ namespace shrtlnk.Controllers
     public class DeveloperController : Controller
     {
         private readonly AuthenticationService auth;
+        private static readonly string sessionEmailVerified = "email_verified";
 
         public DeveloperController(AuthenticationService auth)
         {
@@ -49,13 +50,20 @@ namespace shrtlnk.Controllers
                     DeveloperAccountDTO account = auth.RegisterUser(registration);
                     return RedirectToAction("AccountHome");
                 }
+
+                ViewBag.FormError = true;
+                return View();
+            }
+            catch (Exception e)
+            {
+                if (e.GetType() == typeof(EmailAlreadyExistsError))
+                {
+                    ViewBag.EmailAlreadyExists = true;
+                }
                 else
                 {
-                    return View();
+                    ViewBag.DatabaseError = true;
                 }
-            }
-            catch
-            {
                 return View();
             }
         }
@@ -63,6 +71,7 @@ namespace shrtlnk.Controllers
         [HttpGet]
         public IActionResult SignIn()
         {
+            ViewBag.EmailVerified |= HttpContext.Session.GetString(sessionEmailVerified) == "true";
             return View();
         }
 
@@ -90,6 +99,7 @@ namespace shrtlnk.Controllers
         {
             if (auth.IsSignedIn)
             {
+                ViewBag.EmailVerified |= HttpContext.Session.GetString(sessionEmailVerified) == "true";
                 return View(auth.CurrentUser);
             }
             return View("SignIn");
@@ -119,6 +129,7 @@ namespace shrtlnk.Controllers
                 return View("Hardfall");
             }
 
+            HttpContext.Session.SetString(sessionEmailVerified, "true");
             return RedirectToAction("AccountHome");
         }
 

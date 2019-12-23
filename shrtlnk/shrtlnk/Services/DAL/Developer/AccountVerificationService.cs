@@ -24,12 +24,15 @@ namespace shrtlnk.Services.DAL.Developer
                 Email = email
             };
             _db.InsertOne(av);
-            av = Get(av.Email);
+            av = GetByEmail(av.Email);
             return av;
         }
 
         public AccountVerificationDTO Get(string id) =>
             _db.Find(av => av.Id == id).First();
+
+        public AccountVerificationDTO GetByEmail(string email) =>
+            _db.Find(av => av.Email == email).First();
 
         public void Remove(string id) =>
             _db.DeleteOne(av => av.Id == id);

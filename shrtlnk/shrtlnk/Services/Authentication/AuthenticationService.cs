@@ -91,8 +91,14 @@ namespace shrtlnk.Services.Authentication
                 AccountVerificationDTO av = verificationService.GenerateVerificationCode(account.Email);
                 emailService.SendVerificationEmail(account, av);
             }
-            catch
+            catch (Exception e)
             {
+                if (e.GetType() == typeof(MongoDB.Driver.MongoWriteException) &&
+                    e.Message.Contains("duplicate key error"))
+                {
+                    throw new EmailAlreadyExistsError();
+                }
+
                 throw new DatabaseErrorException();
             }
 

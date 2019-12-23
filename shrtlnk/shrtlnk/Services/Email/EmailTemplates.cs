@@ -22,7 +22,7 @@ namespace shrtlnk.Services.Email
 
         private string VerificationEmailBody(string firstName, string shrtlnkId)
         {
-            string verificationUrl = "https://shrtlnk.dev/developer/verifyemail?verification=" + shrtlnkId;
+            string verificationUrl = "https://shrtlnk.dev/developer/verifyemail?verificationid=" + shrtlnkId;
             string body =
                 "<h1>shrtlnk</h1>" +
                 "<h3>Please verify your email address</h3>" +
