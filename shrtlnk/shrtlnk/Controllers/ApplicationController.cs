@@ -46,5 +46,37 @@ namespace shrtlnk.Controllers
                 return View();
             }
         }
+
+        [HttpGet]
+        public IActionResult Edit(string appId)
+        {
+            if (auth.IsSignedIn)
+            {
+                try
+                {
+                    DeveloperApplicationDTO app = applicationService.GetApp(appId);
+                    return View(app);
+                }
+                catch
+                {
+                    return View("Hardfall");
+                }
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Developer");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Delete(DeveloperApplicationDTO app)
+        {
+            if (auth.IsSignedIn)
+            {
+
+            }
+
+            return View();
+        }
     }
 }

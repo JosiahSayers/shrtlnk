@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace shrtlnk.Services.Authentication.Exceptions
+namespace shrtlnk.Services.Exceptions
 {
     [Serializable]
     internal class DatabaseErrorException : Exception

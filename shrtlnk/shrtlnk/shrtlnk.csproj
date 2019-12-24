@@ -41,11 +41,11 @@
     <Folder Include="Services\DAL\Developer\" />
     <Folder Include="Services\Authentication\" />
     <Folder Include="Models\Developer\FormObjects\" />
-    <Folder Include="Services\Authentication\Exceptions\" />
     <Folder Include="Services\Email\" />
     <Folder Include="Services\DAL\Application\" />
     <Folder Include="Services\Applications\" />
     <Folder Include="Views\Application\" />
+    <Folder Include="Services\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>

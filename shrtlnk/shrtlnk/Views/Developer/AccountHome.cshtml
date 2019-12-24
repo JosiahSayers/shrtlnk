@@ -41,8 +41,8 @@
                     <p><strong>Website: </strong>@(String.IsNullOrEmpty(app.Website) ? "No website added yet" : app.Website)</p>
                 </div>
                 <div class="app-buttons">
-                    <a href="#" class="btn btn-primary">Edit App</a>
-                    <a href="#" class="btn btn-danger">Delete App</a>
+                    <a asp-controller="Application" asp-action="Edit" asp-route-appId="@app.Id" class="btn btn-primary">Edit App</a>
+                    <a asp-controller="Application" asp-action="Delete" asp-route-appId="@app.Id" class="btn btn-danger">Delete App</a>
                 </div>
             </div>
         }

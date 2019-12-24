@@ -4,6 +4,7 @@ using shrtlnk.Models.Developer.DTO;
 using shrtlnk.Models.Developer.FormObjects;
 using shrtlnk.Models.Objects;
 using shrtlnk.Services.Authentication;
+using shrtlnk.Services.Exceptions;
 using shrtlnk.Services.DAL.Developer;
 
 namespace shrtlnk.Services.Applications
@@ -33,6 +34,41 @@ namespace shrtlnk.Services.Applications
             applications.Create(newApp);
 
             return newApp;
+        }
+
+        public DeveloperApplicationDTO GetApp(string id)
+        {
+            DeveloperApplicationDTO app;
+            try
+            {
+                app = applications.Get(id);
+            }
+            catch
+            {
+                throw new DatabaseErrorException();
+            }
+
+            if (IsCurrentUserAppOwner(app))
+            {
+                return app;
+            }
+            else
+            {
+                throw new NotAppOwnerException();
+            }
+        }
+
+        private bool IsCurrentUserAppOwner(DeveloperApplicationDTO app)
+        {
+            try
+            {
+                DeveloperAccountDTO currentUser = auth.CurrentUser;
+                return currentUser.Email == app.DeveloperId;
+            }
+            catch
+            {
+                throw new DatabaseErrorException();
+            }
         }
 
         private string GenerateApiKey()

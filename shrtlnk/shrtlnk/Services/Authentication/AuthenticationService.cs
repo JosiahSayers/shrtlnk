@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using shrtlnk.Models.Developer.DTO;
 using shrtlnk.Models.Developer.FormObjects;
-using shrtlnk.Services.Authentication.Exceptions;
+using shrtlnk.Services.Exceptions;
 using shrtlnk.Services.DAL.Developer;
 using shrtlnk.Services.Email;
 
