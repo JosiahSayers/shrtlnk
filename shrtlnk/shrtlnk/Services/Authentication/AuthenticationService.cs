@@ -30,7 +30,16 @@ namespace shrtlnk.Services.Authentication
         {
             get
             {
-                return accountsService.Get(GetEmailFromSession());
+                DeveloperAccountDTO account;
+                try
+                {
+                    account = accountsService.Get(GetEmailFromSession());
+                }
+                catch
+                {
+                    account = null;
+                }
+                return account;
             }
         }
 
@@ -160,7 +169,14 @@ namespace shrtlnk.Services.Authentication
 
         private string GetEmailFromSession()
         {
-            return context.Session.GetString(sessionKey);
+            if (context != null)
+            {
+                if (context.Session != null)
+                {
+                    return context.Session.GetString(sessionKey);
+                }
+            }
+            return null;
         }
     }
 }

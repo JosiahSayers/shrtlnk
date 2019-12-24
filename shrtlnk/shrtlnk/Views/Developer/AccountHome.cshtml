@@ -1,4 +1,6 @@
-﻿@model DeveloperAccountDTO
+﻿@model AccountHomeViewModel;
+
+<link href="~/css/Developer/AccountHome.css" rel="stylesheet" />
 
 <div class="container">
     @if (ViewBag.EmailVerified == true)
@@ -8,15 +10,26 @@
         </div>
     }
 
-    @if (!Model.Verified)
+    @if (!Model.Account.Verified)
     {
         <div class="alert alert-warning" role="alert">
             Please complete your account verification. You can do this by clicking on the verification link in the email we sent you. Make sure to check your spam folder!
         </div>
     }
 
-    <p>@Model.Email</p>
-    <p>@Model.FirstName</p>
-    <p>@Model.LastName</p>
-    <p>@Model.Role</p>
+    <p>@Model.Account.Email</p>
+    <p>@Model.Account.FirstName</p>
+    <p>@Model.Account.LastName</p>
+    <p>@Model.Account.Role</p>
+
+    @foreach(var app in Model.Applications)
+    {
+        <div class="card pt-4 pb-4 pr-4 pl-4 application-card">
+            <h2>@app.Name</h2>
+            <p><strong>Status: </strong>@app.Status</p>
+            <p><strong>API Key: </strong>@app.ApiKey</p>
+            <p><strong>Created on: </strong>@app.CreationDate.ToShortDateString()</p>
+            <p><strong>Website: </strong>@(String.IsNullOrEmpty(app.Website) ? "No website added yet" : app.Website)</p>
+        </div>
+    }
 </div>

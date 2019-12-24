@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using shrtlnk.Models.Developer.DTO;
 using shrtlnk.Models.Developer.FormObjects;
+using shrtlnk.Models.ViewModels;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.Authentication.Exceptions;
+using shrtlnk.Services.DAL.Developer;
 
 namespace shrtlnk.Controllers
 {
@@ -12,11 +15,13 @@ namespace shrtlnk.Controllers
     public class DeveloperController : Controller
     {
         private readonly AuthenticationService auth;
+        private readonly DeveloperApplicationsDBService applications;
         private static readonly string sessionEmailVerified = "email_verified";
 
-        public DeveloperController(AuthenticationService auth)
+        public DeveloperController(AuthenticationService auth, DeveloperApplicationsDBService applications)
         {
             this.auth = auth;
+            this.applications = applications;
         }
 
         [HttpGet]
@@ -99,8 +104,26 @@ namespace shrtlnk.Controllers
         {
             if (auth.IsSignedIn)
             {
+                DeveloperAccountDTO user;
+                List<DeveloperApplicationDTO> apps;
                 ViewBag.EmailVerified |= HttpContext.Session.GetString(sessionEmailVerified) == "true";
-                return View(auth.CurrentUser);
+                try
+                {
+                    user = auth.CurrentUser;
+                    apps = applications.GetByDeveloper(user.Email);
+                }
+                catch
+                {
+                    return View("Hardfall"); // todo: Make this better based on the error that is thrown
+                }
+
+                AccountHomeViewModel vm = new AccountHomeViewModel()
+                {
+                    Account = auth.CurrentUser,
+                    Applications = apps
+                };
+
+                return View(vm);
             }
             return View("SignIn");
         }

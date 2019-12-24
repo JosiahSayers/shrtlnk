@@ -2,10 +2,10 @@
 {
     public static class ApplicationStatus
     {
-        public static string Valid = "valid";
+        public static string Valid = "Valid";
 
-        public static string Deleted = "deleted";
+        public static string Deleted = "Deleted";
 
-        public static string AccessDenied = "accessDenied";
+        public static string AccessDenied = "Access Denied";
     }
 }
