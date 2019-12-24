@@ -1,15 +1,29 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="appsettings.json">
+    <Files>
+      <File FileName="Controllers/ApplicationController.cs" Line="26" Column="69" />
+      <File FileName="Models/Developer/DTO/DeveloperApplicationDTO.cs" Line="21" Column="43" />
+      <File FileName="Services/Applications/DeveloperApplicationsService.cs" Line="28" Column="54" />
+      <File FileName="Services/DAL/Application/DeveloperApplicationsDBService.cs" Line="43" Column="70" />
+      <File FileName="Startup.cs" Line="60" Column="67" />
+      <File FileName="Services/Authentication/PasswordService.cs" Line="33" Column="1" />
+      <File FileName="Models/Objects/ApplicationStatus.cs" Line="9" Column="60" />
+      <File FileName="Services/Authentication/AuthenticationService.cs" Line="22" Column="13" />
+      <File FileName="Views/Application/AddNew.cshtml" Line="8" Column="17" />
+      <File FileName="Models/Developer/FormObjects/RegisterAccountForm.cs" Line="1" Column="1" />
+      <File FileName="Models/Developer/FormObjects/AddNewApplicationForm.cs" Line="14" Column="175" />
+      <File FileName="Views/Application/_ViewStart.cshtml" Line="8" Column="47" />
+      <File FileName="wwwroot/css/nav.css" Line="3" Column="2" />
+      <File FileName="Views/Developer/_ViewStart.cshtml" Line="8" Column="47" />
+      <File FileName="Models/Developer/DatabaseSettings/DatabaseSettings.cs" Line="7" Column="58" />
+      <File FileName="appsettings.json" Line="14" Column="45" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="shrtlnk" expanded="True">
             <Node name="shrtlnk" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="API" expanded="True">
-                  <Node name="V1" expanded="True" />
-                </Node>
-              </Node>
+              <Node name="Controllers" expanded="True" />
               <Node name="Models" expanded="True">
                 <Node name="DAL" expanded="True" />
                 <Node name="Developer" expanded="True">
@@ -17,25 +31,23 @@
                   <Node name="DTO" expanded="True" />
                   <Node name="FormObjects" expanded="True" />
                 </Node>
+                <Node name="Objects" expanded="True" />
               </Node>
               <Node name="Services" expanded="True">
-                <Node name="Authentication" expanded="True">
-                  <Node name="Exceptions" expanded="True" />
-                </Node>
+                <Node name="Applications" expanded="True" />
+                <Node name="Authentication" expanded="True" />
                 <Node name="DAL" expanded="True">
-                  <Node name="Developer" expanded="True">
-                    <Node name="AccountVerificationService.cs" selected="True" />
-                  </Node>
+                  <Node name="Application" expanded="True" />
                 </Node>
-                <Node name="Email" expanded="True" />
               </Node>
               <Node name="Views" expanded="True">
+                <Node name="Application" expanded="True" />
                 <Node name="Developer" expanded="True" />
-                <Node name="Shared" expanded="True" />
               </Node>
               <Node name="wwwroot" expanded="True">
-                <Node name="swagger" expanded="True" />
+                <Node name="css" expanded="True" />
               </Node>
+              <Node name="appsettings.json" selected="True" />
             </Node>
           </Node>
         </State>

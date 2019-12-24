@@ -17,14 +17,18 @@ namespace shrtlnk.Services.Authentication
         private readonly string sessionKey = "_sessionEmail";
         private readonly EmailService emailService;
 
-        public bool IsSignedIn { get
+        public bool IsSignedIn
+        {
+            get
             {
                 bool signedIn = !String.IsNullOrWhiteSpace(GetEmailFromSession());
                 return signedIn;
             }
         }
 
-        public DeveloperAccountDTO CurrentUser { get
+        public DeveloperAccountDTO CurrentUser
+        {
+            get
             {
                 return accountsService.Get(GetEmailFromSession());
             }

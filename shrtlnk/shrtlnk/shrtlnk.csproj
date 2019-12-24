@@ -43,6 +43,9 @@
     <Folder Include="Models\Developer\FormObjects\" />
     <Folder Include="Services\Authentication\Exceptions\" />
     <Folder Include="Services\Email\" />
+    <Folder Include="Services\DAL\Application\" />
+    <Folder Include="Services\Applications\" />
+    <Folder Include="Views\Application\" />
   </ItemGroup>
 
   <ItemGroup>

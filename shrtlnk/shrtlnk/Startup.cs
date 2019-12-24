@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using shrtlnk.Models.DAL;
 using shrtlnk.Models.Developer.DatabaseSettings;
+using shrtlnk.Services.Applications;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.DAL.Developer;
 using shrtlnk.Services.Email;
@@ -54,6 +55,9 @@ namespace shrtlnk
             services.AddSingleton<AccountVerificationService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<EmailService>();
+
+            services.AddSingleton<DeveloperApplicationsDBService>();
+            services.AddSingleton<DeveloperApplicationsService>();
 
             string connectionString = Configuration.GetConnectionString("AppHarbor");
 

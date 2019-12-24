@@ -41,3 +41,5 @@
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.csproj.CopyComplete
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.csprojAssemblyReference.cache
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/UnknownVerification.cshtml.g.cs
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Application/AddNew.cshtml.g.cs
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Application/_ViewStart.cshtml.g.cs
