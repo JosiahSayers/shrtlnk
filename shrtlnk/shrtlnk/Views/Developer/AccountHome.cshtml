@@ -16,20 +16,35 @@
             Please complete your account verification. You can do this by clicking on the verification link in the email we sent you. Make sure to check your spam folder!
         </div>
     }
-
-    <p>@Model.Account.Email</p>
-    <p>@Model.Account.FirstName</p>
-    <p>@Model.Account.LastName</p>
-    <p>@Model.Account.Role</p>
-
-    @foreach(var app in Model.Applications)
+    else
     {
-        <div class="card pt-4 pb-4 pr-4 pl-4 application-card">
-            <h2>@app.Name</h2>
-            <p><strong>Status: </strong>@app.Status</p>
-            <p><strong>API Key: </strong>@app.ApiKey</p>
-            <p><strong>Created on: </strong>@app.CreationDate.ToShortDateString()</p>
-            <p><strong>Website: </strong>@(String.IsNullOrEmpty(app.Website) ? "No website added yet" : app.Website)</p>
-        </div>
+        <a class="btn btn-light" role="button" id="add-app" asp-controller="Application" asp-action="AddNew">
+            Add an application
+        </a>
+
+        @if(Model.Applications.Count < 1)
+        {
+            <div class="alert alert-light" role="alert">
+                Hi, @Model.Account.FirstName.<br />
+                It looks like you haven't added an application yet. <a asp-controller="Application" asp-action="AddNew">Click here</a> to get started!
+            </div>
+        }
+
+        @foreach(var app in Model.Applications)
+        {
+            <div class="card pt-4 pb-4 pr-4 pl-4 application-card">
+                <div class="app-info">
+                    <h2>@app.Name</h2>
+                    <p><strong>Status: </strong>@app.Status</p>
+                    <p><strong>API Key: </strong>@app.ApiKey</p>
+                    <p><strong>Created on: </strong>@app.CreationDate.ToShortDateString()</p>
+                    <p><strong>Website: </strong>@(String.IsNullOrEmpty(app.Website) ? "No website added yet" : app.Website)</p>
+                </div>
+                <div class="app-buttons">
+                    <a href="#" class="btn btn-primary">Edit App</a>
+                    <a href="#" class="btn btn-danger">Delete App</a>
+                </div>
+            </div>
+        }
     }
 </div>

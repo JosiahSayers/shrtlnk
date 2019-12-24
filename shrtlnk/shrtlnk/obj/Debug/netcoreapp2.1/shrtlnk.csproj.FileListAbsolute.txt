@@ -20,6 +20,7 @@
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Application/_ViewStart.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/AccountHome.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/Documentation.cshtml.g.cs
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/EditAccount.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/Index.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/Register.cshtml.g.cs
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Developer/SignIn.cshtml.g.cs

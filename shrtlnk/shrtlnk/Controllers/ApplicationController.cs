@@ -38,7 +38,7 @@ namespace shrtlnk.Controllers
             if (auth.CurrentUser.Verified)
             {
                 applicationService.AddNew(form);
-                return RedirectToAction();
+                return RedirectToAction("AccountHome", "Developer");
             }
             else
             {

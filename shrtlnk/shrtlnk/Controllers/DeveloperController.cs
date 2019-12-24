@@ -156,10 +156,32 @@ namespace shrtlnk.Controllers
             return RedirectToAction("AccountHome");
         }
 
-        public IActionResult SignedIn()
+        [HttpGet]
+        public IActionResult EditAccount()
         {
-            bool signedIn = auth.IsSignedIn;
-            return signedIn ? Ok() : StatusCode(401);
+            if (auth.IsSignedIn)
+            {
+                DeveloperAccountDTO account = auth.CurrentUser;
+                return View(new EditAccountViewModel(account));
+            }
+            else
+            {
+                return View("SignIn");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult EditAccount(EditAccountViewModel editedAccount)
+        {
+            try
+            {
+                auth.UpdateAccount(editedAccount.Account);
+                return RedirectToAction("AccountHome");
+            }
+            catch
+            {
+                return View("Hardfall");
+            }
         }
     }
 }

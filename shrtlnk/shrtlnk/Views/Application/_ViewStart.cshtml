@@ -21,13 +21,21 @@
             <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Documentation" ? "nav-item active" : "nav-item")">
                 <a class="nav-link" asp-controller="Developer" asp-action="Documentation">Documentation</a>
             </li>
+            @{
+                if (auth.IsSignedIn)
+                {
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "AccountHome" ? "nav-item active" : "nav-item")">
+                        <a class="nav-link" asp-controller="Developer" asp-action="AccountHome">My Applications</a>
+                    </li>
+                }
+            }
         </ul>
         <ul class="navbar-nav">
             @{
                 if (auth.IsSignedIn)
                 {
-                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "AccountHome" ? "nav-item active" : "nav-item")">
-                        <a class="nav-link" asp-controller="Developer" asp-action="AccountHome">Hey there, @auth.CurrentUser.FirstName</a>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "EditAccount" ? "nav-item active" : "nav-item")">
+                        <a class="nav-link" asp-controller="Developer" asp-action="EditAccount">Hey there, @auth.CurrentUser.FirstName</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Developer" asp-action="SignOut">Sign Out</a>

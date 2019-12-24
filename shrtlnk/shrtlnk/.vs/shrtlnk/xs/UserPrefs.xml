@@ -1,18 +1,17 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Views/Developer/_ViewStart.cshtml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Views/Developer/AccountHome.cshtml">
     <Files>
-      <File FileName="Controllers/ApplicationController.cs" Line="26" Column="69" />
-      <File FileName="Services/DAL/Application/DeveloperApplicationsDBService.cs" Line="18" Column="111" />
-      <File FileName="Startup.cs" Line="60" Column="67" />
-      <File FileName="Services/Authentication/PasswordService.cs" Line="33" Column="1" />
-      <File FileName="Models/Objects/ApplicationStatus.cs" Line="9" Column="53" />
-      <File FileName="Services/Authentication/AuthenticationService.cs" Line="22" Column="13" />
-      <File FileName="Controllers/DeveloperController.cs" Line="125" Column="1" />
-      <File FileName="Models/View Models/AccountHomeViewModel.cs" Line="11" Column="72" />
-      <File FileName="Views/Developer/AccountHome.cshtml" Line="3" Column="61" />
-      <File FileName="Views/Developer/SignIn.cshtml" Line="16" Column="41" />
-      <File FileName="wwwroot/css/Developer/AccountHome.css" Line="1" Column="2" />
-      <File FileName="Views/Developer/_ViewStart.cshtml" Line="6" Column="35" />
+      <File FileName="Controllers/DeveloperController.cs" Line="178" Column="1" />
+      <File FileName="Views/Developer/EditAccount.cshtml" Line="9" Column="52" />
+      <File FileName="wwwroot/css/Developer/EditAccount.css" Line="4" Column="2" />
+      <File FileName="Views/Developer/AccountHome.cshtml" Line="19" Column="9" />
+      <File FileName="Models/View Models/EditAccountViewModel.cs" Line="16" Column="64" />
+      <File FileName="Models/Developer/FormObjects/ChangePasswordForm.cs" Line="1" Column="14" />
+      <File FileName="Models/Developer/FormObjects/RegisterAccountForm.cs" Line="16" Column="1" />
+      <File FileName="Views/Developer/Register.cshtml" Line="1" Column="1" />
+      <File FileName="Services/Authentication/AuthenticationService.cs" Line="179" Column="18" />
+      <File FileName="Services/DAL/Developer/DeveloperAccountsService.cs" Line="32" Column="1" />
+      <File FileName="wwwroot/css/Developer/AccountHome.css" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -21,7 +20,10 @@
             <Node name="shrtlnk" expanded="True">
               <Node name="Controllers" expanded="True" />
               <Node name="Models" expanded="True">
-                <Node name="Developer" expanded="True" />
+                <Node name="Developer" expanded="True">
+                  <Node name="DTO" expanded="True" />
+                  <Node name="FormObjects" expanded="True" />
+                </Node>
                 <Node name="Objects" expanded="True" />
                 <Node name="View Models" expanded="True" />
               </Node>
@@ -29,11 +31,13 @@
                 <Node name="Authentication" expanded="True" />
                 <Node name="DAL" expanded="True">
                   <Node name="Application" expanded="True" />
+                  <Node name="Developer" expanded="True" />
                 </Node>
               </Node>
               <Node name="Views" expanded="True">
+                <Node name="Application" expanded="True" />
                 <Node name="Developer" expanded="True">
-                  <Node name="_ViewStart.cshtml" selected="True" />
+                  <Node name="AccountHome.cshtml" selected="True" />
                 </Node>
               </Node>
               <Node name="wwwroot" expanded="True">

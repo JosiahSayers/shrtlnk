@@ -13,7 +13,7 @@ namespace shrtlnk.Services.Authentication
         private readonly PasswordService passwordService;
         private readonly DeveloperAccountsService accountsService;
         private readonly AccountVerificationService verificationService;
-        private readonly HttpContext context;
+        private readonly IHttpContextAccessor contextAccessor;
         private readonly string sessionKey = "_sessionEmail";
         private readonly EmailService emailService;
 
@@ -43,14 +43,21 @@ namespace shrtlnk.Services.Authentication
             }
         }
 
+        private HttpContext Context {
+            get
+            {
+                return contextAccessor.HttpContext;
+            }
+        }
+
         public AuthenticationService(DeveloperAccountsService accountsService,
-            IHttpContextAccessor accessor,
+            IHttpContextAccessor contextAccessor,
             AccountVerificationService verificationService,
             EmailService emailService)
         {
             passwordService = new PasswordService();
             this.accountsService = accountsService;
-            context = accessor.HttpContext;
+            this.contextAccessor = contextAccessor;
             this.verificationService = verificationService;
             this.emailService = emailService;
         }
@@ -121,7 +128,7 @@ namespace shrtlnk.Services.Authentication
 
         public void SignOut()
         {
-            context.Session.Remove(sessionKey);
+            Context.Session.Remove(sessionKey);
         }
 
         public void VerifyAccount(string verificationId)
@@ -162,21 +169,56 @@ namespace shrtlnk.Services.Authentication
             }
         }
 
+        public void UpdateAccount(DeveloperAccountDTO account)
+        {
+            try
+            {
+                account = FindUpdatedFields(account);
+                accountsService.Update(account);
+            }
+            catch
+            {
+                throw new DatabaseErrorException();
+            }
+        }
+
         private void SetEmailToSession(string email)
         {
-            context.Session.SetString(sessionKey, email);
+            Context.Session.SetString(sessionKey, email);
         }
 
         private string GetEmailFromSession()
         {
-            if (context != null)
+            if (Context != null)
             {
-                if (context.Session != null)
+                if (Context.Session != null)
                 {
-                    return context.Session.GetString(sessionKey);
+                    return Context.Session.GetString(sessionKey);
                 }
             }
             return null;
+        }
+
+        private DeveloperAccountDTO FindUpdatedFields(DeveloperAccountDTO updates)
+        {
+            DeveloperAccountDTO updatedAccount = CurrentUser;
+
+            if (!string.IsNullOrWhiteSpace(updates.FirstName))
+            {
+                updatedAccount.FirstName = updates.FirstName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(updates.LastName))
+            {
+                updatedAccount.LastName = updates.LastName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(updates.Role))
+            {
+                updatedAccount.Role = updates.Role;
+            }
+
+            return updatedAccount;
         }
     }
 }
