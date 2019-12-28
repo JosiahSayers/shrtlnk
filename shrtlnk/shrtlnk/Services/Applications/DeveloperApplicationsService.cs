@@ -13,11 +13,16 @@ namespace shrtlnk.Services.Applications
     {
         private readonly DeveloperApplicationsDBService applications;
         private readonly AuthenticationService auth;
+        private readonly ApiInfo apiInfo;
 
-        public DeveloperApplicationsService(DeveloperApplicationsDBService applications, AuthenticationService auth)
+        public DeveloperApplicationsService(
+            DeveloperApplicationsDBService applications,
+            AuthenticationService auth,
+            ApiInfo apiInfo)
         {
             this.applications = applications;
             this.auth = auth;
+            this.apiInfo = apiInfo;
         }
 
         public DeveloperApplicationDTO AddNew(AddNewApplicationForm form)
@@ -29,7 +34,9 @@ namespace shrtlnk.Services.Applications
                 DeveloperId = auth.CurrentUser.Email,
                 Status = ApplicationStatus.Valid,
                 CreationDate = DateTime.Now,
-                ApiKey = GenerateApiKey()
+                ApiKey = GenerateApiKey(),
+                OriginalApiVersion = apiInfo.CurrentVersion,
+                CurrentSetApiVersion = apiInfo.CurrentVersion
             };
             applications.Create(newApp);
 
@@ -71,6 +78,11 @@ namespace shrtlnk.Services.Applications
                 if (!string.IsNullOrWhiteSpace(updatedApp.Website))
                 {
                     currentApp.Website = updatedApp.Website;
+                }
+
+                if (updatedApp.CurrentSetApiVersion > 0)
+                {
+                    currentApp.CurrentSetApiVersion = updatedApp.CurrentSetApiVersion;
                 }
 
                 applications.Update(currentApp);

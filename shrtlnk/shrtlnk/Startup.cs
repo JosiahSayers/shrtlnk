@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using shrtlnk.Models.DAL;
 using shrtlnk.Models.Developer.DatabaseSettings;
+using shrtlnk.Models.Objects;
 using shrtlnk.Services.API;
 using shrtlnk.Services.Applications;
 using shrtlnk.Services.Authentication;
@@ -50,6 +51,12 @@ namespace shrtlnk
 
             services.AddSingleton(sp =>
                 sp.GetRequiredService<IOptions<EmailSettings>>().Value);
+
+            services.Configure<ApiInfo>(
+                Configuration.GetSection(nameof(ApiInfo)));
+
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<ApiInfo>>().Value);
 
             services.AddSingleton<DeveloperAccountsService>();
             services.AddSingleton<AuthenticationService>();

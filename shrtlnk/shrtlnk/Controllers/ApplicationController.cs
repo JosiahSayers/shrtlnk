@@ -26,25 +26,20 @@ namespace shrtlnk.Controllers
                 ViewBag.AccountVerified = auth.CurrentUser.Verified;
                 return View();
             }
-            else
-            {
-                return RedirectToAction("SignIn", "Developer");
-            }
+            return RedirectToAction("SignIn", "Developer");
         }
 
         [HttpPost]
         public IActionResult AddNew(AddNewApplicationForm form)
         {
-            if (auth.CurrentUser.Verified)
+            if (auth.IsSignedIn && auth.CurrentUser.Verified)
             {
                 applicationService.AddNew(form);
                 return RedirectToAction("AccountHome", "Developer");
             }
-            else
-            {
-                ViewBag.AccountVerified = false;
-                return View();
-            }
+
+            ViewBag.AccountVerified = false;
+            return View();
         }
 
         [HttpGet]
@@ -62,10 +57,7 @@ namespace shrtlnk.Controllers
                     return View("Hardfall");
                 }
             }
-            else
-            {
-                return RedirectToAction("SignIn", "Developer");
-            }
+            return RedirectToAction("SignIn", "Developer");
         }
 
         [HttpPost]
@@ -83,10 +75,7 @@ namespace shrtlnk.Controllers
                     return View("Hardfall");
                 }
             }
-            else
-            {
-                return RedirectToAction("SignIn", "Developer");
-            }
+            return RedirectToAction("SignIn", "Developer");
         }
 
         [HttpGet]
@@ -104,10 +93,7 @@ namespace shrtlnk.Controllers
                     return View("Hardfall");
                 }
             }
-            else
-            {
-                return RedirectToAction("SignIn", "Developer");
-            }
+            return RedirectToAction("SignIn", "Developer");
         }
 
         [HttpPost]

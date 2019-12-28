@@ -13,6 +13,11 @@
                 <input class="form-control" asp-for="Website" placeholder="URL">
                 <span asp-validation-for="Website" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="CurrentSetApiVersion"></label>
+                <input class="form-control" asp-for="CurrentSetApiVersion" />
+                <span asp-validation-for="CurrentSetApiVersion" class="text-danger"></span>
+            </div>
             <input type="hidden" asp-for="Id" />
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
