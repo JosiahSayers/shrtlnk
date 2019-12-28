@@ -35,7 +35,7 @@ namespace shrtlnk.Controllers
         {
             string protocol = HttpContext.Request.IsHttps ? "https://" : "http://";
             string baseUrl = HttpContext.Request.Host.ToUriComponent();
-            string swaggerUrl = "/swagger/shrtlnk_V1.json";
+            string swaggerUrl = "/swagger/shrtlnk_V2.json";
             return View("Documentation", protocol + baseUrl + swaggerUrl);
         }
 

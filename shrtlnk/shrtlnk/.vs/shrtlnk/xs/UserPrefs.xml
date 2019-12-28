@@ -1,5 +1,5 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Models/Developer/DTO/DeveloperApplicationDTO.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/DeveloperController.cs">
     <Files>
       <File FileName="Controllers/ApplicationController.cs" Line="70" Column="44" />
       <File FileName="appsettings.json" Line="22" Column="11" />
@@ -7,7 +7,10 @@
       <File FileName="Models/Objects/ApiInfo.cs" Line="1" Column="1" />
       <File FileName="Services/Applications/DeveloperApplicationsService.cs" Line="68" Column="43" />
       <File FileName="Views/Application/Edit.cshtml" Line="19" Column="85" />
-      <File FileName="Models/Developer/DTO/DeveloperApplicationDTO.cs" Line="37" Column="10" />
+      <File FileName="Models/Developer/DTO/DeveloperApplicationDTO.cs" Line="38" Column="72" />
+      <File FileName="wwwroot/swagger/shrtlnk_V1.json" Line="24" Column="15" />
+      <File FileName="Controllers/API/V2/APIController_2.cs" Line="1" Column="1" />
+      <File FileName="Controllers/DeveloperController.cs" Line="38" Column="53" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -19,12 +22,11 @@
                   <Node name="V1" expanded="True" />
                   <Node name="V2" expanded="True" />
                 </Node>
+                <Node name="DeveloperController.cs" selected="True" />
               </Node>
               <Node name="Models" expanded="True">
                 <Node name="Developer" expanded="True">
-                  <Node name="DTO" expanded="True">
-                    <Node name="DeveloperApplicationDTO.cs" selected="True" />
-                  </Node>
+                  <Node name="DTO" expanded="True" />
                 </Node>
                 <Node name="Objects" expanded="True" />
               </Node>
@@ -43,6 +45,7 @@
                 <Node name="css" expanded="True">
                   <Node name="Application" expanded="True" />
                 </Node>
+                <Node name="swagger" expanded="True" />
               </Node>
             </Node>
           </Node>
