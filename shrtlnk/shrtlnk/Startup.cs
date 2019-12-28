@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using shrtlnk.Models.DAL;
 using shrtlnk.Models.Developer.DatabaseSettings;
+using shrtlnk.Services.API;
 using shrtlnk.Services.Applications;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.DAL.Developer;
@@ -55,6 +56,7 @@ namespace shrtlnk
             services.AddSingleton<AccountVerificationService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<EmailService>();
+            services.AddSingleton<ApiAuthorizationService>();
 
             services.AddSingleton<DeveloperApplicationsDBService>();
             services.AddSingleton<DeveloperApplicationsService>();

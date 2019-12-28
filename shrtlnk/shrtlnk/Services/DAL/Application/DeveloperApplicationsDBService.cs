@@ -24,6 +24,9 @@ namespace shrtlnk.Services.DAL.Developer
         public List<DeveloperApplicationDTO> GetByDeveloper(string developerId) =>
             _db.Find(app => app.DeveloperId == developerId).ToList();
 
+        public DeveloperApplicationDTO GetByApiKey(string key) =>
+            _db.Find(app => app.ApiKey == key).First();
+
         public DeveloperApplicationDTO Create(DeveloperApplicationDTO account)
         {
             _db.InsertOne(account);

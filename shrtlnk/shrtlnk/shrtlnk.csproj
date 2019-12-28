@@ -47,6 +47,8 @@
     <Folder Include="Views\Application\" />
     <Folder Include="Services\Exceptions\" />
     <Folder Include="wwwroot\css\Application\" />
+    <Folder Include="Controllers\API\V2\" />
+    <Folder Include="Services\API\" />
   </ItemGroup>
 
   <ItemGroup>
