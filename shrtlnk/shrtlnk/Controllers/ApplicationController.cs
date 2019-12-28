@@ -69,11 +69,61 @@ namespace shrtlnk.Controllers
         }
 
         [HttpPost]
+        public IActionResult Edit(DeveloperApplicationDTO app)
+        {
+            if (auth.IsSignedIn)
+            {
+                try
+                {
+                    applicationService.UpdateApp(app);
+                    return RedirectToAction("AccountHome", "Developer");
+                }
+                catch
+                {
+                    return View("Hardfall");
+                }
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Developer");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Delete(string appId)
+        {
+            if (auth.IsSignedIn)
+            {
+                try
+                {
+                    DeveloperApplicationDTO app = applicationService.GetApp(appId);
+                    return View(app);
+                }
+                catch
+                {
+                    return View("Hardfall");
+                }
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Developer");
+            }
+        }
+
+        [HttpPost]
         public IActionResult Delete(DeveloperApplicationDTO app)
         {
             if (auth.IsSignedIn)
             {
-
+                try
+                {
+                    applicationService.DeleteApp(app.Id);
+                    return RedirectToAction("AccountHome", "Developer");
+                }
+                catch
+                {
+                    return View("Hardfall");
+                }
             }
 
             return View();

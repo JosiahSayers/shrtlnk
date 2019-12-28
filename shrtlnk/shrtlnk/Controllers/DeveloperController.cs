@@ -6,7 +6,7 @@ using shrtlnk.Models.Developer.DTO;
 using shrtlnk.Models.Developer.FormObjects;
 using shrtlnk.Models.ViewModels;
 using shrtlnk.Services.Authentication;
-using shrtlnk.Services.Authentication.Exceptions;
+using shrtlnk.Services.Exceptions;
 using shrtlnk.Services.DAL.Developer;
 
 namespace shrtlnk.Controllers

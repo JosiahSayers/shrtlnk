@@ -1,28 +1,29 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/ApplicationController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Views/Application/Delete.cshtml">
     <Files>
-      <File FileName="Controllers/DeveloperController.cs" Line="178" Column="1" />
+      <File FileName="Controllers/DeveloperController.cs" Line="9" Column="23" />
       <File FileName="Views/Developer/EditAccount.cshtml" Line="9" Column="52" />
       <File FileName="wwwroot/css/Developer/EditAccount.css" Line="4" Column="2" />
-      <File FileName="Views/Developer/AccountHome.cshtml" Line="45" Column="99" />
+      <File FileName="Views/Developer/AccountHome.cshtml" Line="42" Column="23" />
       <File FileName="Models/View Models/EditAccountViewModel.cs" Line="16" Column="64" />
       <File FileName="Models/Developer/FormObjects/ChangePasswordForm.cs" Line="1" Column="14" />
       <File FileName="Models/Developer/FormObjects/RegisterAccountForm.cs" Line="16" Column="1" />
       <File FileName="Views/Developer/Register.cshtml" Line="1" Column="1" />
       <File FileName="Services/Authentication/AuthenticationService.cs" Line="5" Column="23" />
-      <File FileName="Controllers/ApplicationController.cs" Line="53" Column="33" />
-      <File FileName="Services/Applications/DeveloperApplicationsService.cs" Line="57" Column="50" />
+      <File FileName="Controllers/ApplicationController.cs" Line="120" Column="46" />
+      <File FileName="Services/Applications/DeveloperApplicationsService.cs" Line="92" Column="50" />
       <File FileName="Views/Application/Edit.cshtml" Line="1" Column="1" />
-      <File FileName="Views/Application/Index.cshtml" Line="1" Column="1" />
+      <File FileName="Views/Application/Index.cshtml" Line="3" Column="1" />
+      <File FileName="appsettings.json" Line="1" Column="1" />
+      <File FileName="Views/Application/AddNew.cshtml" Line="28" Column="15" />
+      <File FileName="wwwroot/css/Application/delete.css" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="shrtlnk" expanded="True">
             <Node name="shrtlnk" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="ApplicationController.cs" selected="True" />
-              </Node>
+              <Node name="Controllers" expanded="True" />
               <Node name="Models" expanded="True">
                 <Node name="Developer" expanded="True">
                   <Node name="DTO" expanded="True" />
@@ -41,12 +42,14 @@
                 <Node name="Exceptions" expanded="True" />
               </Node>
               <Node name="Views" expanded="True">
-                <Node name="Application" expanded="True" />
+                <Node name="Application" expanded="True">
+                  <Node name="Delete.cshtml" selected="True" />
+                </Node>
                 <Node name="Developer" expanded="True" />
               </Node>
               <Node name="wwwroot" expanded="True">
                 <Node name="css" expanded="True">
-                  <Node name="Developer" expanded="True" />
+                  <Node name="Application" expanded="True" />
                 </Node>
               </Node>
             </Node>

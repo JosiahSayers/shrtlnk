@@ -43,3 +43,5 @@
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.dll
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.pdb
 /Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/shrtlnk.csproj.CopyComplete
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Application/Delete.cshtml.g.cs
+/Users/Josiah/Documents/Projects/shrtlnk/shrtlnk/shrtlnk/obj/Debug/netcoreapp2.1/Razor/Views/Application/Edit.cshtml.g.cs

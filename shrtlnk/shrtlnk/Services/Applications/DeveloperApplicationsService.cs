@@ -58,6 +58,41 @@ namespace shrtlnk.Services.Applications
             }
         }
 
+        public void UpdateApp(DeveloperApplicationDTO updatedApp)
+        {
+            DeveloperApplicationDTO currentApp = applications.Get(updatedApp.Id);
+            if (IsCurrentUserAppOwner(currentApp))
+            {
+                if (!string.IsNullOrWhiteSpace(updatedApp.Name))
+                {
+                    currentApp.Name = updatedApp.Name;
+                }
+
+                if (!string.IsNullOrWhiteSpace(updatedApp.Website))
+                {
+                    currentApp.Website = updatedApp.Website;
+                }
+
+                applications.Update(currentApp);
+            }
+            else
+            {
+                throw new NotAppOwnerException();
+            }
+        }
+
+        public void DeleteApp(string appId)
+        {
+            if (IsCurrentUserAppOwner(applications.Get(appId)))
+            {
+                applications.Remove(appId);
+            }
+            else
+            {
+                throw new NotAppOwnerException();
+            }
+        }
+
         private bool IsCurrentUserAppOwner(DeveloperApplicationDTO app)
         {
             try

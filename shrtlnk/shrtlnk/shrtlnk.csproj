@@ -46,6 +46,7 @@
     <Folder Include="Services\Applications\" />
     <Folder Include="Views\Application\" />
     <Folder Include="Services\Exceptions\" />
+    <Folder Include="wwwroot\css\Application\" />
   </ItemGroup>
 
   <ItemGroup>
