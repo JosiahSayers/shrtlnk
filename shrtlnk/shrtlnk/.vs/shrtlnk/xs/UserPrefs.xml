@@ -1,8 +1,8 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/API/V1/APIController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="wwwroot/swagger/shrtlnk_V2.json">
     <Files>
       <File FileName="Program.cs" Line="25" Column="1" />
-      <File FileName="Controllers/DeveloperController.cs" Line="187" Column="43" />
+      <File FileName="Controllers/DeveloperController.cs" Line="38" Column="31" />
       <File FileName="Services/Authentication/AuthenticationService.cs" Line="14" Column="36" />
       <File FileName="Services/DAL/Developer/DeveloperAccountsService.cs" Line="40" Column="2" />
       <File FileName="Startup.cs" Line="1" Column="1" />
@@ -11,7 +11,8 @@
       <File FileName="Views/Shared/_Layout.cshtml" Line="16" Column="48" />
       <File FileName="Controllers/ApplicationController.cs" Line="121" Column="48" />
       <File FileName="Views/Shared/_ValidationScriptsPartial.cshtml" Line="1" Column="1" />
-      <File FileName="Controllers/API/V1/APIController.cs" Line="1" Column="1" />
+      <File FileName="Views/Developer/Documentation.cshtml" Line="4" Column="63" />
+      <File FileName="wwwroot/swagger/shrtlnk_V2.json" Line="39" Column="31" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -20,9 +21,6 @@
             <Node name="shrtlnk" expanded="True">
               <Node name="Controllers" expanded="True">
                 <Node name="API" expanded="True">
-                  <Node name="V1" expanded="True">
-                    <Node name="APIController.cs" selected="True" />
-                  </Node>
                   <Node name="V2" expanded="True" />
                 </Node>
               </Node>
@@ -49,14 +47,10 @@
               </Node>
               <Node name="wwwroot" expanded="True">
                 <Node name="css" expanded="True">
-                  <Node name="Application" expanded="True" />
+                  <Node name="swagger" expanded="True" />
                 </Node>
-                <Node name="lib" expanded="True">
-                  <Node name="bootstrap" expanded="True">
-                    <Node name="dist" expanded="True">
-                      <Node name="css" expanded="True" />
-                    </Node>
-                  </Node>
+                <Node name="swagger" expanded="True">
+                  <Node name="shrtlnk_V2.json" selected="True" />
                 </Node>
               </Node>
               <Node name="appsettings.json" expanded="True" />

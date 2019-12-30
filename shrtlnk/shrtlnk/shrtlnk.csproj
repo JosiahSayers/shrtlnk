@@ -48,10 +48,10 @@
     <Folder Include="wwwroot\css\Application\" />
     <Folder Include="Controllers\API\V2\" />
     <Folder Include="Services\API\" />
+    <Folder Include="wwwroot\css\swagger\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\swagger\swagger-ui.css" />
     <Content Remove="wwwroot\swagger\favicon-32x32.png" />
   </ItemGroup>
   <ItemGroup>

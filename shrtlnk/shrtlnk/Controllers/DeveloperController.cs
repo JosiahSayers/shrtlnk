@@ -35,7 +35,7 @@ namespace shrtlnk.Controllers
         public IActionResult Documentation()
         {
             ViewData["Title"] = "Developer Documentation";
-            string protocol = HttpContext.Request.IsHttps ? "https://" : "http://";
+            string protocol = "https://";
             string baseUrl = HttpContext.Request.Host.ToUriComponent();
             string swaggerUrl = "/swagger/shrtlnk_V2.json";
             return View("Documentation", protocol + baseUrl + swaggerUrl);
