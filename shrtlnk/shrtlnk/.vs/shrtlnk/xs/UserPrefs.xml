@@ -1,5 +1,5 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{7475057A-CEC4-46DA-9D2F-D24A2B88CC48}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/ApplicationController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Views/Shared/_ValidationScriptsPartial.cshtml">
     <Files>
       <File FileName="Program.cs" Line="25" Column="1" />
       <File FileName="Controllers/DeveloperController.cs" Line="187" Column="43" />
@@ -9,7 +9,8 @@
       <File FileName="appsettings.json" Line="18" Column="30" />
       <File FileName="appsettings.Development.json" Line="10" Column="1" />
       <File FileName="Views/Shared/_Layout.cshtml" Line="6" Column="48" />
-      <File FileName="Controllers/ApplicationController.cs" Line="26" Column="69" />
+      <File FileName="Controllers/ApplicationController.cs" Line="121" Column="48" />
+      <File FileName="Views/Shared/_ValidationScriptsPartial.cshtml" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -21,7 +22,6 @@
                   <Node name="V1" expanded="True" />
                   <Node name="V2" expanded="True" />
                 </Node>
-                <Node name="ApplicationController.cs" selected="True" />
               </Node>
               <Node name="Models" expanded="True">
                 <Node name="Developer" expanded="True">
@@ -42,7 +42,9 @@
                 <Node name="Application" expanded="True" />
                 <Node name="Developer" expanded="True" />
                 <Node name="Home" expanded="True" />
-                <Node name="Shared" expanded="True" />
+                <Node name="Shared" expanded="True">
+                  <Node name="_ValidationScriptsPartial.cshtml" selected="True" />
+                </Node>
               </Node>
               <Node name="wwwroot" expanded="True">
                 <Node name="css" expanded="True">
