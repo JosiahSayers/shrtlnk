@@ -27,12 +27,14 @@ namespace shrtlnk.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewData["Title"] = "Developer Portal";
             return View();
         }
 
         [HttpGet]
         public IActionResult Documentation()
         {
+            ViewData["Title"] = "Developer Documentation";
             string protocol = HttpContext.Request.IsHttps ? "https://" : "http://";
             string baseUrl = HttpContext.Request.Host.ToUriComponent();
             string swaggerUrl = "/swagger/shrtlnk_V2.json";
@@ -42,6 +44,7 @@ namespace shrtlnk.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            ViewData["Title"] = "Register";
             return View();
         }
 
@@ -76,6 +79,7 @@ namespace shrtlnk.Controllers
         [HttpGet]
         public IActionResult SignIn()
         {
+            ViewData["Title"] = "Sign In";
             ViewBag.EmailVerified |= HttpContext.Session.GetString(sessionEmailVerified) == "true";
             return View();
         }
@@ -114,6 +118,7 @@ namespace shrtlnk.Controllers
                 }
                 catch
                 {
+                    ViewData["Title"] = "Error";
                     return View("Hardfall"); // todo: Make this better based on the error that is thrown
                 }
 
@@ -122,17 +127,17 @@ namespace shrtlnk.Controllers
                     Account = auth.CurrentUser,
                     Applications = apps
                 };
-
+                ViewData["Title"] = "Account Home";
                 return View(vm);
             }
-            return View("SignIn");
+            return RedirectToAction("SignIn");
         }
 
         [HttpGet]
         public IActionResult SignOut()
         {
             auth.SignOut();
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -146,9 +151,10 @@ namespace shrtlnk.Controllers
             {
                 if (e.GetType() == typeof(UnknownVerificationIdException))
                 {
+                    ViewData["Title"] = "Unknown Verification Code";
                     return View("UnknownVerification");
                 }
-
+                ViewData["Title"] = "Error";
                 return View("Hardfall");
             }
 
@@ -161,13 +167,11 @@ namespace shrtlnk.Controllers
         {
             if (auth.IsSignedIn)
             {
+                ViewData["Title"] = "Edit Account";
                 DeveloperAccountDTO account = auth.CurrentUser;
                 return View(new EditAccountViewModel(account));
             }
-            else
-            {
-                return View("SignIn");
-            }
+            return RedirectToAction("SignIn");
         }
 
         [HttpPost]
@@ -180,6 +184,7 @@ namespace shrtlnk.Controllers
             }
             catch
             {
+                ViewData["Title"] = "Error";
                 return View("Hardfall");
             }
         }

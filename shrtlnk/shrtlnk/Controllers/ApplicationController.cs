@@ -24,6 +24,7 @@ namespace shrtlnk.Controllers
             if (auth.IsSignedIn)
             {
                 ViewBag.AccountVerified = auth.CurrentUser.Verified;
+                ViewData["Title"] = "Add a New Application";
                 return View();
             }
             return RedirectToAction("SignIn", "Developer");
@@ -50,10 +51,12 @@ namespace shrtlnk.Controllers
                 try
                 {
                     DeveloperApplicationDTO app = applicationService.GetApp(appId);
+                    ViewData["Title"] = "Edit Application";
                     return View(app);
                 }
                 catch
                 {
+                    ViewData["Title"] = "Error";
                     return View("Hardfall");
                 }
             }
@@ -72,6 +75,7 @@ namespace shrtlnk.Controllers
                 }
                 catch
                 {
+                    ViewData["Title"] = "Error";
                     return View("Hardfall");
                 }
             }
@@ -86,10 +90,12 @@ namespace shrtlnk.Controllers
                 try
                 {
                     DeveloperApplicationDTO app = applicationService.GetApp(appId);
+                    ViewData["Title"] = "Confirm Delete";
                     return View(app);
                 }
                 catch
                 {
+                    ViewData["Title"] = "Error";
                     return View("Hardfall");
                 }
             }
@@ -108,10 +114,11 @@ namespace shrtlnk.Controllers
                 }
                 catch
                 {
+                    ViewData["Title"] = "Error";
                     return View("Hardfall");
                 }
             }
-
+            ViewData["Title"] = "Confirm Delete";
             return View();
         }
     }
