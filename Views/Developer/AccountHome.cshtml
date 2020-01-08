@@ -38,7 +38,14 @@
                     <p><strong>Status: </strong>@app.Status</p>
                     <p><strong>API Key: </strong>@app.ApiKey</p>
                     <p><strong>Created on: </strong>@app.CreationDate.ToShortDateString()</p>
-                    <p><strong>Website: </strong>@(String.IsNullOrEmpty(app.Website) ? "No website added yet" : app.Website)</p>
+                    @if(String.IsNullOrEmpty(app.Website))
+                    {
+                        <p><strong>Website: </strong>No website added yet</p>
+                    }
+                    else
+                    {
+                        <p><strong>Website: </strong><a href="@app.Website">@app.Website</a></p>
+                    }
                 </div>
                 <div class="app-buttons">
                     <a asp-controller="Application" asp-action="Edit" asp-route-appId="@app.Id" class="btn btn-primary">Edit App</a>

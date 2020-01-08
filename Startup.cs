@@ -41,7 +41,7 @@ namespace shrtlnk
             services.Configure<DbSettings>(
                 Configuration.GetSection("DatabaseSettings"));
 
-            services.AddSingleton<DbSettings>(sp =>
+            services.AddSingleton(sp =>
                 sp.GetRequiredService<IOptions<DbSettings>>().Value);
 
             services.Configure<EmailSettings>(
@@ -56,14 +56,14 @@ namespace shrtlnk
             services.AddSingleton(sp =>
                 sp.GetRequiredService<IOptions<ApiInfo>>().Value);
 
-            services.AddSingleton<DeveloperAccountsService>();
+            services.AddSingleton<IDeveloperAccountsService, DeveloperAccountsService>();
             services.AddSingleton<AuthenticationService>();
-            services.AddSingleton<AccountVerificationService>();
+            services.AddSingleton<IAccountVerificationService, AccountVerificationService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<EmailService>();
+            services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<ApiAuthorizationService>();
 
-            services.AddSingleton<DeveloperApplicationsDBService>();
+            services.AddSingleton<IDeveloperApplications, DeveloperApplications>();
             services.AddSingleton<DeveloperApplicationsService>();
 
             string connectionString = Configuration.GetConnectionString("AppHarbor");

@@ -4,7 +4,7 @@ using shrtlnk.Models.DatabaseSettings;
 
 namespace shrtlnk.Models.Developer.Account
 {
-    public class DeveloperAccountsService
+    public class DeveloperAccountsService : IDeveloperAccountsService
     {
         private readonly IMongoCollection<DeveloperAccountDTO> _db;
 

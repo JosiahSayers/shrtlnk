@@ -5,7 +5,7 @@ using shrtlnk.Models.Developer.AccountVerification;
 
 namespace shrtlnk.Services.Email
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
         private EmailTemplates templates = new EmailTemplates();
         private readonly EmailSettings emailSettings;
@@ -25,11 +25,11 @@ namespace shrtlnk.Services.Email
 
         private void SendMessage(MailMessage msg)
         {
-            using (var client = new SmtpClient("smtp.gmail.com"))
+            using (var client = new SmtpClient(emailSettings.URL))
             {
-                client.Port = 587;
+                client.Port = emailSettings.Port;
                 client.Credentials = new NetworkCredential(emailSettings.Username, emailSettings.Password);
-                client.EnableSsl = true;
+                client.EnableSsl = emailSettings.EnableSSL;
                 client.Send(msg);
             }
         }

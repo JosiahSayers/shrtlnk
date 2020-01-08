@@ -15,10 +15,10 @@ namespace shrtlnk.Controllers
     public class DeveloperController : Controller
     {
         private readonly AuthenticationService auth;
-        private readonly DeveloperApplicationsDBService applications;
+        private readonly IDeveloperApplications applications;
         private static readonly string sessionEmailVerified = "email_verified";
 
-        public DeveloperController(AuthenticationService auth, DeveloperApplicationsDBService applications)
+        public DeveloperController(AuthenticationService auth, IDeveloperApplications applications)
         {
             this.auth = auth;
             this.applications = applications;

@@ -4,7 +4,7 @@ using shrtlnk.Models.DatabaseSettings;
 
 namespace shrtlnk.Models.Developer.AccountVerification
 {
-    public class AccountVerificationService
+    public class AccountVerificationService : IAccountVerificationService
     {
         private readonly IMongoCollection<AccountVerificationDTO> _db;
 

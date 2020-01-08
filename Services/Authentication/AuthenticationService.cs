@@ -11,17 +11,17 @@ namespace shrtlnk.Services.Authentication
     public class AuthenticationService
     {
         private readonly PasswordService passwordService;
-        private readonly DeveloperAccountsService accountsService;
-        private readonly AccountVerificationService verificationService;
+        private readonly IDeveloperAccountsService accountsService;
+        private readonly IAccountVerificationService verificationService;
         private readonly IHttpContextAccessor contextAccessor;
         private readonly string sessionKey = "_sessionEmail";
-        private readonly EmailService emailService;
+        private readonly IEmailService emailService;
 
         public bool IsSignedIn
         {
             get
             {
-                bool signedIn = !String.IsNullOrWhiteSpace(GetEmailFromSession());
+                bool signedIn = !string.IsNullOrWhiteSpace(GetEmailFromSession());
                 return signedIn;
             }
         }
@@ -50,10 +50,10 @@ namespace shrtlnk.Services.Authentication
             }
         }
 
-        public AuthenticationService(DeveloperAccountsService accountsService,
+        public AuthenticationService(IDeveloperAccountsService accountsService,
             IHttpContextAccessor contextAccessor,
-            AccountVerificationService verificationService,
-            EmailService emailService)
+            IAccountVerificationService verificationService,
+            IEmailService emailService)
         {
             passwordService = new PasswordService();
             this.accountsService = accountsService;

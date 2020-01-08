@@ -11,12 +11,12 @@ namespace shrtlnk.Services.Applications
 {
     public class DeveloperApplicationsService
     {
-        private readonly DeveloperApplicationsDBService applications;
+        private readonly IDeveloperApplications applications;
         private readonly AuthenticationService auth;
         private readonly ApiInfo apiInfo;
 
         public DeveloperApplicationsService(
-            DeveloperApplicationsDBService applications,
+            IDeveloperApplications applications,
             AuthenticationService auth,
             ApiInfo apiInfo)
         {

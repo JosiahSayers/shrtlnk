@@ -4,9 +4,9 @@ namespace shrtlnk.Services.API
 {
     public class ApiAuthorizationService
     {
-        private readonly DeveloperApplicationsDBService applications;
+        private readonly IDeveloperApplications applications;
 
-        public ApiAuthorizationService(DeveloperApplicationsDBService applications)
+        public ApiAuthorizationService(IDeveloperApplications applications)
         {
             this.applications = applications;
         }
