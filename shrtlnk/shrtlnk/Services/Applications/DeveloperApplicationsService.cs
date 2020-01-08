@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Security.Cryptography;
-using shrtlnk.Models.Developer.DTO;
 using shrtlnk.Models.Developer.FormObjects;
 using shrtlnk.Models.Objects;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.Exceptions;
-using shrtlnk.Services.DAL.Developer;
+using shrtlnk.Models.Applications;
+using shrtlnk.Models.Developer.Account;
 
 namespace shrtlnk.Services.Applications
 {

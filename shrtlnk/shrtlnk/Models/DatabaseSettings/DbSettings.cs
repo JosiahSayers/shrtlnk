@@ -1,6 +1,6 @@
-﻿namespace shrtlnk.Models.Developer.DatabaseSettings
+﻿namespace shrtlnk.Models.DatabaseSettings
 {
-    public class DatabaseSettings
+    public class DbSettings
     {
         public string DeveloperAccountsCollectionName { get; set; }
         public string AccountVerificationCollectionName { get; set; }

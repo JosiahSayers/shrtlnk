@@ -1,15 +1,14 @@
 ﻿using MongoDB.Driver;
 using System.Linq;
-using shrtlnk.Models.Developer.DatabaseSettings;
-using shrtlnk.Models.Developer.DTO;
+using shrtlnk.Models.DatabaseSettings;
 
-namespace shrtlnk.Services.DAL.Developer
+namespace shrtlnk.Models.Developer.AccountVerification
 {
     public class AccountVerificationService
     {
         private readonly IMongoCollection<AccountVerificationDTO> _db;
 
-        public AccountVerificationService(DatabaseSettings settings)
+        public AccountVerificationService(DbSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);

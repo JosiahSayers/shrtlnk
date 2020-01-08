@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
-using shrtlnk.Models.Developer.DTO;
 using shrtlnk.Models.Developer.FormObjects;
 using shrtlnk.Services.Exceptions;
-using shrtlnk.Services.DAL.Developer;
 using shrtlnk.Services.Email;
+using shrtlnk.Models.Developer.Account;
+using shrtlnk.Models.Developer.AccountVerification;
 
 namespace shrtlnk.Services.Authentication
 {

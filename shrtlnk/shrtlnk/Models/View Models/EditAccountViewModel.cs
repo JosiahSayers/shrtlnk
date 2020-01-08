@@ -1,5 +1,4 @@
-﻿using System;
-using shrtlnk.Models.Developer.DTO;
+﻿using shrtlnk.Models.Developer.Account;
 using shrtlnk.Models.Developer.FormObjects;
 
 namespace shrtlnk.Models.ViewModels

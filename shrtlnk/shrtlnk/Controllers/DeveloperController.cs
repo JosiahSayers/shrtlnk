@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using shrtlnk.Models.Developer.DTO;
+using shrtlnk.Models.Applications;
+using shrtlnk.Models.Developer.Account;
 using shrtlnk.Models.Developer.FormObjects;
 using shrtlnk.Models.ViewModels;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.Exceptions;
-using shrtlnk.Services.DAL.Developer;
 
 namespace shrtlnk.Controllers
 {

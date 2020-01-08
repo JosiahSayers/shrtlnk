@@ -1,6 +1,4 @@
-﻿using System;
-using shrtlnk.Models.Developer.DTO;
-using shrtlnk.Services.DAL.Developer;
+﻿using shrtlnk.Models.Applications;
 
 namespace shrtlnk.Services.API
 {

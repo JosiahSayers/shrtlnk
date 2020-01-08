@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace shrtlnk.Models.Developer.DTO
+namespace shrtlnk.Models.Developer.Account
 {
     public class DeveloperAccountDTO
     {

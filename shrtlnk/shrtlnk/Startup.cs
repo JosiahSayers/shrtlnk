@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using shrtlnk.Models.Applications;
 using shrtlnk.Models.DAL;
-using shrtlnk.Models.Developer.DatabaseSettings;
+using shrtlnk.Models.DatabaseSettings;
+using shrtlnk.Models.Developer.Account;
+using shrtlnk.Models.Developer.AccountVerification;
 using shrtlnk.Models.Objects;
 using shrtlnk.Services.API;
 using shrtlnk.Services.Applications;
 using shrtlnk.Services.Authentication;
-using shrtlnk.Services.DAL.Developer;
 using shrtlnk.Services.Email;
 
 namespace shrtlnk
@@ -40,11 +38,11 @@ namespace shrtlnk
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<DatabaseSettings>(
-                Configuration.GetSection(nameof(DatabaseSettings)));
+            services.Configure<DbSettings>(
+                Configuration.GetSection("DatabaseSettings"));
 
-            services.AddSingleton<DatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+            services.AddSingleton<DbSettings>(sp =>
+                sp.GetRequiredService<IOptions<DbSettings>>().Value);
 
             services.Configure<EmailSettings>(
                 Configuration.GetSection(nameof(EmailSettings)));
@@ -70,7 +68,7 @@ namespace shrtlnk
 
             string connectionString = Configuration.GetConnectionString("AppHarbor");
 
-            services.AddScoped<linksDAL>(c => new linksDAL(connectionString));
+            services.AddScoped(c => new linksDAL(connectionString));
 
             services.AddDistributedMemoryCache();
 

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using shrtlnk.Models.Developer.DTO;
+﻿using System.Collections.Generic;
+using shrtlnk.Models.Applications;
+using shrtlnk.Models.Developer.Account;
 
 namespace shrtlnk.Models.ViewModels
 {

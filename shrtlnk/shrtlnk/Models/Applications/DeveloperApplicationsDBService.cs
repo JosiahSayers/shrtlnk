@@ -1,16 +1,15 @@
 ﻿using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
-using shrtlnk.Models.Developer.DatabaseSettings;
-using shrtlnk.Models.Developer.DTO;
+using shrtlnk.Models.DatabaseSettings;
 
-namespace shrtlnk.Services.DAL.Developer
+namespace shrtlnk.Models.Applications
 {
     public class DeveloperApplicationsDBService
     {
         private readonly IMongoCollection<DeveloperApplicationDTO> _db;
 
-        public DeveloperApplicationsDBService(DatabaseSettings settings)
+        public DeveloperApplicationsDBService(DbSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);

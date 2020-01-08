@@ -1,6 +1,7 @@
-﻿using shrtlnk.Models.Developer.DTO;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
+using shrtlnk.Models.Developer.Account;
+using shrtlnk.Models.Developer.AccountVerification;
 
 namespace shrtlnk.Services.Email
 {
