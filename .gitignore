@@ -2,6 +2,7 @@
 bin
 .vs
 .vscode
+obj
 
 # Files
 appsettings*json
