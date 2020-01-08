@@ -10,7 +10,7 @@ namespace shrtlnk.Models.Applications
 
          DeveloperApplicationDTO GetByApiKey(string key);
 
-         DeveloperApplicationDTO Create(DeveloperApplicationDTO account);
+         DeveloperApplicationDTO Create(DeveloperApplicationDTO app);
 
          void Update(DeveloperApplicationDTO appIn);
 
