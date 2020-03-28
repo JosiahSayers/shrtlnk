@@ -18,48 +18,41 @@ namespace shrtlnk.Controllers
 
         public IActionResult Index(RedirectItem input)
         {
-            if (!String.IsNullOrWhiteSpace(input.URL) || !String.IsNullOrWhiteSpace(input.Key))
+            if (!string.IsNullOrWhiteSpace(input.URL) || !string.IsNullOrWhiteSpace(input.Key))
             {
                 return View("redirect", input);
             }
-            else
-            {
-                return View();
-            }
+            return View();
         }
 
-        public IActionResult L(string id)
+        public IActionResult Link()
         {
-            RedirectItem input = new RedirectItem();
+            RedirectItem input = new RedirectItem
+            {
+                Key = RouteData.Values["url"].ToString()
+            };
 
-            input.Key = RouteData.Values["url"].ToString();
-
-            if(_DAL.IsValidLinkCode(input.Key))
+            if (_DAL.IsValidLinkCode(input.Key))
             {
                 input = _DAL.GetRedirectItem(input);
 
                 if (!string.IsNullOrEmpty(input.URL))
                 {
-                    return View("Redirect", input);
-                }
-                else
-                {
-                    return View("LinkNotFound", input);
+                    return RedirectPermanent(input.URL);
                 }
             }
-            else
-            {
-                return View("LinkNotFound", input);
-            }
+            return View("LinkNotFound", input);
         }
 
         [HttpPost]
         public IActionResult NewRedirectAdded(RedirectItem input)
         {
-            RedirectItem redirect = new RedirectItem();
-            redirect.URL = input.URL;
-            redirect.DateAdded = DateTime.Now;
-            redirect.TimesLoaded = 0;
+            RedirectItem redirect = new RedirectItem
+            {
+                URL = input.URL,
+                DateAdded = DateTime.Now,
+                TimesLoaded = 0
+            };
 
             redirect = _DAL.AddNewRedirectItem(redirect);
 

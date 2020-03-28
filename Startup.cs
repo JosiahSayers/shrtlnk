@@ -114,7 +114,7 @@ namespace shrtlnk
                 routes.MapRoute(
                     name: "catch-all",
                     template: "{*url}",
-                    defaults: new { controller = "Home", action = "L" }
+                    defaults: new { controller = "Home", action = "Link" }
                 );
             });
         }
