@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using shrtlnk.Models.Objects;
 
 namespace shrtlnk.Models.Applications
 {
@@ -37,5 +39,24 @@ namespace shrtlnk.Models.Applications
 
         [Display(Name = "API Version your app is currently consuming")]
         public int CurrentSetApiVersion { get; set; }
+
+        public int ShrtlnksCreatedWithApplication { get; set; }
+
+        public int ShrtlnksTotalViews { get; set; }
+
+        public DeveloperApplicationDTO()
+        {
+            this.ShrtlnksCreatedWithApplication = 0;
+            this.ShrtlnksTotalViews = 0;
+        }
+
+        public void SetShrtlnkInfo(List<RedirectItem> links)
+        {
+            this.ShrtlnksCreatedWithApplication = links.Count;
+            foreach (RedirectItem link in links)
+            {
+                this.ShrtlnksTotalViews += link.TimesLoaded;
+            }
+        }
     }
 }

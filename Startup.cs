@@ -68,7 +68,7 @@ namespace shrtlnk
 
             string connectionString = Configuration.GetConnectionString("AppHarbor");
 
-            services.AddScoped(c => new linksDAL(connectionString));
+            services.AddSingleton(c => new linksDAL(connectionString));
 
             services.AddDistributedMemoryCache();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using shrtlnk.Models.Applications;
 using shrtlnk.Models.DAL;
 using shrtlnk.Models.Objects;
 using shrtlnk.Models.SimpleError;
@@ -14,11 +15,13 @@ namespace shrtlnk.Controllers.API.V1
         private readonly linksDAL _DAL;
         private readonly string header_apiKey = "api-key";
         private readonly ApiAuthorizationService apiAuth;
+        private readonly IDeveloperApplications applications;
 
-        public APIController_2(linksDAL linksDAL, ApiAuthorizationService apiAuth)
+        public APIController_2(linksDAL linksDAL, ApiAuthorizationService apiAuth, IDeveloperApplications developerApplications)
         {
             _DAL = linksDAL;
             this.apiAuth = apiAuth;
+            this.applications = developerApplications;
         }
 
         [HttpPost]
@@ -30,18 +33,19 @@ namespace shrtlnk.Controllers.API.V1
             {
                 return BadRequest(new SimpleError("API Key is missing"));
             }
+            else if (string.IsNullOrWhiteSpace(newLink.URL))
+            {
+                return BadRequest(new SimpleError("url cannot be blank."));
+            }
 
             try
             {
-                if (apiAuth.ValidateApiKey(apiKey))
+                DeveloperApplicationDTO app = applications.GetByApiKey(apiKey);
+                if (app != null)
                 {
-                    if (string.IsNullOrWhiteSpace(newLink.URL))
-                    {
-                        return BadRequest(new SimpleError("url cannot be blank."));
-                    }
-
                     newLink.DateAdded = DateTime.Now;
                     newLink.TimesLoaded = 0;
+                    newLink.CreatedByApplicationId = app.Id;
                     RedirectItem ri = _DAL.AddNewRedirectItem(newLink);
 
                     if (ri != null)
@@ -50,7 +54,7 @@ namespace shrtlnk.Controllers.API.V1
                     }
                     else
                     {
-                        return StatusCode(500, new SimpleError("A database error has occured, please try again"));
+                        return StatusCode(500, new SimpleError("An error has occured, please try again"));
                     }
                 }
                 else
@@ -65,7 +69,7 @@ namespace shrtlnk.Controllers.API.V1
                 {
                     return BadRequest(new SimpleError("Invalid API Key"));
                 }
-                return StatusCode(500, new SimpleError("A database error has occured, please try again"));
+                return StatusCode(500, new SimpleError("An error has occured, please try again"));
             }
         }
     }

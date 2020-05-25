@@ -10,6 +10,7 @@ namespace shrtlnk.Controllers
     public class HomeController : Controller
     {
         private readonly linksDAL _DAL;
+        private static readonly string _applicationId = "5ecc0250f5ec5e000524459d";
 
         public HomeController(linksDAL linksDAL)
         {
@@ -51,7 +52,8 @@ namespace shrtlnk.Controllers
             {
                 URL = input.URL,
                 DateAdded = DateTime.Now,
-                TimesLoaded = 0
+                TimesLoaded = 0,
+                CreatedByApplicationId = _applicationId
             };
 
             redirect = _DAL.AddNewRedirectItem(redirect);

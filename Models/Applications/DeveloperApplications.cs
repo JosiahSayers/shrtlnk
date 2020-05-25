@@ -2,26 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using shrtlnk.Models.DatabaseSettings;
+using shrtlnk.Models.DAL;
+using shrtlnk.Models.Objects;
 
 namespace shrtlnk.Models.Applications
 {
     public class DeveloperApplications : IDeveloperApplications
     {
         private readonly IMongoCollection<DeveloperApplicationDTO> _db;
+        private readonly linksDAL links;
 
-        public DeveloperApplications(DbSettings settings)
+        public DeveloperApplications(DbSettings settings, linksDAL links)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _db = database.GetCollection<DeveloperApplicationDTO>(settings.DeveloperApplicationsCollectionName);
+            this.links = links;
         }
 
         public DeveloperApplicationDTO Get(string appId) =>
             _db.Find(app => app.Id == appId).FirstOrDefault();
 
-        public List<DeveloperApplicationDTO> GetByDeveloper(string developerId) =>
-            _db.Find(app => app.DeveloperId == developerId).ToList();
+        public List<DeveloperApplicationDTO> GetByDeveloper(string developerId)
+        {
+            List<DeveloperApplicationDTO> apps = _db.Find(app => app.DeveloperId == developerId).ToList();
+
+            foreach (DeveloperApplicationDTO app in apps)
+            {
+                List<RedirectItem> redirectItems = links.GetRedirectItemsByApplication(app.Id);
+                app.SetShrtlnkInfo(redirectItems);
+            }
+
+            return apps;
+        }
 
         public DeveloperApplicationDTO GetByApiKey(string key) =>
             _db.Find(app => app.ApiKey == key).First();
