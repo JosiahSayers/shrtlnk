@@ -16,6 +16,7 @@ using shrtlnk.Services.API;
 using shrtlnk.Services.Applications;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.Email;
+using shrtlnk.Services.Logger;
 
 namespace shrtlnk
 {
@@ -44,6 +45,12 @@ namespace shrtlnk
             services.AddSingleton(sp =>
                 sp.GetRequiredService<IOptions<DbSettings>>().Value);
 
+            services.Configure<LoggerSettings>(
+                Configuration.GetSection(nameof(LoggerSettings)));
+
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<LoggerSettings>>().Value);
+
             services.Configure<EmailSettings>(
                 Configuration.GetSection(nameof(EmailSettings)));
 
@@ -69,6 +76,10 @@ namespace shrtlnk
             string connectionString = Configuration.GetConnectionString("AppHarbor");
 
             services.AddSingleton(c => new linksDAL(connectionString));
+
+            services.AddSingleton<ILogger, Logger>();
+
+            services.AddHttpClient();
 
             services.AddDistributedMemoryCache();
 

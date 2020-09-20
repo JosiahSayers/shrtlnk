@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using shrtlnk.Models;
 using shrtlnk.Models.DAL;
 using shrtlnk.Models.Objects;
+using shrtlnk.Services.Logger;
 
 namespace shrtlnk.Controllers
 {
@@ -11,10 +12,12 @@ namespace shrtlnk.Controllers
     {
         private readonly linksDAL _DAL;
         private static readonly string _applicationId = "5ecc0250f5ec5e000524459d";
+        private readonly ILogger _logger;
 
-        public HomeController(linksDAL linksDAL)
+        public HomeController(linksDAL linksDAL, ILogger logger)
         {
             _DAL = linksDAL;
+            _logger = logger;
         }
 
         public IActionResult Index(RedirectItem input)
@@ -23,6 +26,7 @@ namespace shrtlnk.Controllers
             {
                 return View("redirect", input);
             }
+            _logger.Info("Home page requested");
             return View();
         }
 

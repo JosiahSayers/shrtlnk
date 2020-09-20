@@ -27,5 +27,17 @@ namespace shrtlnk.Models.Developer.Account
         }
 
         public bool Verified { get; set; }
+
+        public DeveloperAccountDTO ForLogging()
+        {
+            return new DeveloperAccountDTO
+            {
+                Email = Email,
+                FirstName = FirstName,
+                LastName = LastName,
+                AccountCreationDate = AccountCreationDate,
+                Role = Role
+            };
+        }
     }
 }

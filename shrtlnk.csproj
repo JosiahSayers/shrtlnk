@@ -8,7 +8,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'shrtlnk' ">
     <StartAction>Project</StartAction>
     <ExternalConsole>true</ExternalConsole>
-    <ApplicationURL>http://localhost:11349</ApplicationURL>
+    <ApplicationURL>http://localhost:46058</ApplicationURL>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App">
@@ -55,6 +55,7 @@
     <Folder Include="Models\DatabaseSettings\" />
     <Folder Include="Models\Developer\Account\" />
     <Folder Include="Models\Developer\AccountVerification\" />
+    <Folder Include="Services\Logger\" />
   </ItemGroup>
 
   <ItemGroup>
