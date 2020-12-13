@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
 using shrtlnk.Models.Developer.Account;
 using shrtlnk.Models.Developer.AccountVerification;
@@ -15,11 +16,20 @@ namespace shrtlnk.Services.Email
             this.emailSettings = emailSettings;
         }
 
-        public void SendVerificationEmail(DeveloperAccountDTO account, AccountVerificationDTO verification)
+        public bool SendVerificationEmail(DeveloperAccountDTO account, AccountVerificationDTO verification)
         {
-            using (MailMessage msg = templates.VerificationEmail(account, verification))
+            try
             {
-                SendMessage(msg);
+
+                using (MailMessage msg = templates.VerificationEmail(account, verification))
+                {
+                    SendMessage(msg);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
             }
         }
 

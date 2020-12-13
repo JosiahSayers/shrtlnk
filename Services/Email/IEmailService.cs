@@ -5,6 +5,6 @@ namespace shrtlnk.Services.Email
 {
     public interface IEmailService
     {
-        void SendVerificationEmail(DeveloperAccountDTO account, AccountVerificationDTO verification);
+        bool SendVerificationEmail(DeveloperAccountDTO account, AccountVerificationDTO verification);
     }
 }

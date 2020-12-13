@@ -43,7 +43,8 @@ namespace shrtlnk.Services.Authentication
             }
         }
 
-        private HttpContext Context {
+        private HttpContext Context
+        {
             get
             {
                 return contextAccessor.HttpContext;
@@ -97,7 +98,8 @@ namespace shrtlnk.Services.Authentication
                     Email = registration.Email,
                     AccountCreationDate = DateTime.Now,
                     Password = encryptedPassword,
-                    Role = "Developer"
+                    Role = "Developer",
+                    Verified = true
                 };
             }
             catch
