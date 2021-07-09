@@ -56,6 +56,8 @@
     <Folder Include="Models\Developer\Account\" />
     <Folder Include="Models\Developer\AccountVerification\" />
     <Folder Include="Services\Logger\" />
+    <Folder Include="Services\SafeBrowsingApi\" />
+    <Folder Include="Models\ApiKeys\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,5 +77,7 @@
   <ItemGroup>
     <None Remove="shrtlnk-tests\obj\Debug\netcoreapp2.1\shrtlnk-tests.assets.cache" />
     <None Remove="shrtlnk-tests\obj\Debug\netcoreapp2.1\shrtlnk-tests.csprojAssemblyReference.cache" />
+    <None Remove="Services\SafeBrowsingApi\" />
+    <None Remove="Models\ApiKeys\" />
   </ItemGroup>
 </Project>

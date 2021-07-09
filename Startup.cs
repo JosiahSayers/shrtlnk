@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using shrtlnk.Models.ApiKeys;
 using shrtlnk.Models.Applications;
 using shrtlnk.Models.DAL;
 using shrtlnk.Models.DatabaseSettings;
@@ -17,6 +18,7 @@ using shrtlnk.Services.Applications;
 using shrtlnk.Services.Authentication;
 using shrtlnk.Services.Email;
 using shrtlnk.Services.Logger;
+using shrtlnk.Services.SafeBrowsingApi;
 
 namespace shrtlnk
 {
@@ -63,6 +65,12 @@ namespace shrtlnk
             services.AddSingleton(sp =>
                 sp.GetRequiredService<IOptions<ApiInfo>>().Value);
 
+            services.Configure<ApiKeys>(
+                Configuration.GetSection(nameof(ApiKeys)));
+
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<ApiKeys>>().Value);
+
             services.AddSingleton<IDeveloperAccountsService, DeveloperAccountsService>();
             services.AddSingleton<AuthenticationService>();
             services.AddSingleton<IAccountVerificationService, AccountVerificationService>();
@@ -72,6 +80,7 @@ namespace shrtlnk
 
             services.AddSingleton<IDeveloperApplications, DeveloperApplications>();
             services.AddSingleton<DeveloperApplicationsService>();
+            services.AddSingleton<SafeBrowsingApi>();
 
             string connectionString = Configuration.GetConnectionString("AppHarbor");
 

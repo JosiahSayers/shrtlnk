@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using shrtlnk.Models.Applications;
 using shrtlnk.Models.DAL;
@@ -6,6 +7,7 @@ using shrtlnk.Models.Objects;
 using shrtlnk.Models.SimpleError;
 using shrtlnk.Services.API;
 using shrtlnk.Services.Logger;
+using shrtlnk.Services.SafeBrowsingApi;
 
 namespace shrtlnk.Controllers.API.V1
 {
@@ -18,17 +20,19 @@ namespace shrtlnk.Controllers.API.V1
         private readonly ApiAuthorizationService apiAuth;
         private readonly IDeveloperApplications applications;
         private readonly ILogger logger;
+        private readonly SafeBrowsingApi _sba;
 
-        public APIController_2(linksDAL linksDAL, ApiAuthorizationService apiAuth, IDeveloperApplications developerApplications, ILogger logger)
+        public APIController_2(linksDAL linksDAL, ApiAuthorizationService apiAuth, IDeveloperApplications developerApplications, ILogger logger, SafeBrowsingApi sba)
         {
             _DAL = linksDAL;
             this.apiAuth = apiAuth;
             this.applications = developerApplications;
             this.logger = logger;
+            _sba = sba;
         }
 
         [HttpPost]
-        public IActionResult Link(RedirectItem newLink)
+        public async Task<IActionResult> Link(RedirectItem newLink)
         {
 
             string apiKey = HttpContext.Request.Headers[header_apiKey];
@@ -53,6 +57,15 @@ namespace shrtlnk.Controllers.API.V1
                 DeveloperApplicationDTO app = applications.GetByApiKey(apiKey);
                 if (app != null)
                 {
+                    bool isSafe = await _sba.CheckUrl(newLink.URL);
+                    if (!isSafe)
+                    {
+                        app.UnsafeURLSubmissions++;
+                        applications.Update(app);
+                        logger.Info("API POST /link - unsafe URL");
+                        return BadRequest(new SimpleError("This URL has been marked as unsafe and cannot be added"));
+                    }
+
                     newLink.DateAdded = DateTime.Now;
                     newLink.TimesLoaded = 0;
                     newLink.CreatedByApplicationId = app.Id;
