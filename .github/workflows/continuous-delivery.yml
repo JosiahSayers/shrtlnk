@@ -15,12 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       # Check-out appsettings
-      - name: Checkout
+      - name: Checkout appsettings
         uses: actions/checkout@v2
         with:
           repository: JosiahSayers/shrtlnk-appsettings
-          path: ./
+          path: appsettings
           token: ${{ secrets.GH_ACCESS_TOKEN }}
+      - run: cp appsettings/appsettings.json ./appsettings.json
 
 
 ### ⬇ IMPORTANT PART ⬇ ###
