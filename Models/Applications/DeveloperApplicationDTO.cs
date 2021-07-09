@@ -44,6 +44,8 @@ namespace shrtlnk.Models.Applications
 
         public int ShrtlnksTotalViews { get; set; }
 
+        public int UnsafeURLSubmissions { get; set; }
+
         public DeveloperApplicationDTO()
         {
             this.ShrtlnksCreatedWithApplication = 0;
