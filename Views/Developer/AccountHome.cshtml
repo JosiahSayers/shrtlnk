@@ -48,6 +48,7 @@
                     }
                     <p><strong>Shrtlnks created with application: </strong>@app.ShrtlnksCreatedWithApplication</p>
                     <p><strong>Shrtlnk clicks from this application's shrtlnks: </strong>@app.ShrtlnksTotalViews</p>
+                    <p><strong>Unsafe URLs detected and blocked from this application: </strong>@app.UnsafeURLSubmissions</p>
                 </div>
                 <div class="app-buttons">
                     <a asp-controller="Application" asp-action="Edit" asp-route-appId="@app.Id" class="btn btn-primary">Edit App</a>
