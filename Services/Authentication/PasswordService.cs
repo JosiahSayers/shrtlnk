@@ -19,7 +19,8 @@ namespace shrtlnk.Services.Authentication
 
         public string HashPasswordBcrypt(string password)
         {
-            return BCrypt.Net.BCrypt.HashPassword(password);
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();
+            return BCrypt.Net.BCrypt.HashPassword(password, salt);
         }
 
         public bool VerifyPassword(string storedHash, string passwordToCheck)
