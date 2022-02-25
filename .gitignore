@@ -7,3 +7,5 @@ obj
 # Files
 appsettings*json
 .DS_Store
+
+node_modules
