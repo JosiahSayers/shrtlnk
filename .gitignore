@@ -1,9 +1,8 @@
-# Folders
-bin
-.vs
-.vscode
-obj
-
-# Files
-appsettings*json
 .DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
