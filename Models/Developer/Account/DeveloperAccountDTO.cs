@@ -15,6 +15,8 @@ namespace shrtlnk.Models.Developer.Account
 
         public string Password { get; set; }
 
+        public string BcryptPassword { get; set; }
+
         [BsonRepresentation(BsonType.DateTime)]
         public DateTime AccountCreationDate { get; set; }
 

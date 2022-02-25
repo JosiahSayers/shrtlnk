@@ -79,6 +79,10 @@ namespace shrtlnk.Services.Authentication
                 throw new IncorrectPasswordException();
             }
 
+            string bcryptPassword = passwordService.HashPasswordBcrypt(signInForm.Password);
+            account.BcryptPassword = bcryptPassword;
+            accountsService.Update(account);
+
             SetEmailToSession(account.Email);
             return account;
         }
@@ -90,6 +94,7 @@ namespace shrtlnk.Services.Authentication
             try
             {
                 string encryptedPassword = passwordService.HashPassword(registration.Password);
+                string bcryptPassword = passwordService.HashPasswordBcrypt(registration.Password);
 
                 account = new DeveloperAccountDTO()
                 {
@@ -98,6 +103,7 @@ namespace shrtlnk.Services.Authentication
                     Email = registration.Email,
                     AccountCreationDate = DateTime.Now,
                     Password = encryptedPassword,
+                    BcryptPassword = bcryptPassword,
                     Role = "Developer",
                     Verified = true
                 };

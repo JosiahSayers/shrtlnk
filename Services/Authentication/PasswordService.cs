@@ -17,6 +17,11 @@ namespace shrtlnk.Services.Authentication
             return $"{Convert.ToBase64String(salt)}.{Convert.ToBase64String(key)}";
         }
 
+        public string HashPasswordBcrypt(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
         public bool VerifyPassword(string storedHash, string passwordToCheck)
         {
             string[] parts = storedHash.Split('.');
