@@ -29,6 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,5 +80,6 @@
     <None Remove="shrtlnk-tests\obj\Debug\netcoreapp2.1\shrtlnk-tests.csprojAssemblyReference.cache" />
     <None Remove="Services\SafeBrowsingApi\" />
     <None Remove="Models\ApiKeys\" />
+    <None Remove="BCrypt.Net-Next" />
   </ItemGroup>
 </Project>
