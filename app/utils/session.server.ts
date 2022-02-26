@@ -67,7 +67,7 @@ const storage = createCookieSessionStorage({
 });
 
 export async function createUserSession(
-  userId: string,
+  userId: number,
   redirectTo: string
 ) {
   const session = await storage.getSession();
