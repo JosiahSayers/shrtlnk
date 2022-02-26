@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const db = new PrismaClient();
+import { db } from "~/utils/db.server";
 
 async function seed() {
   const user = await db.user.create({

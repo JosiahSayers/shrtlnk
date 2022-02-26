@@ -9,3 +9,6 @@ appsettings*json
 .DS_Store
 
 node_modules
+.cache
+public/build
+api
