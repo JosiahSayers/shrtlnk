@@ -1,15 +1,50 @@
 import {
   Links,
+  LinksFunction,
+  MetaFunction,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "remix";
-import type { MetaFunction } from "remix";
+import styles from "~/styles/root.css";
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "shrtlnk - Simple Link Shortener" };
+};
+
+export const links: LinksFunction = () => {
+  return [
+    {
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css?family=Luckiest+Guy",
+    },
+    {
+      rel: "icon",
+      sizes: "16x16",
+      href: "/favicon-16x16.png",
+    },
+    {
+      rel: "icon",
+      sizes: "32x32",
+      href: "/favicon-32x32.png",
+    },
+    {
+      rel: "icon",
+      sizes: "192x192",
+      href: "/android-chrome-192x192.png",
+    },
+    {
+      rel: "icon",
+      sizes: "512x512",
+      href: "/android-chrome-512x512.png",
+    },
+    {
+      rel: "stylesheet",
+      href: styles,
+    },
+  ];
 };
 
 export default function App() {

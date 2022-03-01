@@ -1,0 +1,75 @@
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+main {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+h1.title {
+  font-size: 5em;
+  text-align: center;
+  text-align: center;
+  margin: 0;
+  padding: 2vh;
+  transform: rotate(-10deg);
+}
+
+h1.title span {
+  padding: 0;
+  margin: 0;
+}
+
+form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#url {
+  width: 75vw;
+  height: 8vh;
+  border-style: none;
+  font-size: 6.5vh;
+  padding: 0;
+}
+
+input[type="submit"] {
+  border: none;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  color: white;
+  font: inherit;
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+
+  background-color: #2ecc71;
+  text-transform: uppercase;
+  width: 75vw;
+  margin-top: 1vh;
+  height: 4vh;
+  border-radius: 3px;
+  outline: none;
+}
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px 0;
+}
+
+@media only screen and (max-width: 400px) {
+  h1.title {
+      font-size: 4em
+  }
+}

@@ -1,0 +1,17 @@
+body {
+  background-color: #3498db;
+  min-width: 320px;
+  color: rgb(51, 51, 51);
+}
+
+h1 {
+  font-family: 'Luckiest Guy';
+}
+
+h1.box-title {
+  font-size: 3em;
+  text-align: center;
+  text-align: center;
+  margin: 0;
+  padding: 2vh;
+}
