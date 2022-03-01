@@ -1,12 +1,43 @@
-import { User } from "@prisma/client"
+import { User } from "@prisma/client";
 import pbkdf2Hmac from "pbkdf2-hmac";
+import { db } from "./db.server";
+import { hashPassword } from "./password.server";
 
-type LegacyUser = User & {
+export type LegacyUser = User & {
   dotnetPassword: string;
   dotnetSaltArray: string;
+};
+
+export const authenticateLegacyUser = async (
+  user: LegacyUser,
+  passwordCandidate: string
+): Promise<number | null> => {
+  if (!(await doesLegacyPasswordMatch(user, passwordCandidate))) {
+    return null;
+  }
+
+  await db.user.update({
+    data: {
+      password: await hashPassword(passwordCandidate),
+      dotnetPassword: null,
+      dotnetSaltArray: null,
+    },
+    where: {
+      id: user.id,
+    },
+  });
+
+  return user.id;
+};
+
+export function isLegacyUser(user: User | LegacyUser): user is LegacyUser {
+  return !!user.dotnetPassword && !!user.dotnetSaltArray;
 }
 
-export const authenticateLegacyUser = async (user: LegacyUser, passwordCandidate: string): Promise<boolean> => {
+export async function doesLegacyPasswordMatch(
+  user: LegacyUser,
+  passwordCandidate: string
+): Promise<boolean> {
   const salt = Buffer.from(JSON.parse(user.dotnetSaltArray));
   const hashedPass = await pbkdf2Hmac(
     passwordCandidate,
@@ -15,14 +46,12 @@ export const authenticateLegacyUser = async (user: LegacyUser, passwordCandidate
     256 / 8,
     "SHA-512"
   );
-  return arrayBufferToBase64(hashedPass) === user.dotnetPassword.split('.')[1];
-};
-
-export function isLegacyUser(user: User | LegacyUser): user is LegacyUser {
-  return !!user.dotnetPassword && !!user.dotnetSaltArray;
+  const hashedPassAsString = arrayBufferToBase64(hashedPass);
+  const storedPass = user.dotnetPassword.split(".")[1];
+  return hashedPassAsString === storedPass;
 }
 
-function arrayBufferToBase64(buffer: ArrayBuffer) {
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
   var binary = "";
   var bytes = new Uint8Array(buffer);
   var len = bytes.byteLength;

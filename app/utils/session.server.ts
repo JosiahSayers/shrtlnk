@@ -1,12 +1,11 @@
-import { User } from "@prisma/client";
-import bcrypt from "bcryptjs";
-import {
-  createCookieSessionStorage,
-  redirect,
-} from "remix";
+import { createCookieSessionStorage, redirect } from "remix";
 
 import { db } from "./db.server";
-import { authenticateLegacyUser, isLegacyUser } from "./legacy-authenticate.server";
+import {
+  authenticateLegacyUser,
+  isLegacyUser,
+} from "./legacy-authenticate.server";
+import { doPasswordsMatch } from "./password.server";
 
 type LoginForm = {
   email: string;
@@ -16,34 +15,16 @@ type LoginForm = {
 export async function login({
   email,
   password,
-}: LoginForm) {
+}: LoginForm): Promise<number | null> {
   let user = await db.user.findUnique({
     where: { email },
   });
   if (!user) return null;
   if (isLegacyUser(user)) {
-    if (!(await authenticateLegacyUser(user, password))) {
-      return null;
-    }
-    user = await db.user.update({
-      data: {
-        password: await bcrypt.hash(password, 10),
-        dotnetPassword: null,
-        dotnetSaltArray: null
-      },
-      where: {
-        id: user.id
-      }
-    });
+    return authenticateLegacyUser(user, password);
   } else {
-    const isCorrectPassword = await bcrypt.compare(
-      password,
-      user.password
-    );
-    if (!isCorrectPassword) return null;
+    return (await doPasswordsMatch(password, user.password)) ? user.id : null;
   }
-
-  return user.id;
 }
 
 const sessionSecret = process.env.SESSION_SECRET;
@@ -66,10 +47,7 @@ const storage = createCookieSessionStorage({
   },
 });
 
-export async function createUserSession(
-  userId: number,
-  redirectTo: string
-) {
+export async function createUserSession(userId: number, redirectTo: string) {
   const session = await storage.getSession();
   session.set("userId", userId);
   return redirect(redirectTo, {

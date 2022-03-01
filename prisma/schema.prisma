@@ -11,7 +11,7 @@ model Application {
   id        Int       @id @default(autoincrement())
   name      String
   website   String?
-  apiKey    String
+  apiKey    String    @unique
   status    String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
