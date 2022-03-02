@@ -7,6 +7,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  ErrorBoundaryComponent,
 } from "remix";
 import styles from "~/styles/root.css";
 
@@ -45,6 +46,23 @@ export const links: LinksFunction = () => {
       href: styles,
     },
   ];
+};
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error(error);
+  return (
+    <html>
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>Something went wrong, sorry about that!</h1>
+        <Scripts />
+      </body>
+    </html>
+  );
 };
 
 export default function App() {

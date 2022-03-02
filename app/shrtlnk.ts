@@ -14,7 +14,7 @@ export async function createShrtlnk(
 
   let key: string;
   do {
-    key = new ShortUniqueId({ dictionary: "alphanum" }).randomUUID(6);
+    key = new ShortUniqueId({ dictionary: "alphanum_lower" }).randomUUID(6);
   } while (await doesKeyExist(key));
   return db.shrtlnk.create({
     data: { url, key, applicationId: application.id },

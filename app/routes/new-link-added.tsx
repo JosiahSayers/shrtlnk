@@ -31,7 +31,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 export default function NewLinkAddec() {
   const shrtlnk = useLoaderData<Shrtlnk>();
-  const [showTooltip, setShowTooltip] = useState(true);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [urlWasCopied, setUrlWasCopied] = useState(false);
 
   function setUrlToClipboard() {

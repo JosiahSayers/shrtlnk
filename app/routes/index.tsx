@@ -54,7 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
     });
   }
 
-  return redirect(`/newLinkAdded?key=${link.key}`);
+  return redirect(`/new-link-added?key=${link.key}`);
 };
 
 export default function Index() {

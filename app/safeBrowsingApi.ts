@@ -5,13 +5,12 @@ const apiUrl = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${
 export const isUrlSafe = async (url: string): Promise<boolean> => {
   try {
     const request = createRequest(url);
-    console.log("Sending request:\n", JSON.stringify(request, null, 2));
     const res = await fetch(apiUrl, {
       body: JSON.stringify(request),
       method: "POST",
     });
     const resData: Response = await res.json();
-    console.log("Got response:\n", JSON.stringify(resData, null, 2));
+
     return (
       !resData.matches ||
       (Array.isArray(resData.matches) && resData.matches.length > 0)
