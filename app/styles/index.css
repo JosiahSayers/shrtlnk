@@ -8,20 +8,6 @@ main {
   padding-bottom: 20px;
 }
 
-h1.title {
-  font-size: 5em;
-  text-align: center;
-  text-align: center;
-  margin: 0;
-  padding: 2vh;
-  transform: rotate(-10deg);
-}
-
-h1.title span {
-  padding: 0;
-  margin: 0;
-}
-
 form {
   position: absolute;
   top: 50%;
@@ -59,6 +45,14 @@ input[type="submit"] {
   outline: none;
 }
 
+p.error {
+  max-width: 75vw;
+  background-color: rgba(255, 0, 0, 0.6);
+  color: white;
+  border-radius: 0.2rem;
+  padding: 0 0.5rem;
+}
+
 footer {
   position: absolute;
   bottom: 10px;
@@ -70,6 +64,6 @@ footer {
 
 @media only screen and (max-width: 400px) {
   h1.title {
-      font-size: 4em
+    font-size: 4em;
   }
 }

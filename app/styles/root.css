@@ -4,8 +4,27 @@ body {
   color: rgb(51, 51, 51);
 }
 
-h1 {
-  font-family: 'Luckiest Guy';
+h1,
+h2 {
+  font-family: "Luckiest Guy";
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h1.title {
+  font-size: 5em;
+  text-align: center;
+  text-align: center;
+  margin: 0;
+  padding: 2vh;
+  transform: rotate(-10deg);
+}
+
+h1.title span {
+  padding: 0;
+  margin: 0 0.5rem;
 }
 
 h1.box-title {
