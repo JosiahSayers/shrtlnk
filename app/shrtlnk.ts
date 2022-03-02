@@ -1,14 +1,16 @@
 import { Shrtlnk } from "@prisma/client";
 import { db } from "./utils/db.server";
 import ShortUniqueId from "short-unique-id";
+import { isUrlSafe } from "./safeBrowsingApi";
 
 export async function createShrtlnk(
   url: string,
   apiKey: string
 ): Promise<Shrtlnk | null> {
   const application = await db.application.findFirst({ where: { apiKey } });
-  console.log({ apiKey, application });
   if (!application) return null;
+
+  if (!(await isUrlSafe(url))) return null;
 
   let key: string;
   do {
@@ -24,5 +26,5 @@ export async function getShrtlnk(key: string): Promise<Shrtlnk | null> {
 }
 
 async function doesKeyExist(key: string): Promise<boolean> {
-  return !!(await db.shrtlnk.findFirst({ where: { key } }));
+  return !!(await getShrtlnk(key));
 }
