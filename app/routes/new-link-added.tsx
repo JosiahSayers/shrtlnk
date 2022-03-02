@@ -49,7 +49,7 @@ export default function NewLinkAddec() {
     <main>
       <Link className="home-link" to="/">
         <h1 className="title">
-          <span>S</span>
+          <span>s</span>
           <span>h</span>
           <span>r</span>
           <span>t</span>
@@ -59,11 +59,11 @@ export default function NewLinkAddec() {
         </h1>
       </Link>
       <div className="new-link-container">
-        <h1 className="box-title">Success! Here's your new link:</h1>
+        <h1 className="box-title">SUCCESS! HERE'S YOUR NEW LINK:</h1>
         <ul>
           <li id="new-link-li">
-            <strong className="text-left">Shortened URL: </strong>
-            <Link to={`/${shrtlnk.key}`} reloadDocument>
+            <strong className="text-left">SHORTENED URL: </strong>
+            <Link id="shrtlnk" to={`/${shrtlnk.key}`} reloadDocument>
               shrtlnk.dev/{shrtlnk.key}
             </Link>
             <img
@@ -79,8 +79,10 @@ export default function NewLinkAddec() {
             </div>
           </li>
           <li>
-            <strong className="text-left">Full URL: </strong>
-            <a href={shrtlnk.url}>{shrtlnk.url}</a>
+            <strong className="text-left">FULL URL: </strong>
+            <a id="full-link" href={shrtlnk.url}>
+              {shrtlnk.url}
+            </a>
           </li>
         </ul>
       </div>

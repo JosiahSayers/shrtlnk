@@ -64,17 +64,15 @@ export default function Index() {
     <main>
       <h1 className="title">
         <span>S</span>
-        <span>h</span>
-        <span>r</span>
-        <span>t</span>
+        <span>H</span>
+        <span>R</span>
+        <span>T</span>
         <span>L</span>
-        <span>n</span>
-        <span>k</span>
+        <span>N</span>
+        <span>K</span>
       </h1>
       <Form method="post">
-        <label>
-          <h2>URL To Shorten:</h2>
-        </label>
+        <label htmlFor="url">URL TO SHORTEN:</label>
         <input
           className="text"
           type="text"
@@ -85,7 +83,7 @@ export default function Index() {
         {actionData?.errors?.url && (
           <p className="error">{actionData?.errors?.url}</p>
         )}
-        <input className="button" type="submit" value="Create Short Link" />
+        <input className="button" type="submit" value="CREATE SHORT LINK" />
       </Form>
       <footer>
         <span>Pssst, are you a developer? We have an </span>

@@ -16,6 +16,11 @@ form {
   transform: translate(-50%, -50%);
 }
 
+label {
+  font-family: "Luckiest Guy";
+  font-size: 2.5rem;
+}
+
 #url {
   width: 75vw;
   height: 8vh;
