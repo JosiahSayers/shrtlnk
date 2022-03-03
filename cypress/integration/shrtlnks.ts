@@ -1,6 +1,4 @@
-before(() => {
-  cy.visit("localhost:3000");
-});
+before(() => cy.visit("/"));
 
 describe("Home Page", () => {
   describe("Page content", () => {
@@ -32,6 +30,36 @@ describe("Home Page", () => {
       cy.findByText("CREATE SHORT LINK").click();
       cy.findByText('"URL" must be a valid uri');
     });
+  });
+});
+
+describe("shrtlnk functionality", () => {
+  before(() => cy.visit("/"));
+
+  let newLinkKey = "";
+
+  it("allows users to submit valid links", () => {
+    cy.findByLabelText("URL TO SHORTEN:").type("https://google.com");
+    cy.findByText("CREATE SHORT LINK").click();
+    cy.findByText("SUCCESS! HERE'S YOUR NEW LINK:");
+    cy.get("#shrtlnk").then(($anchor) => {
+      newLinkKey = $anchor[0].attributes.getNamedItem("href")?.value ?? "";
+    });
+  });
+
+  it("redirects users to the full URL when a shrtlnk is loaded", () => {
+    cy.request({
+      url: newLinkKey,
+      followRedirect: false,
+    })
+      .its("headers")
+      .then((headers) => Promise.resolve(headers.location))
+      .should("equal", "https://google.com");
+  });
+
+  it("redirects to the not-found page when a shrtlnk key is not found", () => {
+    cy.visit("/non-existent-key");
+    cy.findByText("UH-OH! WE CAN'T FIND THAT SHORT LINK IN OUR DATABASE.");
   });
 });
 

@@ -15,7 +15,7 @@ export const links: LinksFunction = () => [
 export default function NotFound() {
   return (
     <div className="main">
-      <h1>Uh-oh! We can't find that Short Link in our database.</h1>
+      <h1>UH-OH! WE CAN'T FIND THAT SHORT LINK IN OUR DATABASE.</h1>
     </div>
   );
 }
