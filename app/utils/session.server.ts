@@ -20,11 +20,27 @@ export async function login({
     where: { email },
   });
   if (!user) return null;
+
+  await db.user.update({
+    where: { id: user.id },
+    data: { lastLoginAttempt: new Date() },
+  });
+  let isAuthenticated: boolean;
+
   if (isLegacyUser(user)) {
-    return authenticateLegacyUser(user, password);
+    isAuthenticated = await authenticateLegacyUser(user, password);
   } else {
-    return (await doPasswordsMatch(password, user.password)) ? user.id : null;
+    isAuthenticated = await doPasswordsMatch(password, user.password);
   }
+
+  await db.user.update({
+    where: { id: user.id },
+    data: {
+      lastLoginAttempt: new Date(),
+      lastLoginSuccess: isAuthenticated ? new Date() : user.lastLoginSuccess,
+    },
+  });
+  return isAuthenticated ? user.id : null;
 }
 
 const sessionSecret = process.env.SESSION_SECRET;

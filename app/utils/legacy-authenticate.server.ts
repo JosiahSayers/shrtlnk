@@ -11,9 +11,9 @@ export type LegacyUser = User & {
 export const authenticateLegacyUser = async (
   user: LegacyUser,
   passwordCandidate: string
-): Promise<number | null> => {
+): Promise<boolean> => {
   if (!(await doesLegacyPasswordMatch(user, passwordCandidate))) {
-    return null;
+    return false;
   }
 
   await db.user.update({
@@ -27,7 +27,7 @@ export const authenticateLegacyUser = async (
     },
   });
 
-  return user.id;
+  return true;
 };
 
 export function isLegacyUser(user: User | LegacyUser): user is LegacyUser {
