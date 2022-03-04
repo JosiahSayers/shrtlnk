@@ -38,16 +38,17 @@ model ShrtlnkLoad {
 }
 
 model User {
-  id              Int           @id @default(autoincrement())
-  email           String        @unique
-  firstName       String
-  lastName        String
-  password        String
-  dotnetPassword  String?
-  dotnetSaltArray String?
-  createdAt       DateTime      @default(now())
-  lastLogin       DateTime      @default(now())
-  role            String
-  verified        Boolean
-  applications    Application[]
+  id               Int           @id @default(autoincrement())
+  email            String        @unique
+  firstName        String
+  lastName         String
+  password         String
+  dotnetPassword   String?
+  dotnetSaltArray  String?
+  createdAt        DateTime      @default(now())
+  lastLoginSuccess DateTime      @default(now())
+  lastLoginAttempt DateTime      @default(now())
+  role             String
+  verified         Boolean
+  applications     Application[]
 }
