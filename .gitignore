@@ -13,3 +13,5 @@ node_modules
 public/build
 api
 .env
+
+prisma/generated

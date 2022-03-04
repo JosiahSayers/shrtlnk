@@ -1,0 +1,18 @@
+datasource db {
+  provider = "sqlserver"
+  url      = env("MSSQL_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/mssql-client"
+}
+
+model links {
+  Id             Int       @id(map: "PK__links__3214EC0703317E3D") @default(autoincrement())
+  url_key        String    @db.NVarChar(6)
+  url            String    @db.NVarChar(Max)
+  date_added     DateTime? @db.Date
+  times_loaded   Int?
+  application_id String?   @unique @db.VarChar(255)
+}
