@@ -1,5 +1,5 @@
 body {
-  background-color: #3498db;
+  background-color: #3498db !important;
   min-width: 320px;
   color: rgb(51, 51, 51);
 }
