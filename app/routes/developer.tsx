@@ -18,6 +18,7 @@ export const links: LinksFunction = () => [
 export const loader: LoaderFunction = async ({ request }) => {
   const path = request.url.split("/developer")[1];
   const userInfo = await getUserSession(request);
+  console.log(userInfo);
   return { path, userInfo };
 };
 
@@ -94,7 +95,11 @@ export default function DeveloperRoot() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/developer/signout">
+                  <Link
+                    className="nav-link"
+                    to="/developer/signout"
+                    reloadDocument
+                  >
                     Sign Out
                   </Link>
                 </li>

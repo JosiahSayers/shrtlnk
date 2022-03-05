@@ -1,14 +1,14 @@
 import { ActionFunction, useSearchParams } from "remix";
-import { createUserSession, login } from "~/utils/session.server";
+import { createUserSession, signin } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const email = form.get("email");
   const password = form.get("password");
 
-  const user = await login({ email, password });
+  const user = await signin({ email, password });
   if (user) {
-    return createUserSession(user, "");
+    return createUserSession(user, "/developer");
   }
   return null;
 };

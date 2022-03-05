@@ -13,7 +13,7 @@ type LoginForm = {
   password: string;
 };
 
-export async function login({
+export async function signin({
   email,
   password,
 }: LoginForm): Promise<User | null> {
@@ -76,19 +76,30 @@ export async function createUserSession(user: User, redirectTo: string) {
   });
 }
 
+async function getSession(request: Request) {
+  return storage.getSession(request.headers.get("Cookie"));
+}
+
 export async function getUserSession(request: Request) {
-  const session = await storage.getSession(request.headers.get("Cookie"));
+  const session = await getSession(request);
   const userInfo = {
     id: session.get("userId"),
     firstName: session.get("firstName"),
     lastName: session.get("lastName"),
   };
 
-  for (let field in userInfo) {
-    if (!field || typeof field !== "string") {
-      return null;
-    }
+  if (!userInfo.id) {
+    return null;
   }
 
   return userInfo;
+}
+
+export async function signout(request: Request) {
+  const session = await getSession(request);
+  return redirect("/developer", {
+    headers: {
+      "Set-Cookie": await storage.destroySession(session),
+    },
+  });
 }
