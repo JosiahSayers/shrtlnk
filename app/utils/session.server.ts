@@ -95,6 +95,14 @@ export async function getUserSession(request: Request) {
   return userInfo;
 }
 
+export async function requireUserSession(request: Request) {
+  const userSession = await getUserSession(request);
+  if (!userSession) {
+    throw redirect("/login");
+  }
+  return userSession;
+}
+
 export async function signout(request: Request) {
   const session = await getSession(request);
   return redirect("/developer", {
