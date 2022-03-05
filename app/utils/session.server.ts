@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { createCookieSessionStorage, redirect } from "remix";
 
 import { db } from "./db.server";
@@ -15,7 +16,7 @@ type LoginForm = {
 export async function login({
   email,
   password,
-}: LoginForm): Promise<number | null> {
+}: LoginForm): Promise<User | null> {
   let user = await db.user.findUnique({
     where: { email },
   });
@@ -33,14 +34,14 @@ export async function login({
     isAuthenticated = await doPasswordsMatch(password, user.password);
   }
 
-  await db.user.update({
+  user = await db.user.update({
     where: { id: user.id },
     data: {
       lastLoginAttempt: new Date(),
       lastLoginSuccess: isAuthenticated ? new Date() : user.lastLoginSuccess,
     },
   });
-  return isAuthenticated ? user.id : null;
+  return isAuthenticated ? user : null;
 }
 
 const sessionSecret = process.env.SESSION_SECRET;
@@ -63,12 +64,31 @@ const storage = createCookieSessionStorage({
   },
 });
 
-export async function createUserSession(userId: number, redirectTo: string) {
+export async function createUserSession(user: User, redirectTo: string) {
   const session = await storage.getSession();
-  session.set("userId", userId);
+  session.set("userId", user.id);
+  session.set("firstName", user.firstName);
+  session.set("lastName", user.lastName);
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
     },
   });
+}
+
+export async function getUserSession(request: Request) {
+  const session = await storage.getSession(request.headers.get("Cookie"));
+  const userInfo = {
+    id: session.get("userId"),
+    firstName: session.get("firstName"),
+    lastName: session.get("lastName"),
+  };
+
+  for (let field in userInfo) {
+    if (!field || typeof field !== "string") {
+      return null;
+    }
+  }
+
+  return userInfo;
 }

@@ -1,4 +1,5 @@
 import { Link, LinksFunction, MetaFunction } from "remix";
+import Card from "~/components/developer/card";
 import styles from "~/styles/developer/index.css";
 
 export const meta: MetaFunction = () => ({
@@ -19,7 +20,7 @@ export default function DeveloperHome() {
 
       <div className="center" id="blurb">
         <span className="lead">
-          Shrtlnk strives to be the easiest API to integrate into your project.{" "}
+          Shrtlnk strives to be the easiest API to integrate into your project.
           <br />
         </span>
         <strong className="h4">Here's our onboarding process:</strong>
@@ -27,53 +28,30 @@ export default function DeveloperHome() {
 
       <div className="row">
         <div className="col">
-          <div className="card text-center">
-            <div className="card-body">
-              <div>
-                <h5 className="card-title">Create an account</h5>
-                <p className="card-text">
-                  Click the button below to get started.
-                </p>
-              </div>
-              <Link to="/developer/register" className="btn btn-primary">
-                Create Account
-              </Link>
-            </div>
-          </div>
+          <Card
+            title="Create an account"
+            text="Click the button below to get started."
+            linkUrl="/developer/register"
+            linkText="Create Account"
+          />
         </div>
 
         <div className="col">
-          <div className="card text-center">
-            <div className="card-body">
-              <div>
-                <h5 className="card-title">Add an application</h5>
-                <p className="card-text">
-                  You can have as many applications as you would like, we don't
-                  like limits here!
-                </p>
-              </div>
-              <Link to="/developer/signin" className="btn btn-primary">
-                Sign In
-              </Link>
-            </div>
-          </div>
+          <Card
+            title="Add an application"
+            text="You can have as many applications as you would like, we don't like limits here!"
+            linkUrl="/developer/signin"
+            linkText="Sign In"
+          />
         </div>
 
         <div className="col">
-          <div className="card text-center">
-            <div className="card-body">
-              <div>
-                <h5 className="card-title">Use the API</h5>
-                <p className="card-text">
-                  Each application will be given a private API key, use that to
-                  call shrtlnk
-                </p>
-              </div>
-              <Link to="/developer/documentation" className="btn btn-primary">
-                View Documentation
-              </Link>
-            </div>
-          </div>
+          <Card
+            title="Use the API"
+            text="Each application will be given a private API key, use that to call shrtlnk"
+            linkUrl="/developer/documentation"
+            linkText="View Documentation"
+          />
         </div>
       </div>
     </div>

@@ -6,9 +6,9 @@ export const action: ActionFunction = async ({ request }) => {
   const email = form.get("email");
   const password = form.get("password");
 
-  const userId = await login({ email, password });
-  if (userId) {
-    return createUserSession(userId, "");
+  const user = await login({ email, password });
+  if (user) {
+    return createUserSession(user, "");
   }
   return null;
 };

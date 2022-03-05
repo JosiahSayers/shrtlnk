@@ -6,6 +6,7 @@ import {
   Outlet,
   useLoaderData,
 } from "remix";
+import { getUserSession } from "~/utils/session.server";
 
 export const links: LinksFunction = () => [
   {
@@ -16,11 +17,12 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const path = request.url.split("/developer")[1];
-  return { path, isSignedIn: false };
+  const userInfo = await getUserSession(request);
+  return { path, userInfo };
 };
 
 export default function DeveloperRoot() {
-  const { path, isSignedIn } = useLoaderData();
+  const { path, userInfo } = useLoaderData();
   const [showMobileNav, setShowMobileNav] = useState(false);
 
   return (
@@ -67,7 +69,7 @@ export default function DeveloperRoot() {
                 Documentation
               </Link>
             </li>
-            {isSignedIn && (
+            {userInfo && (
               <li
                 className={
                   path === "/applications" ? "nav-item active" : "nav-item"
@@ -80,7 +82,7 @@ export default function DeveloperRoot() {
             )}
           </ul>
           <ul className="navbar-nav">
-            {isSignedIn ? (
+            {userInfo ? (
               <>
                 <li
                   className={
@@ -88,11 +90,11 @@ export default function DeveloperRoot() {
                   }
                 >
                   <Link className="nav-link" to="/developer/account">
-                    Hey there, @auth.CurrentUser.FirstName
+                    Hey there, {userInfo.firstName}
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/developer/logout">
+                  <Link className="nav-link" to="/developer/signout">
                     Sign Out
                   </Link>
                 </li>
