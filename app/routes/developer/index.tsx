@@ -1,4 +1,4 @@
-import { LinksFunction, MetaFunction } from "remix";
+import { Link, LinksFunction, MetaFunction } from "remix";
 import styles from "~/styles/developer/index.css";
 
 export const meta: MetaFunction = () => ({
@@ -35,13 +35,9 @@ export default function DeveloperHome() {
                   Click the button below to get started.
                 </p>
               </div>
-              <a
-                asp-controller="Developer"
-                asp-action="Register"
-                className="btn btn-primary"
-              >
+              <Link to="/developer/register" className="btn btn-primary">
                 Create Account
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -56,13 +52,9 @@ export default function DeveloperHome() {
                   like limits here!
                 </p>
               </div>
-              <a
-                asp-controller="Developer"
-                asp-action="SignIn"
-                className="btn btn-primary"
-              >
+              <Link to="/developer/signin" className="btn btn-primary">
                 Sign In
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -77,13 +69,9 @@ export default function DeveloperHome() {
                   call shrtlnk
                 </p>
               </div>
-              <a
-                asp-controller="Developer"
-                asp-action="Documentation"
-                className="btn btn-primary"
-              >
+              <Link to="/developer/documentation" className="btn btn-primary">
                 View Documentation
-              </a>
+              </Link>
             </div>
           </div>
         </div>

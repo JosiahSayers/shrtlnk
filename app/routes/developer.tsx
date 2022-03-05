@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { LinksFunction, LoaderFunction, Outlet, useLoaderData } from "remix";
+import {
+  Link,
+  LinksFunction,
+  LoaderFunction,
+  Outlet,
+  useLoaderData,
+} from "remix";
 
 export const links: LinksFunction = () => [
   {
@@ -23,9 +29,9 @@ export default function DeveloperRoot() {
         className="navbar navbar-expand-lg navbar-dark bg-dark"
         onClick={() => setShowMobileNav(!showMobileNav)}
       >
-        <a className="navbar-brand" href="/">
+        <Link to="/" className="navbar-brand">
           shrtlnk
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -48,18 +54,18 @@ export default function DeveloperRoot() {
                 path === "" || path === "/" ? "nav-item active" : "nav-item"
               }
             >
-              <a className="nav-link" href="/developer">
+              <Link to="/developer" className="nav-link">
                 Dev Portal
-              </a>
+              </Link>
             </li>
             <li
               className={
                 path === "/documentation" ? "nav-item active" : "nav-item"
               }
             >
-              <a className="nav-link" href="/developer/documentation">
+              <Link to="/developer/documentation" className="nav-link">
                 Documentation
-              </a>
+              </Link>
             </li>
             {isSignedIn && (
               <li
@@ -67,9 +73,9 @@ export default function DeveloperRoot() {
                   path === "/applications" ? "nav-item active" : "nav-item"
                 }
               >
-                <a className="nav-link" href="/developer/applications">
+                <Link className="nav-link" to="/developer/applications">
                   My Applications
-                </a>
+                </Link>
               </li>
             )}
           </ul>
@@ -81,14 +87,14 @@ export default function DeveloperRoot() {
                     path === "/edit-account" ? "nav-item active" : "nav-item"
                   }
                 >
-                  <a className="nav-link" href="/developer/account">
+                  <Link className="nav-link" to="/developer/account">
                     Hey there, @auth.CurrentUser.FirstName
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/developer/logout">
+                  <Link className="nav-link" to="/developer/logout">
                     Sign Out
-                  </a>
+                  </Link>
                 </li>
               </>
             ) : (
@@ -98,16 +104,16 @@ export default function DeveloperRoot() {
                     path === "/register" ? "nav-item active" : "nav-item"
                   }
                 >
-                  <a className="nav-link" href="/developer/register">
+                  <Link className="nav-link" to="/developer/register">
                     Register
-                  </a>
+                  </Link>
                 </li>
                 <li
                   className={path === "/login" ? "nav-item active" : "nav-item"}
                 >
-                  <a className="nav-link" href="/developer/signin">
+                  <Link className="nav-link" to="/developer/signin">
                     Sign In
-                  </a>
+                  </Link>
                 </li>
               </>
             )}
