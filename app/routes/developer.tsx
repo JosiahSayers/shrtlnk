@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Link,
   LinksFunction,
   LoaderFunction,
   Outlet,
   useLoaderData,
+  useLocation,
 } from "remix";
 import { getUserSession } from "~/utils/session.server";
 
@@ -16,14 +17,14 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const path = request.url.split("/developer")[1];
   const userInfo = await getUserSession(request);
-  return { path, userInfo };
+  return { userInfo };
 };
 
 export default function DeveloperRoot() {
-  const { path, userInfo } = useLoaderData();
+  const { userInfo } = useLoaderData();
   const [showMobileNav, setShowMobileNav] = useState(false);
+  const currentPath = useLocation().pathname.split("/developer")[1];
 
   return (
     <>
@@ -53,7 +54,9 @@ export default function DeveloperRoot() {
           <ul className="navbar-nav mr-auto">
             <li
               className={
-                path === "" || path === "/" ? "nav-item active" : "nav-item"
+                currentPath === "" || currentPath === "/"
+                  ? "nav-item active"
+                  : "nav-item"
               }
             >
               <Link to="/developer" className="nav-link">
@@ -62,7 +65,9 @@ export default function DeveloperRoot() {
             </li>
             <li
               className={
-                path === "/documentation" ? "nav-item active" : "nav-item"
+                currentPath === "/documentation"
+                  ? "nav-item active"
+                  : "nav-item"
               }
             >
               <Link to="/developer/documentation" className="nav-link">
@@ -72,7 +77,9 @@ export default function DeveloperRoot() {
             {userInfo && (
               <li
                 className={
-                  path === "/applications" ? "nav-item active" : "nav-item"
+                  currentPath === "/applications"
+                    ? "nav-item active"
+                    : "nav-item"
                 }
               >
                 <Link className="nav-link" to="/developer/applications">
@@ -86,7 +93,9 @@ export default function DeveloperRoot() {
               <>
                 <li
                   className={
-                    path === "/edit-account" ? "nav-item active" : "nav-item"
+                    currentPath === "/edit-account"
+                      ? "nav-item active"
+                      : "nav-item"
                   }
                 >
                   <Link className="nav-link" to="/developer/account">
@@ -107,7 +116,7 @@ export default function DeveloperRoot() {
               <>
                 <li
                   className={
-                    path === "/register" ? "nav-item active" : "nav-item"
+                    currentPath === "/register" ? "nav-item active" : "nav-item"
                   }
                 >
                   <Link className="nav-link" to="/developer/register">
@@ -115,7 +124,9 @@ export default function DeveloperRoot() {
                   </Link>
                 </li>
                 <li
-                  className={path === "/login" ? "nav-item active" : "nav-item"}
+                  className={
+                    currentPath === "/login" ? "nav-item active" : "nav-item"
+                  }
                 >
                   <Link className="nav-link" to="/developer/signin">
                     Sign In

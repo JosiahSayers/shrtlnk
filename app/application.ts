@@ -25,6 +25,7 @@ export async function getApplicationsWithCounts(
       },
     },
   });
+
   return applications.map((app) => ({
     ...app,
     shrtlnkLoads: app.shrtlnks.reduce(
