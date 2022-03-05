@@ -1,6 +1,6 @@
-import Joi, { string } from "joi";
-import { ActionFunction, json, useActionData, useSearchParams } from "remix";
-import { getErrors } from "~/utils/get-validation-errors";
+import Joi from "joi";
+import { ActionFunction, json, useActionData } from "remix";
+import { validate } from "~/utils/get-validation-errors";
 import { createUserSession, signin } from "~/utils/session.server";
 
 type ActionData = {
@@ -20,11 +20,10 @@ const validateForm = (form: {
   password: FormDataEntryValue | null;
 }) => {
   const schema = Joi.object({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    email: Joi.string().required(),
+    password: Joi.string().required(),
   });
-  const errors = getErrors(schema, form);
-  return errors;
+  return validate(schema, form);
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -32,22 +31,19 @@ export const action: ActionFunction = async ({ request }) => {
   const email = form.get("email");
   const password = form.get("password");
 
-  const errors = validateForm({ email, password });
+  const { fields, errors } = validateForm({ email, password });
 
   if (errors) {
     return json(
       {
         errors,
-        fields: {
-          email,
-          password,
-        },
+        fields,
       },
       { status: 400 }
     );
   }
 
-  const user = await signin({ email, password });
+  const user = await signin(fields);
   if (user) {
     return createUserSession(user, "/developer");
   }
@@ -55,7 +51,7 @@ export const action: ActionFunction = async ({ request }) => {
   return json(
     {
       formLevelError: "Could not log you in with these credentials",
-      fields: { email, password },
+      fields: fields,
     },
     { status: 400 }
   );

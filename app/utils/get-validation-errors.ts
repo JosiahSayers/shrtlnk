@@ -1,13 +1,18 @@
 import { ObjectSchema, Schema, ValidationResult } from "joi";
 
-export const getErrors = <Shape>(
+type Result<Shape> = {
+  fields: Shape | undefined;
+  errors: { [fieldName: string]: string } | null;
+};
+
+export const validate = <Shape>(
   schema: ObjectSchema<Shape>,
   fields: unknown
-): { [fieldName: string]: string } | null => {
+): Result<Shape> => {
   const result = schema.validate(fields, { abortEarly: false });
-  const mapped = result.error?.details.reduce((output, field) => {
+  const errors = result.error?.details.reduce((output, field) => {
     output[field.path[0]] = field.message;
     return output;
   }, {} as { [fieldName: string]: string });
-  return mapped ?? null;
+  return { fields: result.value, errors: errors ?? null };
 };
