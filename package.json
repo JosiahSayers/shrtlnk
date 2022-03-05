@@ -24,7 +24,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.2.2",
-    "short-unique-id": "^4.4.4"
+    "short-unique-id": "^4.4.4",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.2.2",
