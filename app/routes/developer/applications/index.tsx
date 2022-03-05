@@ -86,13 +86,13 @@ export default function Applications() {
           </div>
           <div className="app-buttons">
             <Link
-              to={`/applications/edit/${app.id}`}
+              to={`/developer/applications/${app.id}/edit`}
               className="btn btn-primary"
             >
               Edit App
             </Link>
             <Link
-              to={`/applications/delete/${app.id}`}
+              to={`/developer/applications/${app.id}/delete`}
               className="btn btn-danger"
             >
               Delete App

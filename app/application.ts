@@ -1,4 +1,5 @@
 import { Application } from "@prisma/client";
+import { redirect } from "remix";
 import ShortUniqueId from "short-unique-id";
 import { db } from "./utils/db.server";
 
@@ -61,5 +62,19 @@ export async function createApp({
       userId,
       apiKey,
     },
+  });
+}
+
+export async function getApp(id: number) {
+  return db.application.findFirst({ where: { id } });
+}
+
+export async function deleteApp(id: number, loggedInUserId: number) {
+  const app = await getApp(id);
+  if (!app || app.userId !== loggedInUserId) {
+    return redirect("/developer/applications", 401);
+  }
+  return db.application.delete({
+    where: { idAndUserId: { id, userId: loggedInUserId } },
   });
 }
