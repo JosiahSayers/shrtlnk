@@ -1,4 +1,5 @@
 import { Application } from "@prisma/client";
+import ShortUniqueId from "short-unique-id";
 import { db } from "./utils/db.server";
 
 type ApplicationWithData = Application & {
@@ -37,4 +38,28 @@ export async function getApplicationsWithCounts(
     shrtlnks: undefined,
     _count: undefined,
   }));
+}
+
+export async function createApp({
+  name,
+  website,
+  userId,
+}: {
+  name: string;
+  website: string;
+  userId: number;
+}) {
+  let apiKey: string;
+  do {
+    apiKey = new ShortUniqueId().randomUUID(45);
+  } while (await db.application.findFirst({ where: { apiKey } }));
+
+  return db.application.create({
+    data: {
+      name,
+      website,
+      userId,
+      apiKey,
+    },
+  });
 }

@@ -34,3 +34,7 @@ h1.box-title {
   margin: 0;
   padding: 2vh;
 }
+
+.container {
+  margin-top: 3rem;
+}

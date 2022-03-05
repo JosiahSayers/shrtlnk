@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { ActionFunction, json, useActionData } from "remix";
+import { ActionFunction, json, useActionData, useSearchParams } from "remix";
 import { validate } from "~/utils/get-validation-errors";
 import { createUserSession, signin } from "~/utils/session.server";
 
@@ -30,6 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const email = form.get("email");
   const password = form.get("password");
+  const redirectTo = form.get("redirectTo");
 
   const { fields, errors } = validateForm({ email, password });
 
@@ -45,7 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const user = await signin(fields);
   if (user) {
-    return createUserSession(user, "/developer");
+    return createUserSession(user, (redirectTo as string) ?? "/developer");
   }
 
   return json(
@@ -59,12 +60,19 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Login() {
   const actionData = useActionData<ActionData>();
+  const [searchParams] = useSearchParams();
+
   return (
     <div className="container">
       <h1>Sign In</h1>
 
       <div className="card pt-4 pb-4 pr-4 pl-4">
-        <form asp-controller="Developer" asp-action="SignIn" method="post">
+        <form method="post">
+          <input
+            type="hidden"
+            name="redirectTo"
+            value={searchParams.get("redirectTo") ?? undefined}
+          />
           <div className="form-group">
             <input
               className="form-control"
@@ -103,28 +111,3 @@ export default function Login() {
     </div>
   );
 }
-
-// export default function Login() {
-//   const [searchParams] = useSearchParams();
-//   return (
-//     <div>
-//       <h1>Login</h1>
-//       <form method="post">
-//         <input
-//           type="hidden"
-//           name="redirectTo"
-//           value={searchParams.get("redirectTo") ?? undefined}
-//         />
-
-//         <input type="text" name="email" id="email" placeholder="email" />
-//         <input
-//           type="password"
-//           name="password"
-//           id="password"
-//           placeholder="password"
-//         />
-//         <input type="submit" value="Log in" />
-//       </form>
-//     </div>
-//   );
-// }

@@ -25,15 +25,14 @@ export default function Applications() {
 
   return (
     <div className="container">
-      <a
+      <Link
         className="btn btn-light"
         role="button"
         id="add-app"
-        asp-controller="Application"
-        asp-action="AddNew"
+        to="/developer/applications/new"
       >
         Add an application
-      </a>
+      </Link>
 
       {applications.length < 1 && (
         <div className="alert alert-light" role="alert">

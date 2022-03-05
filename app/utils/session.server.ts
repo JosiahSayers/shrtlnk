@@ -83,9 +83,9 @@ async function getSession(request: Request) {
 export async function getUserSession(request: Request) {
   const session = await getSession(request);
   const userInfo = {
-    id: session.get("userId"),
-    firstName: session.get("firstName"),
-    lastName: session.get("lastName"),
+    id: session?.get("userId"),
+    firstName: session?.get("firstName"),
+    lastName: session?.get("lastName"),
   };
 
   if (!userInfo.id) {
@@ -95,10 +95,14 @@ export async function getUserSession(request: Request) {
   return userInfo;
 }
 
-export async function requireUserSession(request: Request) {
+export async function requireUserSession(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname
+) {
   const userSession = await getUserSession(request);
   if (!userSession) {
-    throw redirect("/login");
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/developer/signin?${searchParams}`);
   }
   return userSession;
 }

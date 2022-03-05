@@ -1,7 +1,7 @@
 import { ObjectSchema, Schema, ValidationResult } from "joi";
 
 type Result<Shape> = {
-  fields: Shape | undefined;
+  fields: Shape;
   errors: { [fieldName: string]: string } | null;
 };
 
@@ -14,5 +14,5 @@ export const validate = <Shape>(
     output[field.path[0]] = field.message;
     return output;
   }, {} as { [fieldName: string]: string });
-  return { fields: result.value, errors: errors ?? null };
+  return { fields: result.value as Shape, errors: errors ?? null };
 };
