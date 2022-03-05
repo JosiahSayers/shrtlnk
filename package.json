@@ -11,7 +11,8 @@
     "cypress": "CYPRESS_BASE_URL=${CYPRESS_BASE_URL:=http://localhost:3000} cypress open",
     "postinstall": "remix setup node",
     "db:seed": "node --require esbuild-register prisma/seed.ts",
-    "db:migrate": "prisma db push"
+    "db:migrate": "prisma db push",
+    "db:prod-refresh": "node --require esbuild-register prisma/drop.ts && node --require esbuild-register prisma/consolidate-production.ts"
   },
   "dependencies": {
     "@prisma/client": "^3.10.0",

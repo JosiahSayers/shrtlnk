@@ -39,7 +39,8 @@ export default function Applications() {
           Hi, {user.firstName}.
           <br />
           It looks like you haven't added an application yet.{" "}
-          <Link to="/applications/new">Click here</Link> to get started!
+          <Link to="/developer/applications/new">Click here</Link> to get
+          started!
         </div>
       )}
 

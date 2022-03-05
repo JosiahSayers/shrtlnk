@@ -11,8 +11,10 @@ import { requireUserSession } from "~/utils/session.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userInfo = await requireUserSession(request);
-  const appId = Number.parseInt(params.appId ?? "0");
-  const app = await getApp(appId);
+  if (!params.appId) {
+    return redirect("/developer/applications", 404);
+  }
+  const app = await getApp(params.appId);
   if (!app || app.userId !== userInfo.id) {
     return redirect("/developer/applications", 500);
   }
@@ -21,8 +23,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const userInfo = await requireUserSession(request);
-  const appId = Number.parseInt(params.appId ?? "0");
-  await deleteApp(appId, userInfo.id);
+  if (!params.appId) {
+    return redirect("/developer/applications", 404);
+  }
+  await deleteApp(params.appId, userInfo.id);
   return redirect("/developer/applications");
 };
 

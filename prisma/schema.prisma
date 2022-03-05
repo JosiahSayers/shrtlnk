@@ -8,14 +8,14 @@ datasource db {
 }
 
 model Application {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(uuid())
   name        String
   website     String?
   apiKey      String       @unique
   status      String       @default("Valid")
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  userId      Int
+  userId      String
   User        User         @relation(fields: [userId], references: [id])
   shrtlnks    Shrtlnk[]
   blockedUrls BlockedUrl[]
@@ -24,32 +24,32 @@ model Application {
 }
 
 model Shrtlnk {
-  id            Int           @id @default(autoincrement())
+  id            String        @id @default(uuid())
   key           String        @unique
   url           String
   createdAt     DateTime      @default(now())
-  applicationId Int
+  applicationId String
   application   Application?  @relation(fields: [applicationId], references: [id], onDelete: SetNull)
   loads         ShrtlnkLoad[]
 }
 
 model ShrtlnkLoad {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
-  shrtlnkId Int
+  shrtlnkId String
   shrtlnk   Shrtlnk  @relation(fields: [shrtlnkId], references: [id], onDelete: Cascade)
 }
 
 model BlockedUrl {
-  id            Int         @id @default(autoincrement())
+  id            String      @id @default(uuid())
   url           String?
   createdAt     DateTime    @default(now())
-  applicationId Int
+  applicationId String
   application   Application @relation(fields: [applicationId], references: [id])
 }
 
 model User {
-  id               Int           @id @default(autoincrement())
+  id               String        @id @default(uuid())
   email            String        @unique
   firstName        String
   lastName         String

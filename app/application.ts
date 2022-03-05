@@ -10,7 +10,7 @@ type ApplicationWithData = Application & {
 };
 
 export async function getApplicationsWithCounts(
-  userId: number
+  userId: string
 ): Promise<ApplicationWithData[]> {
   const applications = await db.application.findMany({
     where: { userId },
@@ -48,7 +48,7 @@ export async function createApp({
 }: {
   name: string;
   website: string;
-  userId: number;
+  userId: string;
 }) {
   let apiKey: string;
   do {
@@ -65,11 +65,11 @@ export async function createApp({
   });
 }
 
-export async function getApp(id: number) {
+export async function getApp(id: string) {
   return db.application.findFirst({ where: { id } });
 }
 
-export async function deleteApp(id: number, loggedInUserId: number) {
+export async function deleteApp(id: string, loggedInUserId: string) {
   const app = await getApp(id);
   if (!app || app.userId !== loggedInUserId) {
     return redirect("/developer/applications", 401);

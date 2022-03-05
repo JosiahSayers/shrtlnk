@@ -46,7 +46,10 @@ export const action: ActionFunction = async ({ request }) => {
 
   const user = await signin(fields);
   if (user) {
-    return createUserSession(user, (redirectTo as string) ?? "/developer");
+    return createUserSession(
+      user,
+      (redirectTo as string) || "/developer/applications"
+    );
   }
 
   return json(
