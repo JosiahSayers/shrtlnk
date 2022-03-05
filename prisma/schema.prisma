@@ -19,6 +19,8 @@ model Application {
   User        User         @relation(fields: [userId], references: [id])
   shrtlnks    Shrtlnk[]
   blockedUrls BlockedUrl[]
+
+  @@unique(fields: [id, userId], name: "idAndUserId")
 }
 
 model Shrtlnk {
@@ -27,7 +29,7 @@ model Shrtlnk {
   url           String
   createdAt     DateTime      @default(now())
   applicationId Int
-  application   Application   @relation(fields: [applicationId], references: [id])
+  application   Application?  @relation(fields: [applicationId], references: [id], onDelete: SetNull)
   loads         ShrtlnkLoad[]
 }
 
@@ -35,7 +37,7 @@ model ShrtlnkLoad {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   shrtlnkId Int
-  shrtlnk   Shrtlnk  @relation(fields: [shrtlnkId], references: [id])
+  shrtlnk   Shrtlnk  @relation(fields: [shrtlnkId], references: [id], onDelete: Cascade)
 }
 
 model BlockedUrl {
