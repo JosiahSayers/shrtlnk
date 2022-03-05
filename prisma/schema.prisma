@@ -8,16 +8,17 @@ datasource db {
 }
 
 model Application {
-  id        Int       @id @default(autoincrement())
-  name      String
-  website   String?
-  apiKey    String    @unique
-  status    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  userId    Int
-  User      User      @relation(fields: [userId], references: [id])
-  shrtlnks  Shrtlnk[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  website     String?
+  apiKey      String       @unique
+  status      String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userId      Int
+  User        User         @relation(fields: [userId], references: [id])
+  shrtlnks    Shrtlnk[]
+  blockedUrls BlockedUrl[]
 }
 
 model Shrtlnk {
@@ -35,6 +36,14 @@ model ShrtlnkLoad {
   createdAt DateTime @default(now())
   shrtlnkId Int
   shrtlnk   Shrtlnk  @relation(fields: [shrtlnkId], references: [id])
+}
+
+model BlockedUrl {
+  id            Int         @id @default(autoincrement())
+  url           String?
+  createdAt     DateTime    @default(now())
+  applicationId Int
+  application   Application @relation(fields: [applicationId], references: [id])
 }
 
 model User {
