@@ -1,5 +1,3 @@
-import { writeFile } from "fs/promises";
-
 import {
   PrismaClient as MssqlPrismaClient,
   links,
@@ -10,6 +8,7 @@ import {
   Applications,
 } from "./generated/mongo-client";
 import { PrismaClient } from "@prisma/client";
+import ProgressBar from "progress";
 
 const mssql = new MssqlPrismaClient();
 const mongo = new MongoPrismaClient();
@@ -42,6 +41,19 @@ async function getProdData() {
 async function consolidateData() {
   const users = await getProdData();
   console.log("Writing data to postgres");
+  const count = users.reduce((accum, user) => {
+    const appCount = user.applications.length;
+    const linkCount = user.applications.reduce(
+      (linkAcc, app) => linkAcc + app.links.length,
+      0
+    );
+    const loadsAsSingleQuery = linkCount;
+    return accum + appCount + linkCount + loadsAsSingleQuery + 1;
+  }, 0);
+
+  const bar = new ProgressBar(":current/:total (:percent) |:bar|", {
+    total: count,
+  });
 
   for (const user of users) {
     const newUser = await db.user.create({
@@ -59,6 +71,7 @@ async function consolidateData() {
         verified: user.Verified,
       },
     });
+    bar.tick();
 
     for (const app of user.applications) {
       const newApp = await db.application.create({
@@ -72,6 +85,7 @@ async function consolidateData() {
           userId: newUser.id,
         },
       });
+      bar.tick();
 
       for (const link of app.links) {
         const date = link.date_added || new Date();
@@ -83,6 +97,7 @@ async function consolidateData() {
             applicationId: newApp.id,
           },
         });
+        bar.tick();
 
         await db.shrtlnkLoad.createMany({
           data: Array(link.times_loaded)
@@ -92,6 +107,7 @@ async function consolidateData() {
               shrtlnkId: newLink.id,
             })),
         });
+        bar.tick();
       }
     }
   }
