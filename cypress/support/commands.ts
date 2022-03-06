@@ -24,4 +24,27 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import '@testing-library/cypress/add-commands';
+import "@testing-library/cypress/add-commands";
+
+const customCommands = {
+  login: (email = "test@test.com", password = "a-really-bad-password") => {
+    cy.visit("/developer/signin");
+    cy.findByPlaceholderText("Email").type(email);
+    cy.findByPlaceholderText("Password").type(password);
+    cy.findByText("Submit").click();
+  },
+  preserveAuthCookie: () => {
+    Cypress.Cookies.preserveOnce("shrtlnk_session");
+  },
+};
+
+Object.keys(customCommands).forEach((commandKey) => {
+  Cypress.Commands.add(commandKey as any, (customCommands as any)[commandKey]);
+});
+
+type CustomCommands = typeof customCommands;
+declare global {
+  namespace Cypress {
+    interface Chainable extends CustomCommands {}
+  }
+}

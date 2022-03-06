@@ -12,7 +12,7 @@
     "postinstall": "remix setup node",
     "db:seed": "node --require esbuild-register prisma/seed.ts",
     "db:migrate": "prisma db push",
-    "db:prod-refresh": "node --require esbuild-register prisma/drop.ts && node --require esbuild-register prisma/consolidate-production.ts"
+    "db:prod-refresh": "node --require esbuild-register prisma/drop.ts && node --require esbuild-register prisma/consolidate-production.ts && npm run db:seed"
   },
   "dependencies": {
     "@prisma/client": "^3.10.0",

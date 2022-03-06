@@ -70,7 +70,7 @@ export default function Login() {
       <h1>Sign In</h1>
 
       <div className="card pt-4 pb-4 pr-4 pl-4">
-        <form method="post">
+        <form method="post" noValidate>
           <input
             type="hidden"
             name="redirectTo"
