@@ -1,4 +1,21 @@
 describe("API", () => {
+  it("returns CORS headers when an OPTIONS request comes in", () => {
+    cy.request({
+      url: "/api/v2/link",
+      method: "OPTIONS",
+      failOnStatusCode: false,
+    }).then((res) => {
+      console.log(res);
+      expect(res.headers["access-control-allow-origin"]).to.eq("*");
+      expect(res.headers["access-control-allow-methods"]).to.eq(
+        "POST, OPTIONS"
+      );
+      expect(res.headers["access-control-allow-headers"]).to.eq("*");
+      expect(res.status).to.eq(204);
+      expect(res.statusText).to.eq("No Content");
+    });
+  });
+
   it("returns an error when the request is not a POST", () => {
     cy.request({
       url: "/api/v2/link",
@@ -74,7 +91,7 @@ describe("API", () => {
       expect(res.body.url).to.eq("https://google.com");
       expect(typeof res.body.key).to.eq("string");
       expect(res.body.shrtlnk).to.eq(`https://shrtlnk.dev/${res.body.key}`);
-      expect(res.status).to.eq(200);
+      expect(res.status).to.eq(201);
     });
   });
 });

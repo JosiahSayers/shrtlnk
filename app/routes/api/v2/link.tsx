@@ -1,7 +1,19 @@
 import Joi from "joi";
-import { ActionFunction, json } from "remix";
+import { ActionFunction, json, LoaderFunction } from "remix";
 import { getAppByApiKey } from "~/application.server";
 import { createShrtlnk } from "~/shrtlnk.server";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "*",
+};
+
+export const loader: LoaderFunction = () =>
+  new Response(null, {
+    headers: new Headers(corsHeaders),
+    status: 204,
+  });
 
 export const action: ActionFunction = async ({ request }) => {
   if (request.method !== "POST") {
@@ -12,13 +24,19 @@ export const action: ActionFunction = async ({ request }) => {
   const apiKeyValidation = Joi.string().required().validate(apiKey);
 
   if (apiKeyValidation.error) {
-    return json({ message: "api-key header is required" }, 403);
+    return json(
+      { message: "api-key header is required" },
+      { headers: corsHeaders, status: 403 }
+    );
   }
 
   const application = await getAppByApiKey(apiKeyValidation.value);
 
   if (!application || application.status !== "Valid") {
-    return json({ message: "API key is not valid" }, 403);
+    return json(
+      { message: "API key is not valid" },
+      { headers: corsHeaders, status: 403 }
+    );
   }
 
   const data = await request.json();
@@ -29,7 +47,10 @@ export const action: ActionFunction = async ({ request }) => {
     .validate(data.url);
 
   if (urlValidationResult.error) {
-    return json({ message: urlValidationResult.error.message }, 400);
+    return json(
+      { message: urlValidationResult.error.message },
+      { headers: corsHeaders, status: 400 }
+    );
   }
 
   try {
@@ -38,13 +59,19 @@ export const action: ActionFunction = async ({ request }) => {
       application.apiKey
     );
     if (!newShrtlnk) {
-      return json({ message: "Error creating shrtlnk, please try again" }, 500);
+      return json(
+        { message: "Error creating shrtlnk, please try again" },
+        { headers: corsHeaders, status: 500 }
+      );
     }
-    return json({
-      url: newShrtlnk.url,
-      key: newShrtlnk.key,
-      shrtlnk: `https://shrtlnk.dev/${newShrtlnk.key}`,
-    });
+    return json(
+      {
+        url: newShrtlnk.url,
+        key: newShrtlnk.key,
+        shrtlnk: `https://shrtlnk.dev/${newShrtlnk.key}`,
+      },
+      { headers: corsHeaders, status: 201 }
+    );
   } catch (e: any) {
     if (e.message === "unsafe URL") {
       return json(
@@ -52,6 +79,9 @@ export const action: ActionFunction = async ({ request }) => {
         451
       );
     }
-    return json({ message: "Unknown error occured" }, 500);
+    return json(
+      { message: "Unknown error occured" },
+      { headers: corsHeaders, status: 500 }
+    );
   }
 };
