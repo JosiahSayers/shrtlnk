@@ -221,4 +221,83 @@ describe("Application CRUD", () => {
   });
 });
 
+describe("Account management", () => {
+  before(() => cy.login());
+  beforeEach(() => {
+    cy.preserveAuthCookie();
+    cy.findByText("Hey there, John").click();
+  });
+
+  describe("changing your name", () => {
+    it("requires both first name and last name", () => {
+      cy.findByLabelText("First Name").clear();
+      cy.findByLabelText("Last Name").clear();
+      cy.findByText("Submit").click();
+      cy.findByText('"First Name" is not allowed to be empty');
+      cy.findByText('"Last Name" is not allowed to be empty');
+    });
+
+    it("allows updates the users name", () => {
+      cy.findByLabelText("First Name").type("test-first");
+      cy.findByLabelText("Last Name").type("test-last");
+      cy.findByText("Submit").click();
+      cy.findByText("Hey there, test-first").click();
+      cy.findByLabelText("First Name").should("have.value", "test-first");
+      cy.findByLabelText("Last Name").should("have.value", "test-last");
+      cy.findByLabelText("First Name").clear().type("John");
+      cy.findByLabelText("Last Name").clear().type("Developer");
+      cy.findByText("Submit").click();
+    });
+  });
+
+  describe("changing your password", () => {
+    beforeEach(() => cy.findByText("Change Password").click());
+
+    it("requires all fields", () => {
+      cy.findByText("Submit").click();
+      cy.findByText('"Current Password" is not allowed to be empty');
+      cy.findByText('"New Password" is not allowed to be empty');
+    });
+
+    it("requires that the confirm password field matches the new password field", () => {
+      cy.findByLabelText("Current Password").type("password");
+      cy.findByLabelText("New Password").type("password");
+      cy.findByLabelText("Confirm Password").type("aaaaaaa");
+      cy.findByText("Submit").click();
+      cy.findByText('"Confirm Password" must match "New Password"');
+    });
+
+    it("requires the new password field to be at least 8 characters", () => {
+      cy.findByLabelText("New Password").clear().type("short");
+      cy.findByText("Submit").click();
+      cy.findByText('"New Password" length must be at least 8 characters long');
+    });
+
+    it("requires the current password to match the user's current password", () => {
+      cy.findByLabelText("Current Password").clear().type("wrong-password");
+      cy.findByLabelText("New Password").clear().type("password2");
+      cy.findByLabelText("Confirm Password").clear().type("password2");
+      cy.findByText("Submit").click();
+      cy.findByText(
+        "The password you entered does not match your current password"
+      );
+    });
+
+    it("allows updates to the password", () => {
+      cy.findByLabelText("Current Password").clear().type("password");
+      cy.findByLabelText("New Password").clear().type("password2");
+      cy.findByLabelText("Confirm Password").clear().type("password2");
+      cy.findByText("Submit").click();
+      cy.findByText("Sign Out").click();
+      cy.login("test@test.com", "password2");
+      cy.findByText("Hey there, John").click();
+      cy.findByText("Change Password").click();
+      cy.findByLabelText("Current Password").clear().type("password2");
+      cy.findByLabelText("New Password").clear().type("password");
+      cy.findByLabelText("Confirm Password").clear().type("password");
+      cy.findByText("Submit").click();
+    });
+  });
+});
+
 export {};

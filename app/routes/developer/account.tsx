@@ -50,8 +50,8 @@ const validateNameForm = (form: {
   lastName: FormDataEntryValue | null;
 }) => {
   const schema = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().allow("").optional(),
+    firstName: Joi.string().label("First Name").required(),
+    lastName: Joi.string().label("Last Name").required(),
   });
   return validate<{ firstName: string; lastName: string }>(schema, form);
 };
@@ -62,8 +62,8 @@ const validatePasswordForm = (form: {
   confirmNewPassword: FormDataEntryValue | null;
 }) => {
   const schema = Joi.object({
-    currentPassword: Joi.string().label("current password").required(),
-    newPassword: Joi.string().label("new password").required().min(8),
+    currentPassword: Joi.string().label("Current Password").required(),
+    newPassword: Joi.string().label("New Password").required().min(8),
     confirmNewPassword: Joi.string()
       .required()
       .valid(Joi.ref("newPassword"))
@@ -194,14 +194,24 @@ export default function Account() {
             <Form method="post">
               <div className="form-group">
                 <label htmlFor="firstName">First Name</label>{" "}
-                <input type="text" defaultValue={firstName} name="firstName" />
+                <input
+                  type="text"
+                  defaultValue={firstName}
+                  name="firstName"
+                  id="firstName"
+                />
                 {actionData?.errors?.firstName && (
                   <p className="text-danger">{actionData.errors.firstName}</p>
                 )}
               </div>
               <div className="form-group">
                 <label htmlFor="lastName">Last Name</label>{" "}
-                <input type="text" defaultValue={lastName} name="lastName" />
+                <input
+                  type="text"
+                  defaultValue={lastName}
+                  name="lastName"
+                  id="lastName"
+                />
                 {actionData?.errors?.lastName && (
                   <p className="text-danger">{actionData.errors.lastName}</p>
                 )}
@@ -221,8 +231,9 @@ export default function Account() {
               <div className="form-group">
                 <label htmlFor="currentPassword">Current Password</label>{" "}
                 <input
-                  type="text"
+                  type="password"
                   name="currentPassword"
+                  id="currentPassword"
                   defaultValue={actionData?.fields?.currentPassword}
                 />
                 {actionData?.errors?.currentPassword && (
@@ -234,8 +245,9 @@ export default function Account() {
               <div className="form-group">
                 <label htmlFor="newPassword">New Password</label>{" "}
                 <input
-                  type="text"
+                  type="password"
                   name="newPassword"
+                  id="newPassword"
                   defaultValue={actionData?.fields?.newPassword}
                 />
                 {actionData?.errors?.newPassword && (
@@ -247,6 +259,7 @@ export default function Account() {
                 <input
                   type="password"
                   name="confirmNewPassword"
+                  id="confirmNewPassword"
                   defaultValue={actionData?.fields?.confirmNewPassword}
                 />
                 {actionData?.errors?.confirmNewPassword && (
