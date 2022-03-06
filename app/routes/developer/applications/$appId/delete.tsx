@@ -38,16 +38,18 @@ export default function DeleteApp() {
       <div className="card pt-4 pb-4 pr-4 pl-4">
         <div className="card-body text-center">
           <div className="card-title">
-            Are you sure that you want to delete this?
-            <br />
-            All applications using this API key will no longer work.
-            <br />
-            All shrtlnks that were created through this application will not be
-            deleted and will remain functional.
+            <p>Are you sure that you want to delete this?</p>
+            <p>All applications using this API key will no longer work.</p>
+            <p>
+              All shrtlnks that were created through this application will not
+              be deleted and will remain functional.
+            </p>
           </div>
           <div className="card-text">
-            <strong>App: </strong>
-            {app.name}
+            <p>
+              <strong>App: </strong>
+              {app.name}
+            </p>
             <form method="post" className="mt-4">
               <input type="hidden" name="appId" value={app.id} />
               <input type="submit" className="btn btn-danger" value="Delete" />

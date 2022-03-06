@@ -99,7 +99,7 @@ export default function NewApplication() {
               <span className="text-danger">{actionData?.errors?.website}</span>
             )}
           </div>
-          <input type="submit" className="btn btn-primary" />
+          <input type="submit" value="Submit" className="btn btn-primary" />
         </form>
       </div>
     </div>

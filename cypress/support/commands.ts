@@ -27,7 +27,7 @@
 import "@testing-library/cypress/add-commands";
 
 const customCommands = {
-  login: (email = "test@test.com", password = "a-really-bad-password") => {
+  login: (email = "test@test.com", password = "password") => {
     cy.visit("/developer/signin");
     cy.findByPlaceholderText("Email").type(email);
     cy.findByPlaceholderText("Password").type(password);

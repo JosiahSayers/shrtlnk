@@ -6,7 +6,7 @@ async function seed() {
     email: "test@test.com",
     firstName: "John",
     lastName: "Developer",
-    password: await hashPassword("a-really-bad-password"),
+    password: await hashPassword("password"),
     dotnetPassword: "",
     dotnetSaltArray: "",
     role: "Developer",
@@ -36,12 +36,33 @@ async function seed() {
     create: legacyUserData,
   });
 
+  const noAppsUser = await db.user.upsert({
+    where: { email: "noapps@test.com" },
+    update: { ...user1Data, firstName: "Appless", email: "noapps@test.com" },
+    create: { ...user1Data, firstName: "Appless", email: "noapps@test.com" },
+  });
+
+  const shrtlnkWebsiteApplicationData = {
+    name: "shrtlnk",
+    website: "shrtlnk.dev",
+    apiKey: "shrtlnk-test-api-key",
+    status: "Valid",
+    userId: legacyUser.id,
+    createdAt: new Date("2022-03-06T03:34:27.058Z"),
+  };
+  const shrlnkWebsiteApplication = await db.application.upsert({
+    where: { apiKey: "shrtlnk-test-api-key" },
+    update: shrtlnkWebsiteApplicationData,
+    create: shrtlnkWebsiteApplicationData,
+  });
+
   const applicationData = {
     name: "Test App",
     website: "http://localhost:3000",
     apiKey: "test-api-key",
     status: "Valid",
     userId: user.id,
+    createdAt: new Date("2022-03-06T03:34:27.058Z"),
   };
   const application = await db.application.upsert({
     where: { apiKey: "test-api-key" },
