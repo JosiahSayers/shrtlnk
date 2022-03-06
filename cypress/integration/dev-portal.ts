@@ -67,6 +67,22 @@ describe("Signing into an account", () => {
     cy.findByText("Hey there, John");
     cy.findByText("Sign Out");
   });
+
+  it("allows legacy users to log in", () => {
+    cy.findByPlaceholderText("Email").type("legacy@test.com");
+    cy.findByPlaceholderText("Password").type("password");
+    cy.findByText("Submit").click();
+    cy.findByText("Hey there, Legacy");
+    cy.findByText("Add an application");
+  });
+
+  it("allows legacy users to log in a second time (after their password has been hashed with bcrypt)", () => {
+    cy.findByPlaceholderText("Email").type("legacy@test.com");
+    cy.findByPlaceholderText("Password").type("password");
+    cy.findByText("Submit").click();
+    cy.findByText("Hey there, Legacy");
+    cy.findByText("Add an application");
+  });
 });
 
 describe("Application list", () => {
@@ -94,19 +110,18 @@ describe("Application list", () => {
     cy.findByText(
       (content, node) => node?.textContent === "Website: http://localhost:3000"
     );
-    cy.findByText(
-      (content, node) =>
-        node?.textContent === "Shrtlnks created with application: 2"
+    cy.findAllByText((content, node) =>
+      /^Shrtlnks created with application: \d$/gm.test(node?.textContent ?? "")
     );
-    cy.findByText(
-      (content, node) =>
-        node?.textContent ===
-        "Shrtlnk clicks from this application's shrtlnks: 3"
+    cy.findAllByText((content, node) =>
+      /^Shrtlnk clicks from this application's shrtlnks: \d$/gm.test(
+        node?.textContent ?? ""
+      )
     );
-    cy.findByText(
-      (content, node) =>
-        node?.textContent ===
-        "Unsafe URLs detected and blocked from this application: 0"
+    cy.findAllByText((content, node) =>
+      /^Unsafe URLs detected and blocked from this application: \d$/gm.test(
+        node?.textContent ?? ""
+      )
     );
   });
 });
