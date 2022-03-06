@@ -88,7 +88,8 @@ describe("Application list", () => {
       (content, node) => node?.textContent === "API Key: test-api-key"
     );
     cy.findByText(
-      (content, node) => node?.textContent === "Created on: Sat Mar 05 2022"
+      (content, node) =>
+        node?.textContent === "Created on: Saturday, March 5, 2022"
     );
     cy.findByText(
       (content, node) => node?.textContent === "Website: http://localhost:3000"

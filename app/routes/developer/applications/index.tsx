@@ -58,7 +58,9 @@ export default function Applications() {
             </p>
             <p>
               <strong>Created on: </strong>
-              {new Date(app.createdAt).toDateString()}
+              {Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
+                new Date(app.createdAt)
+              )}
             </p>
             {app.website ? (
               <p>
