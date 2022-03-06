@@ -1,3 +1,23 @@
+function createApp(name: string, website?: string) {
+  cy.visit("/developer/applications/new");
+  cy.findByPlaceholderText("Name").type(name);
+  if (website) {
+    cy.findByPlaceholderText("URL").type(website);
+  }
+  cy.findByText("Submit").click();
+}
+
+function deleteApp(name: string) {
+  cy.visit("/developer/applications");
+  cy.findByText(name)
+    .parent("div")
+    .parent("div")
+    .within(() => {
+      cy.findByText("Delete App").click();
+    });
+  cy.findByText("Delete").click();
+}
+
 describe("Developer landing page", () => {
   before(() => cy.visit("/developer"));
 
@@ -142,6 +162,30 @@ describe("Application CRUD", () => {
       cy.findByPlaceholderText("Name").type("Test App 1");
       cy.findByText("Submit").click();
       cy.findByText("Test App 1");
+      deleteApp("Test App 1");
+    });
+  });
+
+  describe("Updating an application", () => {
+    it("allows you to update the name and website of an existing application", () => {
+      const name = "test-editing-app";
+      const editedName = name + "-edited";
+      createApp(name);
+      cy.findByText(name)
+        .parent("div")
+        .parent("div")
+        .within(() => {
+          cy.findByText("Edit App").click();
+        });
+      cy.findByPlaceholderText("Name").clear().type(editedName);
+      cy.findByPlaceholderText("URL").type("https://thisisatest.com");
+      cy.findByText("Submit").click();
+      cy.findByText(editedName);
+      cy.findAllByText(
+        (content, node) =>
+          node?.textContent === "Website: https://thisisatest.com"
+      );
+      deleteApp(editedName);
     });
   });
 
@@ -149,6 +193,7 @@ describe("Application CRUD", () => {
     beforeEach(() => cy.visit("/developer/applications"));
 
     it("allows you to delete an application", () => {
+      createApp("Test App 1");
       cy.findByText("Test App 1")
         .parent("div")
         .parent("div")

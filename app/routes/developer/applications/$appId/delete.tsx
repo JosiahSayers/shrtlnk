@@ -6,27 +6,19 @@ import {
   redirect,
   useLoaderData,
 } from "remix";
-import { deleteApp, getApp } from "~/application.server";
-import { requireUserSession } from "~/utils/session.server";
+import { deleteApp } from "~/application.server";
+import { requireUserOwnsApplication } from "~/utils/authorization.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const userInfo = await requireUserSession(request);
-  if (!params.appId) {
-    return redirect("/developer/applications", 404);
-  }
-  const app = await getApp(params.appId);
-  if (!app || app.userId !== userInfo.id) {
-    return redirect("/developer/applications", 500);
-  }
+  const { app } = await requireUserOwnsApplication(request, params.appId);
   return app;
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const userInfo = await requireUserSession(request);
-  if (!params.appId) {
-    return redirect("/developer/applications", 404);
-  }
-  await deleteApp(params.appId, userInfo.id);
+  const {
+    app: { id },
+  } = await requireUserOwnsApplication(request, params.appId);
+  await deleteApp(id);
   return redirect("/developer/applications");
 };
 

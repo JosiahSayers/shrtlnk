@@ -65,17 +65,31 @@ export async function createApp({
   });
 }
 
+export async function updateApp({
+  id,
+  name,
+  website,
+}: {
+  id: string;
+  name: string;
+  website: string;
+}) {
+  return db.application.update({
+    where: { id },
+    data: {
+      name,
+      website,
+    },
+  });
+}
+
 export async function getApp(id: string) {
   return db.application.findFirst({ where: { id } });
 }
 
-export async function deleteApp(id: string, loggedInUserId: string) {
-  const app = await getApp(id);
-  if (!app || app.userId !== loggedInUserId) {
-    return redirect("/developer/applications", 401);
-  }
+export async function deleteApp(id: string) {
   return db.application.delete({
-    where: { idAndUserId: { id, userId: loggedInUserId } },
+    where: { id },
   });
 }
 
