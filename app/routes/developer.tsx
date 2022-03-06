@@ -93,9 +93,7 @@ export default function DeveloperRoot() {
               <>
                 <li
                   className={
-                    currentPath === "/edit-account"
-                      ? "nav-item active"
-                      : "nav-item"
+                    currentPath === "/account" ? "nav-item active" : "nav-item"
                   }
                 >
                   <Link className="nav-link" to="/developer/account">
