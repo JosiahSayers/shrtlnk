@@ -1,4 +1,4 @@
-before(() => cy.visit("/"));
+before(() => cy.visit(""));
 
 describe("Home Page", () => {
   describe("Page content", () => {

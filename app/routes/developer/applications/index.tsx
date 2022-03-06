@@ -1,5 +1,5 @@
 import { Link, LinksFunction, LoaderFunction, useLoaderData } from "remix";
-import { getApplicationsWithCounts } from "~/application";
+import { getApplicationsWithCounts } from "~/application.server";
 import { requireUserSession } from "~/utils/session.server";
 import styles from "~/styles/developer/applications.css";
 

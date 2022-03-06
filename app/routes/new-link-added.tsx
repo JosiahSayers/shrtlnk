@@ -8,7 +8,7 @@ import {
   redirect,
   useLoaderData,
 } from "remix";
-import { getShrtlnk } from "~/shrtlnk";
+import { getShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/newLinkAdded.css";
 
 export const links: LinksFunction = () => [

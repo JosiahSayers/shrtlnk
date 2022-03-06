@@ -9,7 +9,7 @@ import {
 } from "remix";
 import joi from "joi";
 import styles from "~/styles/index.css";
-import { createShrtlnk } from "~/shrtlnk";
+import { createShrtlnk } from "~/shrtlnk.server";
 
 const validateUrl = (
   url: FormDataEntryValue | string | null

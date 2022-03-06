@@ -6,7 +6,7 @@ import {
   redirect,
   useLoaderData,
 } from "remix";
-import { deleteApp, getApp } from "~/application";
+import { deleteApp, getApp } from "~/application.server";
 import { requireUserSession } from "~/utils/session.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {

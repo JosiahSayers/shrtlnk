@@ -2,6 +2,7 @@ import { db } from "~/utils/db.server";
 import { hashPassword } from "~/utils/password.server";
 
 async function seed() {
+  const testDate = new Date("2022-03-06T03:34:27.058Z");
   const user1Data = {
     email: "test@test.com",
     firstName: "John",
@@ -48,7 +49,7 @@ async function seed() {
     apiKey: "shrtlnk-test-api-key",
     status: "Valid",
     userId: legacyUser.id,
-    createdAt: new Date("2022-03-06T03:34:27.058Z"),
+    createdAt: testDate,
   };
   const shrlnkWebsiteApplication = await db.application.upsert({
     where: { apiKey: "shrtlnk-test-api-key" },
@@ -62,12 +63,35 @@ async function seed() {
     apiKey: "test-api-key",
     status: "Valid",
     userId: user.id,
-    createdAt: new Date("2022-03-06T03:34:27.058Z"),
+    createdAt: testDate,
   };
   const application = await db.application.upsert({
     where: { apiKey: "test-api-key" },
     update: applicationData,
     create: applicationData,
+  });
+
+  const invalidApplicationData = {
+    apiKey: "invalid-application",
+    status: "Invalid",
+    name: "invalid",
+    website: "",
+    userId: user.id,
+    createdAt: new Date("2022-02-05T03:34:27.058Z"),
+  };
+  const invalidApplication = await db.application.upsert({
+    where: { apiKey: "invalid-application" },
+    update: invalidApplicationData,
+    create: invalidApplicationData,
+  });
+
+  const blockedUrlData = {
+    url: "http://realbank.freesites.com",
+    createdAt: testDate,
+    applicationId: invalidApplication.id,
+  };
+  const blockedUrl = await db.blockedUrl.create({
+    data: blockedUrlData,
   });
 
   const shrtlnkData = [

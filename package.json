@@ -8,10 +8,10 @@
     "build": "cross-env NODE_ENV=production remix build",
     "dev": "cross-env NODE_ENV=development remix dev",
     "test": "jest",
-    "cypress": "CYPRESS_BASE_URL=${CYPRESS_BASE_URL:=http://localhost:3000} cypress ${TEST_COMMAND:=open}",
+    "cypress": "CYPRESS_BASE_URL=${BASE_URL:=http://localhost:3000} cypress ${TEST_COMMAND:=open}",
     "postinstall": "remix setup node",
     "db:seed": "node --require esbuild-register prisma/seed.ts",
-    "db:drop": "─ node --require esbuild-register prisma/drop.ts",
+    "db:drop": "node --require esbuild-register prisma/drop.ts",
     "db:migrate": "prisma db push",
     "db:prod-refresh": "npm run db:drop && node --require esbuild-register prisma/consolidate-production.ts && npm run db:seed"
   },

@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { ActionFunction, json, useActionData, useSearchParams } from "remix";
-import { validate } from "~/utils/get-validation-errors";
+import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
 
 type ActionData = {

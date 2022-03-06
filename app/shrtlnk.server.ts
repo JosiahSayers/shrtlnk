@@ -1,7 +1,7 @@
 import { Shrtlnk } from "@prisma/client";
 import { db } from "./utils/db.server";
 import ShortUniqueId from "short-unique-id";
-import { isUrlSafe } from "./safeBrowsingApi";
+import { isUrlSafe } from "./safeBrowsingApi.server";
 
 export async function createShrtlnk(
   url: string,
@@ -10,7 +10,7 @@ export async function createShrtlnk(
   const application = await db.application.findFirst({ where: { apiKey } });
   if (!application) return null;
 
-  if (!(await isUrlSafe(url))) return null;
+  if (!(await isUrlSafe(url))) throw new Error("unsafe URL");
 
   let key: string;
   do {

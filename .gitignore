@@ -11,7 +11,7 @@ appsettings*json
 node_modules
 .cache
 public/build
-api
+api/index.js
 .env
 
 prisma/generated

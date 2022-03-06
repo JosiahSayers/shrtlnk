@@ -78,3 +78,7 @@ export async function deleteApp(id: string, loggedInUserId: string) {
     where: { idAndUserId: { id, userId: loggedInUserId } },
   });
 }
+
+export async function getAppByApiKey(apiKey: string) {
+  return db.application.findFirst({ where: { apiKey } });
+}

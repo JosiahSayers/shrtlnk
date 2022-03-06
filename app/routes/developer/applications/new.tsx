@@ -6,8 +6,8 @@ import {
   redirect,
   useActionData,
 } from "remix";
-import { createApp } from "~/application";
-import { validate } from "~/utils/get-validation-errors";
+import { createApp } from "~/application.server";
+import { validate } from "~/utils/get-validation-errors.server";
 import { requireUserSession } from "~/utils/session.server";
 
 type ActionData = {
