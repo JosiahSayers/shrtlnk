@@ -2,6 +2,7 @@ import { Application } from "@prisma/client";
 import Joi, { string } from "joi";
 import {
   ActionFunction,
+  Form,
   json,
   LoaderFunction,
   redirect,
@@ -82,7 +83,7 @@ export default function EditApplication() {
   return (
     <div className="container">
       <div className="card pt-4 pb-4 pr-4 pl-4">
-        <form method="post">
+        <Form method="post">
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
@@ -111,7 +112,7 @@ export default function EditApplication() {
           </div>
           <input type="hidden" name="id" defaultValue={id} />
           <input type="submit" className="btn btn-primary" value="Submit" />
-        </form>
+        </Form>
       </div>
     </div>
   );

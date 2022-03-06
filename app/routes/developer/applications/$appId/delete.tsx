@@ -1,6 +1,7 @@
 import { Application } from "@prisma/client";
 import {
   ActionFunction,
+  Form,
   Link,
   LoaderFunction,
   redirect,
@@ -42,13 +43,13 @@ export default function DeleteApp() {
               <strong>App: </strong>
               {app.name}
             </p>
-            <form method="post" className="mt-4">
+            <Form method="post" className="mt-4">
               <input type="hidden" name="appId" value={app.id} />
               <input type="submit" className="btn btn-danger" value="Delete" />
               <Link to="/developer/applications" className="btn btn-secondary">
                 Cancel
               </Link>
-            </form>
+            </Form>
           </div>
         </div>
       </div>

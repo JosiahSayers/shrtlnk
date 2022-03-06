@@ -80,9 +80,9 @@ export default function NewLinkAddec() {
           </li>
           <li>
             <strong className="text-left">FULL URL: </strong>
-            <a id="full-link" href={shrtlnk.url}>
+            <Link id="full-link" to={shrtlnk.url} reloadDocument>
               {shrtlnk.url}
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

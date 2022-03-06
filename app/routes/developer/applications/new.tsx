@@ -1,6 +1,7 @@
 import Joi from "joi";
 import {
   ActionFunction,
+  Form,
   json,
   LoaderFunction,
   redirect,
@@ -80,7 +81,7 @@ export default function NewApplication() {
   return (
     <div className="container">
       <div className="card pt-4 pb-4 pr-4 pl-4">
-        <form method="post">
+        <Form method="post">
           <div className="form-group">
             <label htmlFor="name">Application Name</label>
             <input className="form-control" placeholder="Name" name="name" />
@@ -100,7 +101,7 @@ export default function NewApplication() {
             )}
           </div>
           <input type="submit" value="Submit" className="btn btn-primary" />
-        </form>
+        </Form>
       </div>
     </div>
   );
