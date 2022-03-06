@@ -21,8 +21,19 @@ export async function createShrtlnk(
   });
 }
 
-export async function getShrtlnk(key: string): Promise<Shrtlnk | null> {
-  return db.shrtlnk.findFirst({ where: { key } });
+export async function getShrtlnk(
+  key: string,
+  createLoadEntry = false
+): Promise<Shrtlnk | null> {
+  const link = await db.shrtlnk.findUnique({ where: { key } });
+  if (link && createLoadEntry) {
+    await db.shrtlnkLoad.create({
+      data: {
+        shrtlnkId: link.id,
+      },
+    });
+  }
+  return link;
 }
 
 async function doesKeyExist(key: string): Promise<boolean> {
