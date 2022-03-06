@@ -6,7 +6,7 @@ import {
   authenticateLegacyUser,
   isLegacyUser,
 } from "./legacy-authenticate.server";
-import { doPasswordsMatch } from "./password.server";
+import { doPasswordsMatch, hashPassword } from "./password.server";
 
 type LoginForm = {
   email: string;
@@ -113,5 +113,31 @@ export async function signout(request: Request) {
     headers: {
       "Set-Cookie": await storage.destroySession(session),
     },
+  });
+}
+
+export async function updateName(
+  firstName: string,
+  lastName: string,
+  id: string
+) {
+  return db.user.update({
+    where: { id },
+    data: { firstName, lastName },
+  });
+}
+
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+  id: string
+) {
+  const user = await db.user.findUnique({ where: { id } });
+  if (!(await doPasswordsMatch(currentPassword, user!.password))) {
+    throw new Error("password mismatch");
+  }
+  return db.user.update({
+    where: { id },
+    data: { password: await hashPassword(newPassword) },
   });
 }
