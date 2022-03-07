@@ -13,7 +13,7 @@
     "db:seed": "node --require esbuild-register prisma/seed.ts",
     "db:drop": "node --require esbuild-register prisma/drop.ts",
     "db:migrate": "prisma db push",
-    "db:prod-refresh": "npm run db:drop && node --require esbuild-register prisma/consolidate-production.ts && npm run db:seed"
+    "db:prod-refresh": "npm run db:drop && node --require esbuild-register prisma/consolidate-production.ts"
   },
   "dependencies": {
     "@prisma/client": "^3.10.0",
