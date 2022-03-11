@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { createCookieSessionStorage, redirect } from "remix";
 
 import { db } from "./db.server";
@@ -12,6 +12,27 @@ type LoginForm = {
   email: string;
   password: string;
 };
+
+export type RegisterForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export async function register(form: RegisterForm) {
+  return db.user.create({
+    data: {
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email,
+      password: await hashPassword(form.password),
+      role: 'Developer',
+      verified: true
+    }
+  });
+}
 
 export async function signin({
   email,
@@ -44,10 +65,33 @@ export async function signin({
   return isAuthenticated ? user : null;
 }
 
-const sessionSecret = process.env.SESSION_SECRET;
-if (!sessionSecret) {
-  throw new Error("SESSION_SECRET must be set");
+export async function updateName(
+  firstName: string,
+  lastName: string,
+  id: string
+) {
+  return db.user.update({
+    where: { id },
+    data: { firstName, lastName },
+  });
 }
+
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+  id: string
+) {
+  const user = await db.user.findUnique({ where: { id } });
+  if (!(await doPasswordsMatch(currentPassword, user!.password))) {
+    throw new Error("password mismatch");
+  }
+  return db.user.update({
+    where: { id },
+    data: { password: await hashPassword(newPassword) },
+  });
+}
+
+const sessionSecret = process.env.SESSION_SECRET!;
 
 const storage = createCookieSessionStorage({
   cookie: {
@@ -108,36 +152,13 @@ export async function requireUserSession(
 }
 
 export async function signout(request: Request) {
+  const headers = await getSignoutHeaders(request);
+  return redirect("/developer", { headers });
+}
+
+export async function getSignoutHeaders(request: Request) {
   const session = await getSession(request);
-  return redirect("/developer", {
-    headers: {
-      "Set-Cookie": await storage.destroySession(session),
-    },
-  });
-}
-
-export async function updateName(
-  firstName: string,
-  lastName: string,
-  id: string
-) {
-  return db.user.update({
-    where: { id },
-    data: { firstName, lastName },
-  });
-}
-
-export async function changePassword(
-  currentPassword: string,
-  newPassword: string,
-  id: string
-) {
-  const user = await db.user.findUnique({ where: { id } });
-  if (!(await doPasswordsMatch(currentPassword, user!.password))) {
-    throw new Error("password mismatch");
-  }
-  return db.user.update({
-    where: { id },
-    data: { password: await hashPassword(newPassword) },
+  return new Headers({
+    "Set-Cookie": await storage.destroySession(session)
   });
 }
