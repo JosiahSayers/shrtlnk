@@ -1,0 +1,94 @@
+import {
+  Link,
+  LinksFunction,
+  ActionFunction,
+  useActionData,
+  json,
+  Form,
+  redirect,
+} from "remix";
+import joi from "joi";
+import styles from "~/styles/index.css";
+import { createShrtlnk } from "~/shrtlnk.server";
+
+const validateUrl = (
+  url: FormDataEntryValue | string | null
+): joi.ValidationResult<string> => {
+  const urlSchema = joi.string().label("URL").uri();
+  return urlSchema.validate(url);
+};
+
+export const links: LinksFunction = () => {
+  return [
+    {
+      rel: "stylesheet",
+      href: styles,
+    },
+  ];
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+
+  const validationResult = validateUrl(formData.get("url"));
+
+  if (validationResult.error) {
+    return json(
+      {
+        errors: { url: validationResult.error.message },
+        values: { url: validationResult.value },
+      },
+      { status: 400 }
+    );
+  }
+
+  const link = await createShrtlnk(
+    validationResult.value,
+    process.env.API_KEY!
+  );
+
+  if (!link) {
+    return json({
+      errors: { url: "Something went wrong, please try again " },
+      values: { url: validationResult.value },
+    });
+  }
+
+  return redirect(`/new-link-added?key=${link.key}`);
+};
+
+export default function Index() {
+  const actionData = useActionData();
+
+  return (
+    <main>
+      <h1 className="title">
+        <span>S</span>
+        <span>H</span>
+        <span>R</span>
+        <span>T</span>
+        <span>L</span>
+        <span>N</span>
+        <span>K</span>
+      </h1>
+      <Form method="post">
+        <label htmlFor="url">URL TO SHORTEN:</label>
+        <input
+          className="text"
+          type="text"
+          name="url"
+          id="url"
+          defaultValue={actionData?.values?.url}
+        />
+        {actionData?.errors?.url && (
+          <p className="error">{actionData?.errors?.url}</p>
+        )}
+        <input className="button" type="submit" value="CREATE SHORT LINK" />
+      </Form>
+      <footer>
+        <span>Pssst, are you a developer? We have an </span>
+        <Link to="/developer">API</Link>.
+      </footer>
+    </main>
+  );
+}

@@ -1,0 +1,75 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+
+main {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+label {
+  font-family: "Luckiest Guy";
+  font-size: 2.5rem;
+}
+
+#url {
+  width: 75vw;
+  height: 8vh;
+  border-style: none;
+  font-size: 6.5vh;
+  padding: 0;
+}
+
+input[type="submit"] {
+  border: none;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  color: white;
+  font: inherit;
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+
+  background-color: #2ecc71;
+  text-transform: uppercase;
+  width: 75vw;
+  margin-top: 1vh;
+  height: 4vh;
+  border-radius: 3px;
+  outline: none;
+}
+
+p.error {
+  max-width: 75vw;
+  background-color: rgba(255, 0, 0, 0.6);
+  color: white;
+  border-radius: 0.2rem;
+  padding: 0 0.5rem;
+}
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px 0;
+}
+
+@media only screen and (max-width: 400px) {
+  h1.title {
+    font-size: 4em;
+  }
+}

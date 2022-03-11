@@ -7,3 +7,15 @@ obj
 # Files
 appsettings*json
 .DS_Store
+
+node_modules
+.cache
+public/build
+api/index.js
+.env
+
+prisma/generated
+
+cypress/videos
+cypress/screenshots
+cypress/downloads

@@ -1,0 +1,39 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=shrtlnk
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - NODE_ENV=testing
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/shrtlnk
+      - PORT=3000
+      - API_KEY=shrtlnk-test-api-key
+      - SESSION_SECRET=super-secure-secret
+      - SAFE_BROWSING_API_KEY=$SAFE_BROWSING_API_KEY
+      - BASE_URL=http://app:3000
+    ports:
+      - 3000:3000
+      - 5555:5555
+    healthcheck:
+      test: curl --fail http://localhost:3000/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npm run dev"
