@@ -51,6 +51,42 @@ describe("Developer landing page", () => {
   });
 });
 
+describe.only("Registering for an account", () => {
+  before(() => cy.visit("/developer/register"));
+
+  it("requires all fields", () => {
+    cy.findByText("Submit").click();
+    cy.findByText('"First Name" is not allowed to be empty');
+    cy.findByText('"Last Name" is not allowed to be empty');
+    cy.findByText('"Email" is not allowed to be empty');
+    cy.findByText('"Password" is not allowed to be empty');
+  });
+
+  it("requires that password is at least 8 characters", () => {
+    cy.findByPlaceholderText("Password").clear().type("short");
+    cy.findByText("Submit").click();
+    cy.findByText('"Password" length must be at least 8 characters long');
+  });
+
+  it("requires that password and confirmPassword match", () => {
+    cy.findByPlaceholderText("Password").clear().type("new password");
+    cy.findByPlaceholderText("Confirm Password").clear().type("wrong password");
+    cy.findByText("Submit").click();
+    cy.findByText('"Confirm Password" must match "Password"');
+  });
+
+  it("allows you to register for an account", () => {
+    cy.findByPlaceholderText("First Name").clear().type("integration");
+    cy.findByPlaceholderText("Last Name").clear().type(new Date().toLocaleString());
+    cy.findByPlaceholderText("Email").clear().type(`integration-${new Date().getTime()}@test.com`);
+    cy.findByPlaceholderText("Password").clear().type("password");
+    cy.findByPlaceholderText("Confirm Password").clear().type("password");
+    cy.findByText("Submit").click();
+    cy.findByText("Add an application");
+    cy.findByText("Hey there, integration");
+  });
+});
+
 describe("Signing into an account", () => {
   beforeEach(() => cy.visit("/developer/signin"));
 
@@ -300,4 +336,4 @@ describe("Account management", () => {
   });
 });
 
-export {};
+export { };

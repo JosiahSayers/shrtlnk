@@ -40,7 +40,7 @@ const validateForm = (form: any) => {
     firstName: Joi.string().label("First Name").required(),
     lastName: Joi.string().label("Last Name").required(),
     email: Joi.string().email().label("Email").required(),
-    password: Joi.string().label("New Password").required().min(8),
+    password: Joi.string().label("Password").required().min(8),
     confirmPassword: Joi.string()
       .required()
       .valid(Joi.ref("password"))
