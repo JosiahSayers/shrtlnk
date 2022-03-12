@@ -111,7 +111,7 @@ export default function Register() {
       )}
 
       <div className="card pt-4 pb-4 pr-4 pl-4">
-        <Form method="post">
+        <Form method="post" noValidate>
           <div className="form-group">
             <input
               className="form-control"
@@ -144,6 +144,7 @@ export default function Register() {
               name="email"
               defaultValue={actionData?.fields?.email}
               id="email"
+              type="email"
             />
             {actionData?.errors?.email && (
               <span className="text-danger">{actionData.errors.email}</span>
@@ -156,6 +157,7 @@ export default function Register() {
               id="password"
               defaultValue={actionData?.fields?.password}
               placeholder="Password"
+              type="password"
             />
             {actionData?.errors?.password && (
               <span className="text-danger">{actionData.errors.password}</span>
@@ -168,6 +170,7 @@ export default function Register() {
               id="confirmPassword"
               defaultValue={actionData?.fields?.confirmPassword}
               placeholder="Confirm Password"
+              type="password"
             />
             {actionData?.errors?.confirmPassword && (
               <span className="text-danger">

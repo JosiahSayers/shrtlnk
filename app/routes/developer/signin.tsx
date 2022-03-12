@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { ActionFunction, json, useActionData, useSearchParams } from "remix";
+import { ActionFunction, Form, json, useActionData, useSearchParams } from "remix";
 import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
 
@@ -70,7 +70,7 @@ export default function Login() {
       <h1>Sign In</h1>
 
       <div className="card pt-4 pb-4 pr-4 pl-4">
-        <form method="post" noValidate>
+        <Form method="post" noValidate>
           <input
             type="hidden"
             name="redirectTo"
@@ -109,7 +109,7 @@ export default function Login() {
               <span className="text-danger">{actionData.formLevelError}</span>
             </p>
           )}
-        </form>
+        </Form>
       </div>
     </div>
   );
