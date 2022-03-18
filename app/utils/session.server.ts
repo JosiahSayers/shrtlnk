@@ -113,6 +113,7 @@ export async function createUserSession(user: User, redirectTo: string) {
   session.set("userId", user.id);
   session.set("firstName", user.firstName);
   session.set("lastName", user.lastName);
+  session.set("role", user.role);
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
@@ -130,6 +131,7 @@ export async function getUserSession(request: Request) {
     id: session?.get("userId"),
     firstName: session?.get("firstName"),
     lastName: session?.get("lastName"),
+    role: session?.get("role"),
   };
 
   if (!userInfo.id) {

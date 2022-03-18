@@ -87,6 +87,19 @@ export default function DeveloperRoot() {
                 </Link>
               </li>
             )}
+            {userInfo?.role === "Admin" && (
+              <li
+                className={
+                  currentPath.startsWith("/admin")
+                    ? "nav-item active"
+                    : "nav-item"
+                }
+              >
+                <Link className="nav-link" to="/developer/admin">
+                  Admin Dashboard
+                </Link>
+              </li>
+            )}
           </ul>
           <ul className="navbar-nav">
             {userInfo ? (
