@@ -43,6 +43,12 @@ async function seed() {
     create: { ...user1Data, firstName: "Appless", email: "noapps@test.com" },
   });
 
+  const adminUser = await db.user.upsert({
+    where: { email: "admin@test.com" },
+    update: { ...user1Data, firstName: "Admin", email: "admin@test.com", role: "Admin" },
+    create: { ...user1Data, firstName: "Admin", email: "admin@test.com", role: "Admin" },
+  });
+
   const shrtlnkWebsiteApplicationData = {
     name: "shrtlnk",
     website: "shrtlnk.dev",

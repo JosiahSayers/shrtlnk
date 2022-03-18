@@ -151,6 +151,16 @@ export async function requireUserSession(
   return userSession;
 }
 
+export async function requireAdminRole(request: Request, redirectTo: string = new URL(request.url).pathname) {
+  const userData = await requireUserSession(request, redirectTo);
+  const user = await db.user.findUnique({ where: { id: userData.id } });
+  const isAdmin = user?.role === 'Admin';
+  if (!isAdmin) {
+    throw redirect(`/not-found`);
+  }
+  return user;
+}
+
 export async function signout(request: Request) {
   const headers = await getSignoutHeaders(request);
   return redirect("/developer", { headers });
