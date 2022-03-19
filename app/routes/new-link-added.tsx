@@ -22,9 +22,9 @@ export const meta: MetaFunction = () => ({
   title: "Success!",
 });
 
-export let loader: LoaderFunction = async ({ request }) => {
-  let url = new URL(request.url);
-  let key = url.searchParams.get("key");
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url);
+  const key = url.searchParams.get("key");
   const shrtlnk = await getShrtlnk(key!);
   return shrtlnk ? shrtlnk : redirect("/notFound");
 };
@@ -35,9 +35,9 @@ export default function NewLinkAddec() {
   const [urlWasCopied, setUrlWasCopied] = useState(false);
 
   function setUrlToClipboard() {
-    var type = "text/plain";
-    var blob = new Blob([`shrtlnk.dev/${shrtlnk.key}`], { type });
-    var data = [new ClipboardItem({ [type]: blob })];
+    const type = "text/plain";
+    const blob = new Blob([`shrtlnk.dev/${shrtlnk.key}`], { type });
+    const data = [new ClipboardItem({ [type]: blob })];
 
     navigator.clipboard.write(data).then(
       () => setUrlWasCopied(true),
@@ -59,7 +59,7 @@ export default function NewLinkAddec() {
         </h1>
       </Link>
       <div className="new-link-container">
-        <h1 className="box-title">SUCCESS! HERE'S YOUR NEW LINK:</h1>
+        <h1 className="box-title">SUCCESS! HERE{"'"}S YOUR NEW LINK:</h1>
         <ul>
           <li id="new-link-li">
             <strong className="text-left">SHORTENED URL: </strong>

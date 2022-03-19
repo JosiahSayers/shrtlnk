@@ -1,4 +1,4 @@
-import { Link, LinksFunction, MetaFunction } from "remix";
+import { LinksFunction, MetaFunction } from "remix";
 import Card from "~/components/developer/card";
 import styles from "~/styles/developer/index.css";
 
@@ -23,7 +23,7 @@ export default function DeveloperHome() {
           Shrtlnk strives to be the easiest API to integrate into your project.
           <br />
         </span>
-        <strong className="h4">Here's our onboarding process:</strong>
+        <strong className="h4">Here{"'"}s our onboarding process:</strong>
       </div>
 
       <div className="row">

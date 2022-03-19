@@ -1,5 +1,4 @@
 import { Application } from "@prisma/client";
-import { redirect } from "remix";
 import ShortUniqueId from "short-unique-id";
 import { db } from "./utils/db.server";
 

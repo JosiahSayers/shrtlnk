@@ -1,4 +1,4 @@
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { createCookieSessionStorage, redirect } from "remix";
 
 import { db } from "./db.server";

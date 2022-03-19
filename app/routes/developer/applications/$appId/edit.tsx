@@ -1,5 +1,5 @@
 import { Application } from "@prisma/client";
-import Joi, { string } from "joi";
+import Joi from "joi";
 import {
   ActionFunction,
   Form,
@@ -9,10 +9,9 @@ import {
   useActionData,
   useLoaderData,
 } from "remix";
-import { getApp, updateApp } from "~/application.server";
+import { updateApp } from "~/application.server";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
 import { validate } from "~/utils/get-validation-errors.server";
-import { requireUserSession } from "~/utils/session.server";
 
 type ActionData = {
   formLevelError?: string;
