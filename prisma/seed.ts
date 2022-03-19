@@ -2,7 +2,7 @@ import { db } from "~/utils/db.server";
 import { hashPassword } from "~/utils/password.server";
 
 async function seed() {
-  const testDate = new Date("2022-03-06T03:34:27.058Z");
+  const testDate = new Date("2022-03-05T12:34:27.058Z");
   const user1Data = {
     email: "test@test.com",
     firstName: "John",
