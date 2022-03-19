@@ -16,6 +16,12 @@ jobs:
     - name: Start API and DB containers
       run: docker-compose -f docker-compose.ci.yml up -d --build --remove-orphans --force-recreate
 
+    - name: "Lint"
+      run: "docker-compose -f docker-compose.ci.yml exec -T app npm run lint"
+
+    - name: "Unit Tests"
+      run: "docker-compose -f docker-compose.ci.yml exec -T app npm run test"
+
     - name: Migrate database
       run: docker-compose -f docker-compose.ci.yml exec -T app npm run db:migrate
 
