@@ -51,8 +51,9 @@ describe("Developer landing page", () => {
   });
 });
 
-describe.only("Registering for an account", () => {
+describe("Registering for an account", () => {
   before(() => cy.visit("/developer/register"));
+  after(() => cy.logout());
 
   it("requires all fields", () => {
     cy.findByText("Submit").click();
@@ -89,6 +90,7 @@ describe.only("Registering for an account", () => {
 
 describe("Signing into an account", () => {
   beforeEach(() => cy.visit("/developer/signin"));
+  after(() => cy.logout());
 
   it("requires email and password", () => {
     cy.findByText("Submit").click();
@@ -120,6 +122,7 @@ describe("Signing into an account", () => {
   it("shows the updated navbar for logged in users", () => {
     cy.login();
     cy.findByText("My Applications");
+    cy.findByText("Admin Dashboard").should("not.exist");
     cy.findByText("Hey there, John");
     cy.findByText("Sign Out");
   });
@@ -142,6 +145,8 @@ describe("Signing into an account", () => {
 });
 
 describe("Application list", () => {
+  afterEach(() => cy.logout());
+
   it("shows the correct content when the user has no applications", () => {
     cy.login("noapps@test.com");
     cy.get(".alert.alert-light").should(
@@ -185,11 +190,13 @@ describe("Application list", () => {
 describe("Application CRUD", () => {
   before(() => cy.login());
   beforeEach(() => cy.preserveAuthCookie());
+  after(() => cy.logout());
 
   describe("Creating an application", () => {
-    beforeEach(() => cy.visit("/developer/applications/new"));
+    beforeEach(() => {cy.preserveAuthCookie(); cy.visit("/developer/applications/new")});
 
     it("requires an application name", () => {
+      cy.visit("/developer/applications/new")
       cy.findByText("Submit").click();
       cy.findByText('"name" is not allowed to be empty');
     });
@@ -263,6 +270,7 @@ describe("Account management", () => {
     cy.preserveAuthCookie();
     cy.findByText("Hey there, John").click();
   });
+  after(() => cy.logout());
 
   describe("changing your name", () => {
     it("requires both first name and last name", () => {
