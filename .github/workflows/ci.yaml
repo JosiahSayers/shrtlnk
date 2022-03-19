@@ -34,3 +34,7 @@ jobs:
     - name: Stop containers
       if: always()
       run: docker-compose -f docker-compose.ci.yml down
+
+    - name: Docker Prune
+      if: always()
+      run: docker system prune -f
