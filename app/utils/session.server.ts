@@ -1,4 +1,4 @@
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { createCookieSessionStorage, redirect } from "remix";
 
 import { db } from "./db.server";
@@ -113,6 +113,7 @@ export async function createUserSession(user: User, redirectTo: string) {
   session.set("userId", user.id);
   session.set("firstName", user.firstName);
   session.set("lastName", user.lastName);
+  session.set("role", user.role);
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
@@ -130,6 +131,7 @@ export async function getUserSession(request: Request) {
     id: session?.get("userId"),
     firstName: session?.get("firstName"),
     lastName: session?.get("lastName"),
+    role: session?.get("role"),
   };
 
   if (!userInfo.id) {
@@ -149,6 +151,16 @@ export async function requireUserSession(
     throw redirect(`/developer/signin?${searchParams}`);
   }
   return userSession;
+}
+
+export async function requireAdminRole(request: Request, redirectTo: string = new URL(request.url).pathname) {
+  const userData = await requireUserSession(request, redirectTo);
+  const user = await db.user.findUnique({ where: { id: userData.id } });
+  const isAdmin = user?.role === 'Admin';
+  if (!isAdmin) {
+    throw redirect(`/not-found`);
+  }
+  return user;
 }
 
 export async function signout(request: Request) {

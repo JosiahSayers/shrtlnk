@@ -1,5 +1,4 @@
-import { Application } from "@prisma/client";
-import { redirect, useParams } from "remix";
+import { redirect } from "remix";
 import { getApp } from "~/application.server";
 import { requireUserSession } from "./session.server";
 

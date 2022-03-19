@@ -5,7 +5,6 @@ describe("API", () => {
       method: "OPTIONS",
       failOnStatusCode: false,
     }).then((res) => {
-      console.log(res);
       expect(res.headers["access-control-allow-origin"]).to.eq("*");
       expect(res.headers["access-control-allow-methods"]).to.eq(
         "POST, OPTIONS"

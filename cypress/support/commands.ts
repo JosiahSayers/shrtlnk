@@ -36,6 +36,9 @@ const customCommands = {
   preserveAuthCookie: () => {
     Cypress.Cookies.preserveOnce("shrtlnk_session");
   },
+  logout: () => {
+    cy.visit("/developer/signout")
+  }
 };
 
 Object.keys(customCommands).forEach((commandKey) => {

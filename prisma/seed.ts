@@ -2,7 +2,7 @@ import { db } from "~/utils/db.server";
 import { hashPassword } from "~/utils/password.server";
 
 async function seed() {
-  const testDate = new Date("2022-03-06T03:34:27.058Z");
+  const testDate = new Date("2022-03-05T12:34:27.058Z");
   const user1Data = {
     email: "test@test.com",
     firstName: "John",
@@ -41,6 +41,12 @@ async function seed() {
     where: { email: "noapps@test.com" },
     update: { ...user1Data, firstName: "Appless", email: "noapps@test.com" },
     create: { ...user1Data, firstName: "Appless", email: "noapps@test.com" },
+  });
+
+  const adminUser = await db.user.upsert({
+    where: { email: "admin@test.com" },
+    update: { ...user1Data, firstName: "Admin", email: "admin@test.com", role: "Admin" },
+    create: { ...user1Data, firstName: "Admin", email: "admin@test.com", role: "Admin" },
   });
 
   const shrtlnkWebsiteApplicationData = {

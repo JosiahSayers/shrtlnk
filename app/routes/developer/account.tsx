@@ -86,7 +86,6 @@ export const action: ActionFunction = async ({ request }) => {
   const userInfo = await requireUserSession(request);
   const formData = await request.formData();
   const formType = formData.get("_action");
-  console.log({ formType });
 
   if (formType === "name") {
     const firstName = formData.get("firstName");

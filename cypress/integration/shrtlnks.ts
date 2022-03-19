@@ -1,6 +1,6 @@
-before(() => cy.visit(""));
-
 describe("Home Page", () => {
+  before(() => cy.visit("/"));
+
   describe("Page content", () => {
     it("Renders the page title", () => {
       cy.findByText((content, node) => node?.textContent === "SHRTLNK");

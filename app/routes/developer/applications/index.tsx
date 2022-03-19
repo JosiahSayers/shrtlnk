@@ -38,7 +38,7 @@ export default function Applications() {
         <div className="alert alert-light" role="alert">
           Hi, {user.firstName}.
           <br />
-          It looks like you haven't added an application yet.{" "}
+          It looks like you haven{"'"}t added an application yet.{" "}
           <Link to="/developer/applications/new">Click here</Link> to get
           started!
         </div>
@@ -77,7 +77,9 @@ export default function Applications() {
               {app.shrtlnksCreated}
             </p>
             <p>
-              <strong>Shrtlnk clicks from this application's shrtlnks: </strong>
+              <strong>
+                Shrtlnk clicks from this application{"'"}s shrtlnks:{" "}
+              </strong>
               {app.shrtlnkLoads}
             </p>
             <p>
