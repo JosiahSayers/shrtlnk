@@ -104,7 +104,7 @@ export default function Impersonate() {
         </div>
 
         <button type="submit" className="btn btn-warning">
-          Impersonate
+          Start Impersonating
         </button>
       </Form>
     </div>

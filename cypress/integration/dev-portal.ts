@@ -77,14 +77,16 @@ describe("Registering for an account", () => {
   });
 
   it("allows you to register for an account", () => {
+    const email = `integration-${new Date().getTime()}@test.com`;
     cy.findByPlaceholderText("First Name").clear().type("integration");
     cy.findByPlaceholderText("Last Name").clear().type(new Date().toLocaleString());
-    cy.findByPlaceholderText("Email").clear().type(`integration-${new Date().getTime()}@test.com`);
+    cy.findByPlaceholderText("Email").clear().type(email);
     cy.findByPlaceholderText("Password").clear().type("password");
     cy.findByPlaceholderText("Confirm Password").clear().type("password");
     cy.findByText("Submit").click();
     cy.findByText("Add an application");
     cy.findByText("Hey there, integration");
+    cy.task("deleteUser", email);
   });
 });
 
