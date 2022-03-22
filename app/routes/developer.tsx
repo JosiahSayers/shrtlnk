@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Form,
   Link,
   LinksFunction,
   LoaderFunction,
@@ -148,6 +149,25 @@ export default function DeveloperRoot() {
           </ul>
         </div>
       </nav>
+      {userInfo?.impersonator && (
+        <div className="bg-warning d-flex justify-content-center align-items-center">
+          <p className="mb-0 mr-3">
+            {userInfo.impersonator.firstName} {userInfo.impersonator.lastName}{" "}
+            impersonating!
+          </p>
+          <Form method="post" action="/developer/admin/impersonate">
+            <button
+              type="submit"
+              name="_action"
+              id="_action"
+              value="stop"
+              className="btn btn-link"
+            >
+              Stop Impersonating
+            </button>
+          </Form>
+        </div>
+      )}
       <Outlet />
     </>
   );

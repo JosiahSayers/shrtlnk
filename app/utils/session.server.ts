@@ -121,6 +121,40 @@ export async function createUserSession(user: User, redirectTo: string) {
   });
 }
 
+export async function createImpersonateSession(request: Request, impersonatedUser: User, redirectTo: string) {
+  const session = await getSession(request);
+  session.set("impersonatorId", session.get("userId"));
+  session.set("impersonatorFirstName", session.get("firstName"));
+  session.set("impersonatorLastName", session.get("lastName"));
+  session.set("impersonatorRole", session.get("role"));
+  session.set("userId", impersonatedUser.id);
+  session.set("firstName", impersonatedUser.firstName);
+  session.set("lastName", impersonatedUser.lastName);
+  session.set("role", impersonatedUser.role);
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await storage.commitSession(session)
+    }
+  });
+}
+
+export async function revertImpersonateSession(request: Request, redirectTo: string) {
+  const session = await getSession(request);
+  session.set("userId", session.get("impersonatorId"));
+  session.set("firstName", session.get("impersonatorFirstName"));
+  session.set("lastName", session.get("impersonatorLastName"));
+  session.set("role", session.get("impersonatorRole"));
+  session.unset("impersonatorId");
+  session.unset("impersonatorFirstName");
+  session.unset("impersonatorLastName");
+  session.unset("impersonatorRole");
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await storage.commitSession(session)
+    }
+  });
+}
+
 async function getSession(request: Request) {
   return storage.getSession(request.headers.get("Cookie"));
 }
@@ -132,6 +166,12 @@ export async function getUserSession(request: Request) {
     firstName: session?.get("firstName"),
     lastName: session?.get("lastName"),
     role: session?.get("role"),
+    impersonator: session.has("impersonatorId") ? {
+      id: session.get("impersonatorId"),
+      firstName: session.get("impersonatorFirstName"),
+      lastName: session.get("impersonatorLastName"),
+      role: session.get("impersonatorRole"),
+    } : undefined
   };
 
   if (!userInfo.id) {
@@ -161,6 +201,12 @@ export async function requireAdminRole(request: Request, redirectTo: string = ne
     throw redirect(`/not-found`);
   }
   return user;
+}
+
+export async function impersonateUser(idToImpersonate: string, request: Request, redirectTo: string) {
+  const userToImpersonate = await db.user.findUnique({ where: { id: idToImpersonate } });
+  if (!userToImpersonate) throw redirect('/developer/admin');
+  return createImpersonateSession(request, userToImpersonate, redirectTo);
 }
 
 export async function signout(request: Request) {
