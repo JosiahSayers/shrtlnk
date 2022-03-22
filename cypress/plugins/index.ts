@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+import { db } from "~/utils/db.server";
+
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -15,8 +18,11 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-// eslint-disable-next-line no-unused-vars
-module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-}
+/* eslint-disable */
+export default function (on: any, config: any) {
+  on('task', {
+    deleteUser: async (email: string) => await db.user.delete({ where: { email } })
+  });
+  return config;
+};
+/* eslint-enable */

@@ -1,5 +1,6 @@
 function createApp(name: string, website?: string) {
-  cy.visit("/developer/applications/new");
+  cy.findByText("My Applications").click();
+  cy.findByText("Add an application").click();
   cy.findByPlaceholderText("Name").type(name);
   if (website) {
     cy.findByPlaceholderText("URL").type(website);
@@ -8,7 +9,7 @@ function createApp(name: string, website?: string) {
 }
 
 function deleteApp(name: string) {
-  cy.visit("/developer/applications");
+  cy.findByText("My Applications").click();
   cy.findByText(name)
     .parent("div")
     .parent("div")
@@ -77,14 +78,16 @@ describe("Registering for an account", () => {
   });
 
   it("allows you to register for an account", () => {
+    const email = `integration-${new Date().getTime()}@test.com`;
     cy.findByPlaceholderText("First Name").clear().type("integration");
     cy.findByPlaceholderText("Last Name").clear().type(new Date().toLocaleString());
-    cy.findByPlaceholderText("Email").clear().type(`integration-${new Date().getTime()}@test.com`);
+    cy.findByPlaceholderText("Email").clear().type(email);
     cy.findByPlaceholderText("Password").clear().type("password");
     cy.findByPlaceholderText("Confirm Password").clear().type("password");
     cy.findByText("Submit").click();
     cy.findByText("Add an application");
     cy.findByText("Hey there, integration");
+    cy.task("deleteUser", email);
   });
 });
 
@@ -193,10 +196,8 @@ describe("Application CRUD", () => {
   after(() => cy.logout());
 
   describe("Creating an application", () => {
-    beforeEach(() => {cy.preserveAuthCookie(); cy.visit("/developer/applications/new")});
-
     it("requires an application name", () => {
-      cy.visit("/developer/applications/new")
+      cy.findByText("Add an application").click();
       cy.findByText("Submit").click();
       cy.findByText('"name" is not allowed to be empty');
     });
