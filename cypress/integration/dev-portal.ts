@@ -1,5 +1,6 @@
 function createApp(name: string, website?: string) {
-  cy.visit("/developer/applications/new");
+  cy.findByText("My Applications").click();
+  cy.findByText("Add an application").click();
   cy.findByPlaceholderText("Name").type(name);
   if (website) {
     cy.findByPlaceholderText("URL").type(website);
@@ -8,7 +9,7 @@ function createApp(name: string, website?: string) {
 }
 
 function deleteApp(name: string) {
-  cy.visit("/developer/applications");
+  cy.findByText("My Applications").click();
   cy.findByText(name)
     .parent("div")
     .parent("div")
@@ -195,10 +196,8 @@ describe("Application CRUD", () => {
   after(() => cy.logout());
 
   describe("Creating an application", () => {
-    beforeEach(() => {cy.preserveAuthCookie(); cy.visit("/developer/applications/new")});
-
     it("requires an application name", () => {
-      cy.visit("/developer/applications/new")
+      cy.findByText("Add an application").click();
       cy.findByText("Submit").click();
       cy.findByText('"name" is not allowed to be empty');
     });
