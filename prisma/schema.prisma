@@ -28,7 +28,7 @@ model Shrtlnk {
   key           String        @unique
   url           String
   createdAt     DateTime      @default(now())
-  applicationId String
+  applicationId String?
   application   Application?  @relation(fields: [applicationId], references: [id], onDelete: SetNull)
   loads         ShrtlnkLoad[]
 }
