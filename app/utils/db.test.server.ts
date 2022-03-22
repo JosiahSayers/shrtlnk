@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import { PrismaClient } from '@prisma/client';
 import { db } from './db.server';
 
