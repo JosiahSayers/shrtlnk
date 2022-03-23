@@ -164,8 +164,8 @@ describe("Application list", () => {
     cy.login();
     cy.findByText("Test App");
     cy.findByText((content, node) => node?.textContent === "Status: Valid");
-    cy.findByText(
-      (content, node) => node?.textContent === "API Key: test-api-key"
+    cy.findAllByText(
+      (content, node) => node?.textContent === "API Key: xxxxxxxxxxxxxxxxxxxxxxxxxxx"
     );
     cy.findByText(
       (content, node) =>
@@ -187,6 +187,15 @@ describe("Application list", () => {
         node?.textContent ?? ""
       )
     );
+  });
+
+  it("shows the API key when the element is clicked", () => {
+    cy.login();
+    cy.findByText((content, node) => node?.textContent === "API Key: test-api-key").should("not.exist");
+    cy.findAllByText(
+      (content, node) => node?.textContent === "API Key: xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    ).last().click();
+    cy.findByText((content, node) => node?.textContent === "API Key: test-api-key");
   });
 });
 
