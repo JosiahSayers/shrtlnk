@@ -29,6 +29,13 @@ div.alert {
   margin: 2vh 0;
 }
 
+span.hidden-text {
+  border: 1px dashed grey;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  position: relative;
+}
+
 @media only screen and (max-width: 768px) {
   .application-card {
       flex-direction: column;

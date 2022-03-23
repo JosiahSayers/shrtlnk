@@ -2,6 +2,7 @@ import { Link, LinksFunction, LoaderFunction, useLoaderData } from "remix";
 import { getApplicationsWithCounts } from "~/application.server";
 import { requireUserSession } from "~/utils/session.server";
 import styles from "~/styles/developer/applications.css";
+import HiddenText from "~/components/developer/hidden-text";
 
 type LoaderData = {
   user: Awaited<ReturnType<typeof requireUserSession>>;
@@ -54,7 +55,7 @@ export default function Applications() {
             </p>
             <p>
               <strong>API Key: </strong>
-              {app.apiKey}
+              <HiddenText>{app.apiKey}</HiddenText>
             </p>
             <p>
               <strong>Created on: </strong>
