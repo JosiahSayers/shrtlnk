@@ -32,6 +32,8 @@ const customCommands = {
     cy.findByPlaceholderText("Email").type(email);
     cy.findByPlaceholderText("Password").type(password);
     cy.findByText("Submit").click();
+    cy.location('pathname', {timeout: 10000})
+      .should('include', '/developer/applications');
   },
   preserveAuthCookie: () => {
     Cypress.Cookies.preserveOnce("shrtlnk_session");
@@ -48,6 +50,6 @@ Object.keys(customCommands).forEach((commandKey) => {
 type CustomCommands = typeof customCommands;
 declare global {
   namespace Cypress {
-    interface Chainable extends CustomCommands {}
+    type Chainable = CustomCommands
   }
 }

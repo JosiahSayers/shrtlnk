@@ -94,8 +94,8 @@ describe("Registering for an account", () => {
     cy.login();
     cy.findByText("Dev Portal").click();
     cy.findByText("Create Account").click();
-    cy.findByText("Register").should("not.exist");
-    cy.findByText("Add an application");
+    // cy.findByText("Register").should("not.exist");
+    cy.findByText("Test App");
   });
 });
 
