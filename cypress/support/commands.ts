@@ -50,6 +50,6 @@ Object.keys(customCommands).forEach((commandKey) => {
 type CustomCommands = typeof customCommands;
 declare global {
   namespace Cypress {
-    type Chainable = CustomCommands
+    interface Chainable extends CustomCommands {}
   }
 }
