@@ -89,6 +89,14 @@ describe("Registering for an account", () => {
     cy.findByText("Hey there, integration");
     cy.task("deleteUser", email);
   });
+
+  it("redirects to the applications page when logged in", () => {
+    cy.login();
+    cy.findByText("Dev Portal").click();
+    cy.findByText("Create Account").click();
+    cy.findByText("Register").should("not.exist");
+    cy.findByText("Add an application");
+  });
 });
 
 describe("Signing into an account", () => {

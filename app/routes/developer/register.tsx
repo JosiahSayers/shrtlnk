@@ -11,7 +11,6 @@ import {
 import { validate } from "~/utils/get-validation-errors.server";
 import {
   createUserSession,
-  getSignoutHeaders,
   getUserSession,
   register,
   RegisterForm,
@@ -52,8 +51,7 @@ const validateForm = (form: any) => {
 export const loader: LoaderFunction = async ({ request }) => {
   const userInfo = await getUserSession(request);
   if (userInfo) {
-    const headers = await getSignoutHeaders(request);
-    return redirect("/developer/register", { headers });
+    return redirect("/developer/applications");
   }
   return null;
 };
