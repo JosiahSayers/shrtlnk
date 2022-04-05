@@ -21,7 +21,8 @@ import { db } from "~/utils/db.server";
 /* eslint-disable */
 export default function (on: any, config: any) {
   on('task', {
-    deleteUser: async (email: string) => await db.user.delete({ where: { email } })
+    deleteUser: async (email: string) => await db.user.delete({ where: { email } }),
+    getImpersonations: async () => await db.impersonation.findMany({ include: { impersonated: true, impersonator: true }, orderBy: { createdAt: "asc" } }),
   });
   return config;
 };

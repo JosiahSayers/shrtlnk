@@ -47,6 +47,14 @@ describe("Admin", () => {
       cy.findByText("Hey there, Admin");
       cy.findByText("Admin Dashboard");
     });
+
+    it("logs an impersonation record in the db", () => {
+      cy.task("getImpersonations").then((impersonations: any) => {
+        const last = impersonations[impersonations.length - 1];
+        expect(last.impersonator.email).to.eq("admin@test.com");
+        expect(last.impersonated.email).to.eq("test@test.com");
+      });
+    });
   });
 });
 
