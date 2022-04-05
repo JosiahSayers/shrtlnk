@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { createCookieSessionStorage, redirect } from "remix";
+import { createCookieSessionStorage, redirect, Session } from "remix";
 
 import { db } from "./db.server";
 import {
@@ -121,12 +121,12 @@ export async function createUserSession(user: User, redirectTo: string) {
   });
 }
 
-export async function createImpersonateSession(request: Request, impersonatedUser: User, redirectTo: string) {
-  const session = await getSession(request);
+export async function createImpersonateSession(session: Session, impersonatedUser: User, logId: string, redirectTo: string) {
   session.set("impersonatorId", session.get("userId"));
   session.set("impersonatorFirstName", session.get("firstName"));
   session.set("impersonatorLastName", session.get("lastName"));
   session.set("impersonatorRole", session.get("role"));
+  session.set("impersonationLogId", logId);
   session.set("userId", impersonatedUser.id);
   session.set("firstName", impersonatedUser.firstName);
   session.set("lastName", impersonatedUser.lastName);
@@ -148,6 +148,9 @@ export async function revertImpersonateSession(request: Request, redirectTo: str
   session.unset("impersonatorFirstName");
   session.unset("impersonatorLastName");
   session.unset("impersonatorRole");
+  const logId = session.get("impersonationLogId");
+  session.unset("impersonationLogId");
+  await db.impersonation.update({ where: { id: logId }, data: { endedAt: new Date() } });
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session)
@@ -206,16 +209,25 @@ export async function requireAdminRole(request: Request, redirectTo: string = ne
 export async function impersonateUser(idToImpersonate: string, request: Request, redirectTo: string) {
   const userToImpersonate = await db.user.findUnique({ where: { id: idToImpersonate } });
   if (!userToImpersonate) throw redirect('/developer/admin');
-  return createImpersonateSession(request, userToImpersonate, redirectTo);
+  const session = await getSession(request);
+  const impersonationLog = await db.impersonation.create({ data: {
+    impersonatorId: session.get("userId"),
+    impersonatedId: userToImpersonate.id
+  }});
+  return createImpersonateSession(session, userToImpersonate, impersonationLog.id, redirectTo);
 }
 
 export async function signout(request: Request) {
-  const headers = await getSignoutHeaders(request);
+  const session = await getSession(request);
+  const impersonationLogId = session.get("impersonationLogId");
+  if (impersonationLogId) {
+    await db.impersonation.update({ where: { id: impersonationLogId }, data: { endedAt: new Date() } });
+  }
+  const headers = await getSignoutHeaders(session);
   return redirect("/developer", { headers });
 }
 
-export async function getSignoutHeaders(request: Request) {
-  const session = await getSession(request);
+export async function getSignoutHeaders(session: Session) {
   return new Headers({
     "Set-Cookie": await storage.destroySession(session)
   });
