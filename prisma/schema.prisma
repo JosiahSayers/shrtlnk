@@ -69,7 +69,7 @@ model User {
 model Impersonation {
   id             String    @id @default(uuid())
   createdAt      DateTime  @default(now())
-  endedAt        DateTime? @default(now())
+  endedAt        DateTime?
   impersonatorId String
   impersonator   User      @relation("impersonator", fields: [impersonatorId], references: [id], onDelete: Cascade)
   impersonatedId String
