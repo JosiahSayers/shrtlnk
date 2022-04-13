@@ -22,6 +22,7 @@ import {
 import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
 import { useEffect } from "react";
+import TextInput from "~/components/developer/TextInput";
 
 type ActionData = {
   formLevelError?: string;
@@ -122,33 +123,20 @@ export default function SimpleCard() {
               value={searchParams.get("redirectTo") ?? undefined}
             />
             <Stack spacing={4}>
-              <FormControl id="email" isInvalid={!!actionData?.errors?.email}>
-                <FormLabel>Email Address</FormLabel>
-                <Input
-                  type="email"
-                  name="email"
-                  defaultValue={actionData?.fields?.email}
-                />
-                {actionData?.errors?.email && (
-                  <FormErrorMessage>{actionData.errors.email}</FormErrorMessage>
-                )}
-              </FormControl>
-              <FormControl
-                id="password"
-                isInvalid={!!actionData?.errors?.password}
-              >
-                <FormLabel>Password</FormLabel>
-                <Input
-                  type="password"
-                  name="password"
-                  defaultValue={actionData?.fields?.password}
-                />
-                {actionData?.errors?.password && (
-                  <FormErrorMessage>
-                    {actionData.errors.password}
-                  </FormErrorMessage>
-                )}
-              </FormControl>
+              <TextInput
+                errorMessage={actionData?.errors?.email}
+                defaultValue={actionData?.fields?.email}
+                name="email"
+                type="email"
+                label="Email Address"
+              />
+              <TextInput
+                errorMessage={actionData?.errors?.password}
+                defaultValue={actionData?.fields?.password}
+                name="password"
+                type="password"
+                label="Password"
+              />
               <Stack spacing={10}>
                 <Stack
                   direction={{ base: "column", sm: "row" }}
