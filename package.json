@@ -17,6 +17,7 @@
     "db:prod-refresh": "npm run db:drop && node --require esbuild-register prisma/consolidate-production.ts"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",

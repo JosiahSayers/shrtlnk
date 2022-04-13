@@ -29,7 +29,7 @@ import "@testing-library/cypress/add-commands";
 const customCommands = {
   login: (email = "test@test.com", password = "password") => {
     cy.visit("/developer/signin");
-    cy.findByLabelText("Email address").type(email);
+    cy.findByLabelText("Email Address").type(email);
     cy.findByLabelText("Password").type(password);
     cy.findByText("Sign in").click();
     cy.location('pathname', {timeout: 10000})

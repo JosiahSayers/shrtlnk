@@ -53,11 +53,11 @@ describe("Developer landing page", () => {
 });
 
 describe("Registering for an account", () => {
-  before(() => cy.visit("/developer/register"));
+  beforeEach(() => cy.visit("/developer/register"));
   after(() => cy.logout());
 
   it("requires all fields", () => {
-    cy.findByText("Submit").click();
+    cy.findByText("Sign up").click();
     cy.findByText('"First Name" is not allowed to be empty');
     cy.findByText('"Last Name" is not allowed to be empty');
     cy.findByText('"Email" is not allowed to be empty');
@@ -65,26 +65,18 @@ describe("Registering for an account", () => {
   });
 
   it("requires that password is at least 8 characters", () => {
-    cy.findByPlaceholderText("Password").clear().type("short");
-    cy.findByText("Submit").click();
+    cy.findByLabelText("Password*").clear().type("short");
+    cy.findByText("Sign up").click();
     cy.findByText('"Password" length must be at least 8 characters long');
-  });
-
-  it("requires that password and confirmPassword match", () => {
-    cy.findByPlaceholderText("Password").clear().type("new password");
-    cy.findByPlaceholderText("Confirm Password").clear().type("wrong password");
-    cy.findByText("Submit").click();
-    cy.findByText('"Confirm Password" must match "Password"');
   });
 
   it("allows you to register for an account", () => {
     const email = `integration-${new Date().getTime()}@test.com`;
-    cy.findByPlaceholderText("First Name").clear().type("integration");
-    cy.findByPlaceholderText("Last Name").clear().type(new Date().toLocaleString());
-    cy.findByPlaceholderText("Email").clear().type(email);
-    cy.findByPlaceholderText("Password").clear().type("password");
-    cy.findByPlaceholderText("Confirm Password").clear().type("password");
-    cy.findByText("Submit").click();
+    cy.findByLabelText("First Name*").clear().type("integration");
+    cy.findByLabelText("Last Name*").clear().type(new Date().toLocaleString());
+    cy.findByLabelText("Email Address*").clear().type(email);
+    cy.findByLabelText("Password*").clear().type("password");
+    cy.findByText("Sign up").click();
     cy.findByText("Add an application");
     cy.findByText("Hey there, integration");
     cy.task("deleteUser", email);
@@ -109,21 +101,21 @@ describe("Signing into an account", () => {
   });
 
   it("display a form level error when the email is not found", () => {
-    cy.findByLabelText("Email address").type("test@test.co");
+    cy.findByLabelText("Email Address").type("test@test.co");
     cy.findByLabelText("Password").type("password");
     cy.findByText("Sign in").click();
     cy.findByText("Could not log you in with these credentials");
   });
 
   it("displays a form level error when the email is found but the password is incorrect", () => {
-    cy.findByLabelText("Email address").type("test@test.com");
+    cy.findByLabelText("Email Address").type("test@test.com");
     cy.findByLabelText("Password").type("incorrect password");
     cy.findByText("Sign in").click();
     cy.findByText("Could not log you in with these credentials");
   });
 
   it("logs the user in when given correct credentials", () => {
-    cy.findByLabelText("Email address").type("test@test.com");
+    cy.findByLabelText("Email Address").type("test@test.com");
     cy.findByLabelText("Password").type("password");
     cy.findByText("Sign in").click();
     cy.findByText("Add an application");
@@ -138,7 +130,7 @@ describe("Signing into an account", () => {
   });
 
   it("allows legacy users to log in", () => {
-    cy.findByLabelText("Email address").type("legacy@test.com");
+    cy.findByLabelText("Email Address").type("legacy@test.com");
     cy.findByLabelText("Password").type("password");
     cy.findByText("Sign in").click();
     cy.findByText("Hey there, Legacy");
@@ -146,7 +138,7 @@ describe("Signing into an account", () => {
   });
 
   it("allows legacy users to log in a second time (after their password has been hashed with bcrypt)", () => {
-    cy.findByLabelText("Email address").type("legacy@test.com");
+    cy.findByLabelText("Email Address").type("legacy@test.com");
     cy.findByLabelText("Password").type("password");
     cy.findByText("Sign in").click();
     cy.findByText("Hey there, Legacy");
