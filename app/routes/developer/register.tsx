@@ -8,7 +8,6 @@ import {
   redirect,
   useActionData,
   Link,
-  useLocation,
 } from "remix";
 import {
   Flex,
