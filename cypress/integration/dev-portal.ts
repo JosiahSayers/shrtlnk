@@ -103,29 +103,29 @@ describe("Signing into an account", () => {
   after(() => cy.logout());
 
   it("requires email and password", () => {
-    cy.findByText("Submit").click();
+    cy.findByText("Sign in").click();
     cy.findByText('"email" is not allowed to be empty');
     cy.findByText('"password" is not allowed to be empty');
   });
 
   it("display a form level error when the email is not found", () => {
-    cy.findByPlaceholderText("Email").type("test@test.co");
-    cy.findByPlaceholderText("Password").type("password");
-    cy.findByText("Submit").click();
+    cy.findByLabelText("Email address").type("test@test.co");
+    cy.findByLabelText("Password").type("password");
+    cy.findByText("Sign in").click();
     cy.findByText("Could not log you in with these credentials");
   });
 
   it("displays a form level error when the email is found but the password is incorrect", () => {
-    cy.findByPlaceholderText("Email").type("test@test.com");
-    cy.findByPlaceholderText("Password").type("incorrect password");
-    cy.findByText("Submit").click();
+    cy.findByLabelText("Email address").type("test@test.com");
+    cy.findByLabelText("Password").type("incorrect password");
+    cy.findByText("Sign in").click();
     cy.findByText("Could not log you in with these credentials");
   });
 
   it("logs the user in when given correct credentials", () => {
-    cy.findByPlaceholderText("Email").type("test@test.com");
-    cy.findByPlaceholderText("Password").type("password");
-    cy.findByText("Submit").click();
+    cy.findByLabelText("Email address").type("test@test.com");
+    cy.findByLabelText("Password").type("password");
+    cy.findByText("Sign in").click();
     cy.findByText("Add an application");
   });
 
@@ -138,17 +138,17 @@ describe("Signing into an account", () => {
   });
 
   it("allows legacy users to log in", () => {
-    cy.findByPlaceholderText("Email").type("legacy@test.com");
-    cy.findByPlaceholderText("Password").type("password");
-    cy.findByText("Submit").click();
+    cy.findByLabelText("Email address").type("legacy@test.com");
+    cy.findByLabelText("Password").type("password");
+    cy.findByText("Sign in").click();
     cy.findByText("Hey there, Legacy");
     cy.findByText("Add an application");
   });
 
   it("allows legacy users to log in a second time (after their password has been hashed with bcrypt)", () => {
-    cy.findByPlaceholderText("Email").type("legacy@test.com");
-    cy.findByPlaceholderText("Password").type("password");
-    cy.findByText("Submit").click();
+    cy.findByLabelText("Email address").type("legacy@test.com");
+    cy.findByLabelText("Password").type("password");
+    cy.findByText("Sign in").click();
     cy.findByText("Hey there, Legacy");
     cy.findByText("Add an application");
   });
