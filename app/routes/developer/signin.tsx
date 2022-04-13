@@ -18,7 +18,7 @@ import {
 import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
 import { useEffect } from "react";
-import TextInput from "~/components/developer/TextInput";
+import TextInput from "~/components/developer/text-input";
 
 type ActionData = {
   formLevelError?: string;

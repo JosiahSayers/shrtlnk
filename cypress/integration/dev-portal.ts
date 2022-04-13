@@ -1,5 +1,5 @@
 function createApp(name: string, website?: string) {
-  cy.findByText("My Applications").click();
+  cy.findAllByText("My Applications").filter(":visible").click();
   cy.findByText("Add an application").click();
   cy.findByPlaceholderText("Name").type(name);
   if (website) {
@@ -9,7 +9,7 @@ function createApp(name: string, website?: string) {
 }
 
 function deleteApp(name: string) {
-  cy.findByText("My Applications").click();
+  cy.findAllByText("My Applications").filter(":visible").click();
   cy.findByText(name)
     .parent("div")
     .parent("div")
@@ -23,10 +23,10 @@ describe("Developer landing page", () => {
   before(() => cy.visit("/developer"));
 
   it("has the correct static content", () => {
-    cy.findByText("shrtlnk");
-    cy.findByText("Dev Portal");
-    cy.findByText("Documentation");
-    cy.findByText("Register");
+    cy.findAllByText("shrtlnk");
+    cy.findAllByText("Dev Portal");
+    cy.findAllByText("Documentation");
+    cy.findAllByText("Sign Up");
     cy.findAllByText("Sign In").should("have.length", 2);
 
     cy.findByText("Welcome, artisan of the internet!");
@@ -84,7 +84,7 @@ describe("Registering for an account", () => {
 
   it("redirects to the applications page when logged in", () => {
     cy.login();
-    cy.findByText("Dev Portal").click();
+    cy.findAllByText("Dev Portal").filter(":visible").click();
     cy.findByText("Create Account").click();
     cy.findByText("Test App");
   });
@@ -123,7 +123,7 @@ describe("Signing into an account", () => {
 
   it("shows the updated navbar for logged in users", () => {
     cy.login();
-    cy.findByText("My Applications");
+    cy.findAllByText("My Applications");
     cy.findByText("Admin Dashboard").should("not.exist");
     cy.findByText("Hey there, John");
     cy.findByText("Sign Out");

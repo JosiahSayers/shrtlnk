@@ -5,7 +5,7 @@ describe("Admin", () => {
 
   describe('Admin Dashboard', () => {
     it("loads the dashboard page and expected graphs", () => {
-      cy.findByText("Admin Dashboard").click();
+      cy.findAllByText("Admin Dashboard").filter(':visible').click();
       cy.findByText("Admin Tools");
       cy.findAllByText("Dashboard");
       cy.findByText("Impersonate");
@@ -20,7 +20,7 @@ describe("Admin", () => {
   
   describe("Admin Impersonate", () => {
     beforeEach(() => {
-      cy.findByText("Admin Dashboard").click();
+      cy.findAllByText("Admin Dashboard").filter(':visible').click();
       cy.findByText("Impersonate").click();
     });
 
@@ -45,7 +45,7 @@ describe("Admin", () => {
       cy.findByText("Admin Dashboard").should("not.exist");
       cy.findByText("Stop Impersonating").click();
       cy.findByText("Hey there, Admin");
-      cy.findByText("Admin Dashboard");
+      cy.findAllByText("Admin Dashboard");
     });
 
     it("logs an impersonation record in the db", () => {

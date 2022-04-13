@@ -36,7 +36,7 @@ import {
   register,
   RegisterForm,
 } from "~/utils/session.server";
-import TextInput from "~/components/developer/TextInput";
+import TextInput from "~/components/developer/text-input";
 
 type ActionData = {
   formLevelError?: string;
