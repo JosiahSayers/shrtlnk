@@ -123,6 +123,7 @@ export default function NavBar({ userInfo }: Props) {
                 to={"/developer/register"}
                 _hover={{
                   bg: "blue.300",
+                  color: "white",
                 }}
               >
                 Sign Up
