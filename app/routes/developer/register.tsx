@@ -1,34 +1,34 @@
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  HStack,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Link as ChakraLink,
+  Stack,
+  Text,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import { Prisma } from "@prisma/client";
 import Joi from "joi";
+import { useEffect, useState } from "react";
 import {
   ActionFunction,
   Form,
   json,
+  Link,
   LoaderFunction,
   redirect,
   useActionData,
-  Link,
 } from "remix";
-import {
-  Flex,
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  HStack,
-  InputRightElement,
-  Stack,
-  Button,
-  Heading,
-  Text,
-  useColorModeValue,
-  Link as ChakraLink,
-  FormErrorMessage,
-  useToast,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import {
   createUserSession,
@@ -36,7 +36,6 @@ import {
   register,
   RegisterForm,
 } from "~/utils/session.server";
-import TextInput from "~/components/developer/text-input";
 
 type ActionData = {
   formLevelError?: string;
@@ -124,117 +123,110 @@ export default function SignupCard() {
   }, [actionData]);
 
   return (
-    <Flex
-      minH={"calc(100vh - 56px)"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
-            Sign up for an account
-          </Heading>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
-          p={8}
-        >
-          <Form method="post" noValidate>
-            <Stack spacing={4}>
-              <HStack>
-                <Box>
-                  <TextInput
-                    errorMessage={actionData?.errors?.firstName}
-                    defaultValue={actionData?.fields?.firstName}
-                    name="firstName"
-                    type="firstName"
-                    label="First Name"
-                    isRequired
-                  />
-                </Box>
-                <Box>
-                  <TextInput
-                    errorMessage={actionData?.errors?.lastName}
-                    defaultValue={actionData?.fields?.lastName}
-                    name="lastName"
-                    type="lastName"
-                    label="Last Name"
-                    isRequired
-                  />
-                </Box>
-              </HStack>
-              <TextInput
-                errorMessage={actionData?.errors?.email}
-                defaultValue={actionData?.fields?.email}
-                name="email"
-                type="email"
-                label="Email Address"
-                isRequired
-              />
-              <FormControl
-                id="password"
-                isInvalid={!!actionData?.errors?.password}
-                isRequired
+    <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack align={"center"}>
+        <Heading fontSize={"4xl"} textAlign={"center"}>
+          Sign up for an account
+        </Heading>
+      </Stack>
+      <Box
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={8}
+      >
+        <Form method="post" noValidate>
+          <Stack spacing={4}>
+            <HStack>
+              <Box>
+                <TextInput
+                  errorMessage={actionData?.errors?.firstName}
+                  defaultValue={actionData?.fields?.firstName}
+                  name="firstName"
+                  type="firstName"
+                  label="First Name"
+                  isRequired
+                />
+              </Box>
+              <Box>
+                <TextInput
+                  errorMessage={actionData?.errors?.lastName}
+                  defaultValue={actionData?.fields?.lastName}
+                  name="lastName"
+                  type="lastName"
+                  label="Last Name"
+                  isRequired
+                />
+              </Box>
+            </HStack>
+            <TextInput
+              errorMessage={actionData?.errors?.email}
+              defaultValue={actionData?.fields?.email}
+              name="email"
+              type="email"
+              label="Email Address"
+              isRequired
+            />
+            <FormControl
+              id="password"
+              isInvalid={!!actionData?.errors?.password}
+              isRequired
+            >
+              <FormLabel>Password</FormLabel>
+              <InputGroup>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  defaultValue={actionData?.fields?.password}
+                />
+                <InputRightElement h={"full"}>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() =>
+                      setShowPassword((showPassword) => !showPassword)
+                    }
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              {actionData?.errors?.password && (
+                <FormErrorMessage>
+                  {actionData.errors.password}
+                </FormErrorMessage>
+              )}
+            </FormControl>
+            <Stack spacing={10} pt={2}>
+              <Button
+                loadingText="Submitting"
+                size="lg"
+                bg={"blue.400"}
+                color={"white"}
+                _hover={{
+                  bg: "blue.500",
+                }}
+                type="submit"
+                onClick={() => toast.closeAll()}
               >
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    defaultValue={actionData?.fields?.password}
-                  />
-                  <InputRightElement h={"full"}>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }
-                    >
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                {actionData?.errors?.password && (
-                  <FormErrorMessage>
-                    {actionData.errors.password}
-                  </FormErrorMessage>
-                )}
-              </FormControl>
-              <Stack spacing={10} pt={2}>
-                <Button
-                  loadingText="Submitting"
-                  size="lg"
-                  bg={"blue.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.500",
-                  }}
-                  type="submit"
+                Sign up
+              </Button>
+            </Stack>
+            <Stack pt={6}>
+              <Text align={"center"}>
+                Already a user?{" "}
+                <ChakraLink
+                  as={Link}
+                  to="/developer/signin"
+                  color={"blue.400"}
                   onClick={() => toast.closeAll()}
                 >
-                  Sign up
-                </Button>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={"center"}>
-                  Already a user?{" "}
-                  <ChakraLink
-                    as={Link}
-                    to="/developer/signin"
-                    color={"blue.400"}
-                    onClick={() => toast.closeAll()}
-                  >
-                    Sign in
-                  </ChakraLink>
-                </Text>
-              </Stack>
+                  Sign in
+                </ChakraLink>
+              </Text>
             </Stack>
-          </Form>
-        </Box>
-      </Stack>
-    </Flex>
+          </Stack>
+        </Form>
+      </Box>
+    </Stack>
   );
 }

@@ -1,3 +1,4 @@
+import { Flex, useColorModeValue } from "@chakra-ui/react";
 import {
   Form,
   LinksFunction,
@@ -45,7 +46,17 @@ export default function DeveloperRoot() {
           </Form>
         </div>
       )}
-      <Outlet />
+      <Flex
+        minH="calc(100vh - 60px)"
+        w="100vw"
+        alignItems="center"
+        justifyContent="center"
+        bg={useColorModeValue("gray.50", "gray.800")}
+        direction="column"
+        textAlign="center"
+      >
+        <Outlet />
+      </Flex>
     </>
   );
 }

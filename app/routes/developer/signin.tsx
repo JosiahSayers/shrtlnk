@@ -1,4 +1,13 @@
+import {
+  Box,
+  Button,
+  Heading,
+  Stack,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import Joi from "joi";
+import { useEffect } from "react";
 import {
   ActionFunction,
   Form,
@@ -6,19 +15,9 @@ import {
   useActionData,
   useSearchParams,
 } from "remix";
-import {
-  Flex,
-  Box,
-  Stack,
-  Button,
-  Heading,
-  useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
+import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
-import { useEffect } from "react";
-import TextInput from "~/components/developer/text-input";
 
 type ActionData = {
   formLevelError?: string;
@@ -96,65 +95,58 @@ export default function SimpleCard() {
   }, [actionData]);
 
   return (
-    <Flex
-      minH={"calc(100vh - 56px)"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
-          p={8}
-        >
-          <Form method="post" noValidate>
-            <input
-              type="hidden"
-              name="redirectTo"
-              value={searchParams.get("redirectTo") ?? undefined}
-            />
-            <Stack spacing={4}>
-              <TextInput
-                errorMessage={actionData?.errors?.email}
-                defaultValue={actionData?.fields?.email}
-                name="email"
-                type="email"
-                label="Email Address"
-              />
-              <TextInput
-                errorMessage={actionData?.errors?.password}
-                defaultValue={actionData?.fields?.password}
-                name="password"
-                type="password"
-                label="Password"
-              />
-              <Stack spacing={10}>
-                <Stack
-                  direction={{ base: "column", sm: "row" }}
-                  align={"start"}
-                  justify={"space-between"}
-                ></Stack>
-                <Button
-                  bg={"blue.400"}
-                  color={"white"}
-                  type="submit"
-                  onClick={() => toast.closeAll()}
-                  _hover={{
-                    bg: "blue.500",
-                  }}
-                >
-                  Sign in
-                </Button>
-              </Stack>
-            </Stack>
-          </Form>
-        </Box>
+    <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack align={"center"}>
+        <Heading fontSize={"4xl"}>Sign in to your account</Heading>
       </Stack>
-    </Flex>
+      <Box
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={8}
+      >
+        <Form method="post" noValidate>
+          <input
+            type="hidden"
+            name="redirectTo"
+            value={searchParams.get("redirectTo") ?? undefined}
+          />
+          <Stack spacing={4}>
+            <TextInput
+              errorMessage={actionData?.errors?.email}
+              defaultValue={actionData?.fields?.email}
+              name="email"
+              type="email"
+              label="Email Address"
+            />
+            <TextInput
+              errorMessage={actionData?.errors?.password}
+              defaultValue={actionData?.fields?.password}
+              name="password"
+              type="password"
+              label="Password"
+            />
+            <Stack spacing={10}>
+              <Stack
+                direction={{ base: "column", sm: "row" }}
+                align={"start"}
+                justify={"space-between"}
+              ></Stack>
+              <Button
+                bg={"blue.400"}
+                color={"white"}
+                type="submit"
+                onClick={() => toast.closeAll()}
+                _hover={{
+                  bg: "blue.500",
+                }}
+              >
+                Sign in
+              </Button>
+            </Stack>
+          </Stack>
+        </Form>
+      </Box>
+    </Stack>
   );
 }
