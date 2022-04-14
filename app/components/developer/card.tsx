@@ -7,7 +7,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Link } from "remix";
-import BoxComponent from "./box";
+import { BoxComponent } from "./box";
 
 interface CardProps extends BoxProps {
   title: string;

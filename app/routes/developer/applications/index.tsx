@@ -1,17 +1,28 @@
-import { Link, LinksFunction, LoaderFunction, useLoaderData } from "remix";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link as ChakraLink,
+  List,
+  ListItem,
+  Text,
+} from "@chakra-ui/react";
+import { LinksFunction } from "@remix-run/react/routeModules";
+import { Link, LoaderFunction, useLoaderData } from "remix";
 import { getApplicationsWithCounts } from "~/application.server";
-import { requireUserSession } from "~/utils/session.server";
-import styles from "~/styles/developer/applications.css";
+import { BoxComponent } from "~/components/developer/box";
 import HiddenText from "~/components/developer/hidden-text";
+import styles from "~/styles/developer/applications.css";
+import { requireUserSession } from "~/utils/session.server";
 
 type LoaderData = {
   user: Awaited<ReturnType<typeof requireUserSession>>;
   applications: Awaited<ReturnType<typeof getApplicationsWithCounts>>;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUserSession(request);
-  return { user, applications: await getApplicationsWithCounts(user.id) };
 };
 
 export const links: LinksFunction = () => [
@@ -21,91 +32,144 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = await requireUserSession(request);
+  return { user, applications: await getApplicationsWithCounts(user.id) };
+};
+
 export default function Applications() {
   const { applications, user } = useLoaderData<LoaderData>();
 
   return (
-    <div className="container">
-      <Link
-        className="btn btn-light"
-        role="button"
-        id="add-app"
-        to="/developer/applications/new"
-      >
-        Add an application
-      </Link>
+    <>
+      <Heading size="2xl" mb="5">
+        Your Applications
+      </Heading>
+
+      {applications.length > 0 && (
+        <Button
+          as={Link}
+          className="btn btn-light"
+          role="button"
+          id="add-app"
+          to="/developer/applications/new"
+          alignSelf="flex-end"
+          mr="5vw"
+        >
+          Add an application
+        </Button>
+      )}
 
       {applications.length < 1 && (
-        <div className="alert alert-light" role="alert">
-          Hi, {user.firstName}.
-          <br />
-          It looks like you haven{"'"}t added an application yet.{" "}
-          <Link to="/developer/applications/new">Click here</Link> to get
-          started!
-        </div>
+        <Alert status="info" w="60vw" textAlign="left">
+          <AlertIcon />
+          <Box flex="1">
+            <AlertTitle>Hi, {user.firstName}.</AlertTitle>
+            <AlertDescription display="block">
+              It looks like you haven{"'"}t added an application yet.{" "}
+              <ChakraLink
+                as={Link}
+                to="/developer/applications/new"
+                color="teal.500"
+              >
+                Click here
+              </ChakraLink>{" "}
+              to get started!
+            </AlertDescription>
+          </Box>
+        </Alert>
       )}
 
       {applications.map((app) => (
-        <div className="card pt-4 pb-4 pr-4 pl-4 application-card" key={app.id}>
-          <div className="app-info">
-            <h2>{app.name}</h2>
-            <p>
-              <strong>Status: </strong>
-              {app.status}
-            </p>
-            <p>
-              <strong>API Key: </strong>
-              <HiddenText>{app.apiKey}</HiddenText>
-            </p>
-            <p>
-              <strong>Created on: </strong>
-              {Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
-                new Date(app.createdAt)
-              )}
-            </p>
-            {app.website ? (
-              <p>
-                <strong>Website: </strong>
-                <a href={app.website}>{app.website}</a>
-              </p>
-            ) : (
-              <p>
-                <strong>Website: </strong>No website added yet
-              </p>
-            )}
-            <p>
-              <strong>Shrtlnks created with application: </strong>
-              {app.shrtlnksCreated}
-            </p>
-            <p>
-              <strong>
-                Shrtlnk clicks from this application{"'"}s shrtlnks:{" "}
-              </strong>
-              {app.shrtlnkLoads}
-            </p>
-            <p>
-              <strong>
-                Unsafe URLs detected and blocked from this application:{" "}
-              </strong>
-              {app.blockedUrls}
-            </p>
-          </div>
-          <div className="app-buttons">
-            <Link
-              to={`/developer/applications/${app.id}/edit`}
-              className="btn btn-primary"
-            >
-              Edit App
-            </Link>
-            <Link
-              to={`/developer/applications/${app.id}/delete`}
-              className="btn btn-danger"
-            >
-              Delete App
-            </Link>
-          </div>
-        </div>
+        <BoxComponent key={app.id} w="90vw" m="3">
+          <Heading mb="4" size="lg">
+            {app.name}
+          </Heading>
+          <Flex w="100%" h="100%" justifyContent="space-around" flexWrap="wrap">
+            <List mb="3" textAlign="left">
+              <ListItem>
+                <Text as="span" fontWeight="bold">
+                  Status:
+                </Text>{" "}
+                {app.status}
+              </ListItem>
+
+              <ListItem>
+                <Text as="span" fontWeight="bold">
+                  API Key:
+                </Text>{" "}
+                <HiddenText>{app.apiKey}</HiddenText>
+              </ListItem>
+
+              <ListItem>
+                <Text as="span" fontWeight="bold">
+                  Created On:
+                </Text>{" "}
+                {Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
+                  new Date(app.createdAt)
+                )}
+              </ListItem>
+
+              <ListItem>
+                <Text as="span" fontWeight="bold">
+                  Website:
+                </Text>{" "}
+                {app.website ? (
+                  <ChakraLink as={Link} to={app.website}>
+                    {app.website}
+                  </ChakraLink>
+                ) : (
+                  "No website added yet"
+                )}
+              </ListItem>
+
+              <ListItem>
+                <Text as="span" fontWeight="bold">
+                  Shrtlnks created:
+                </Text>{" "}
+                {app.shrtlnksCreated}
+              </ListItem>
+
+              <ListItem>
+                <Text as="span" fontWeight="bold">
+                  Shrtlnks loaded:
+                </Text>{" "}
+                {app.shrtlnkLoads} time{app.shrtlnkLoads === 1 ? "" : "s"}
+              </ListItem>
+
+              <ListItem>
+                <Text as="span" fontWeight="bold">
+                  Unsafe URLs detected and blocked from this application:
+                </Text>{" "}
+                {app.blockedUrls}
+              </ListItem>
+            </List>
+
+            <Flex alignItems="center" justifyContent="center">
+              <Button
+                color="white"
+                bg="blue.400"
+                _hover={{ bg: "blue.300", color: "white" }}
+                as={Link}
+                to={`/developer/applications/${app.id}/edit`}
+                m="2"
+              >
+                Edit
+              </Button>
+              <Button
+                as={Link}
+                color="white"
+                bg="red.400"
+                _hover={{ bg: "red.300", color: "white" }}
+                to={`/developer/applications/${app.id}/delete`}
+                m="2"
+              >
+                Delete
+              </Button>
+            </Flex>
+          </Flex>
+        </BoxComponent>
       ))}
-    </div>
+    </>
   );
 }

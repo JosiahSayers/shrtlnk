@@ -1,11 +1,7 @@
 import { Box, BoxProps, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 
-interface Props extends BoxProps {
-  children: React.ReactChild;
-}
-
-export default function BoxComponent({ children, ...props }: Props) {
+export const BoxComponent: React.FC<BoxProps> = ({ children, ...props }) => {
   return (
     <Box
       rounded={"lg"}
@@ -17,4 +13,4 @@ export default function BoxComponent({ children, ...props }: Props) {
       {children}
     </Box>
   );
-}
+};
