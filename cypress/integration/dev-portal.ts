@@ -1,24 +1,3 @@
-function createApp(name: string, website?: string) {
-  cy.findAllByText("My Applications").filter(":visible").click();
-  cy.findByText("Add an application").click();
-  cy.findByPlaceholderText("Name").type(name);
-  if (website) {
-    cy.findByPlaceholderText("URL").type(website);
-  }
-  cy.findByText("Submit").click();
-}
-
-function deleteApp(name: string) {
-  cy.findAllByText("My Applications").filter(":visible").click();
-  cy.findByText(name)
-    .parent("div")
-    .parent("div")
-    .within(() => {
-      cy.findByText("Delete App").click();
-    });
-  cy.findByText("Delete").click();
-}
-
 describe("Developer landing page", () => {
   before(() => cy.visit("/developer"));
 
@@ -30,10 +9,6 @@ describe("Developer landing page", () => {
     cy.findAllByText("Sign In").should("have.length", 2);
 
     cy.findByText("Welcome, artisan of the internet!");
-    cy.findByText(
-      "Shrtlnk strives to be the easiest API to integrate into your project."
-    );
-    cy.findByText("Here's our onboarding process:");
 
     cy.findByText("Create an account");
     cy.findByText("Click the button below to get started.");
@@ -77,7 +52,7 @@ describe("Registering for an account", () => {
     cy.findByLabelText("Email Address*").clear().type(email);
     cy.findByLabelText("Password*").clear().type("password");
     cy.findByText("Sign up").click();
-    cy.findByText("Add an application");
+    cy.findByText("Your Applications");
     cy.findByText("Hey there, integration");
     cy.task("deleteUser", email);
   });
@@ -151,10 +126,8 @@ describe("Application list", () => {
 
   it("shows the correct content when the user has no applications", () => {
     cy.login("noapps@test.com");
-    cy.get(".alert.alert-light").should(
-      "have.text",
-      "Hi, Appless.It looks like you haven't added an application yet. Click here to get started!"
-    );
+    cy.findByText("Hi, Appless.");
+    cy.findByText((_, node) => node?.textContent === "It looks like you haven't added an application yet. Click here to get started!");
     cy.findByText("Click here").click();
     cy.findByText("Application Name");
   });
@@ -168,16 +141,16 @@ describe("Application list", () => {
     );
     cy.findByText(
       (content, node) =>
-        node?.textContent === "Created on: Saturday, March 5, 2022"
+        node?.textContent === "Created On: Saturday, March 5, 2022"
     );
     cy.findByText(
       (content, node) => node?.textContent === "Website: http://localhost:3000"
     );
     cy.findAllByText((content, node) =>
-      /^Shrtlnks created with application: \d$/gm.test(node?.textContent ?? "")
+      /^Shrtlnks created: \d$/gm.test(node?.textContent ?? "")
     );
     cy.findAllByText((content, node) =>
-      /^Shrtlnk clicks from this application's shrtlnks: \d$/gm.test(
+      /^Shrtlnks loaded: \d times$/gm.test(
         node?.textContent ?? ""
       )
     );
@@ -206,15 +179,15 @@ describe("Application CRUD", () => {
   describe("Creating an application", () => {
     it("requires an application name", () => {
       cy.findByText("Add an application").click();
-      cy.findByText("Submit").click();
+      cy.findByText("Create").click();
       cy.findByText('"name" is not allowed to be empty');
     });
 
     it("Allows you to create an application without a website", () => {
-      cy.findByPlaceholderText("Name").type("Test App 1");
-      cy.findByText("Submit").click();
+      cy.findByLabelText("Application Name*").type("Test App 1");
+      cy.findByText("Create").click();
       cy.findByText("Test App 1");
-      deleteApp("Test App 1");
+      cy.task("deleteApplication", { name: "Test App 1", email: "test@test.com" });
     });
   });
 
@@ -222,22 +195,27 @@ describe("Application CRUD", () => {
     it("allows you to update the name and website of an existing application", () => {
       const name = "test-editing-app";
       const editedName = name + "-edited";
-      createApp(name);
+      cy.task("createApplication", {
+        email: "test@test.com",
+        app: {
+          name,
+        }
+      });
+      cy.reload();
       cy.findByText(name)
-        .parent("div")
-        .parent("div")
-        .within(() => {
-          cy.findByText("Edit App").click();
-        });
+      .parent("div")
+      .within(() => {
+        cy.findByText("Edit").click();
+      });
       cy.findByPlaceholderText("Name").clear().type(editedName);
       cy.findByPlaceholderText("URL").type("https://thisisatest.com");
       cy.findByText("Submit").click();
       cy.findByText(editedName);
       cy.findAllByText(
         (content, node) =>
-          node?.textContent === "Website: https://thisisatest.com"
-      );
-      deleteApp(editedName);
+        node?.textContent === "Website: https://thisisatest.com"
+        );
+        cy.task("deleteApplication", { name: editedName, email: "test@test.com" });
     });
   });
 
@@ -245,12 +223,17 @@ describe("Application CRUD", () => {
     beforeEach(() => cy.visit("/developer/applications"));
 
     it("allows you to delete an application", () => {
-      createApp("Test App 1");
+      cy.task("createApplication", {
+        email: "test@test.com",
+        app: {
+          name: "Test App 1"
+        }
+      });
+      cy.reload();
       cy.findByText("Test App 1")
         .parent("div")
-        .parent("div")
         .within(() => {
-          cy.findByText("Delete App").click();
+          cy.findByText("Delete").click();
         });
       cy.findByText("Are you sure that you want to delete this?");
       cy.findByText("All applications using this API key will no longer work.");
@@ -265,8 +248,7 @@ describe("Application CRUD", () => {
     it("allows you to cancel and go back without deleting anything", () => {
       cy.findByText("Test App")
         .parent("div")
-        .parent("div")
-        .within(() => cy.findByText("Delete App").click());
+        .within(() => cy.findByText("Delete").click());
       cy.findByText("Cancel").click();
       cy.findByText("Test App");
     });

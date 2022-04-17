@@ -1,9 +1,10 @@
 import {
   FormControl,
+  FormControlProps,
+  FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
-  FormErrorMessage,
-  FormControlProps,
 } from "@chakra-ui/react";
 
 interface Props extends FormControlProps {
@@ -13,6 +14,7 @@ interface Props extends FormControlProps {
   name: string;
   type?: HTMLInputElement["type"];
   id?: string;
+  helperText?: string;
 }
 
 export default function TextInput({
@@ -22,6 +24,7 @@ export default function TextInput({
   name,
   type = "text",
   id = name,
+  helperText,
   ...props
 }: Props) {
   return (
@@ -29,6 +32,7 @@ export default function TextInput({
       <FormLabel>{label}</FormLabel>
       <Input type={type} name={name} defaultValue={defaultValue} />
       {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 }
