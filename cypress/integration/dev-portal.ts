@@ -207,9 +207,9 @@ describe("Application CRUD", () => {
       .within(() => {
         cy.findByText("Edit").click();
       });
-      cy.findByPlaceholderText("Name").clear().type(editedName);
-      cy.findByPlaceholderText("URL").type("https://thisisatest.com");
-      cy.findByText("Submit").click();
+      cy.findByLabelText("Application Name*").clear().type(editedName);
+      cy.findByLabelText("URL of Application").type("https://thisisatest.com");
+      cy.findByText("Update").click();
       cy.findByText(editedName);
       cy.findAllByText(
         (content, node) =>

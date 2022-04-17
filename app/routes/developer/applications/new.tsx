@@ -113,7 +113,7 @@ export default function NewApplication() {
               defaultValue={actionData?.fields?.website}
               name="website"
               type="website"
-              label="URL of application"
+              label="URL of Application"
               helperText="If this is a mobile app, put the URL to the app store page. Otherwise, leave blank for now and fill in later."
             />
             <Stack spacing={10}>

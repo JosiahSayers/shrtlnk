@@ -1,4 +1,4 @@
-name: Portfolio CI
+name: CI Checks
 on:
   pull_request:
     branches: [ main ]

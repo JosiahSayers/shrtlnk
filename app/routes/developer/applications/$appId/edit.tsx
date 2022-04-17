@@ -1,3 +1,11 @@
+import {
+  Box,
+  Button,
+  Heading,
+  Stack,
+  toast,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { Application } from "@prisma/client";
 import Joi from "joi";
 import {
@@ -10,6 +18,7 @@ import {
   useLoaderData,
 } from "remix";
 import { updateApp } from "~/application.server";
+import TextInput from "~/components/developer/text-input";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
 import { validate } from "~/utils/get-validation-errors.server";
 
@@ -80,39 +89,51 @@ export default function EditApplication() {
   const id = loaderData?.id || actionData?.fields?.id;
 
   return (
-    <div className="container">
-      <div className="card pt-4 pb-4 pr-4 pl-4">
-        <Form method="post">
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              className="form-control"
-              placeholder="Name"
-              name="name"
+    <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack align={"center"}>
+        <Heading fontSize={"4xl"}>Edit Application ({loaderData.name})</Heading>
+      </Stack>
+      <Box
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={8}
+      >
+        <Form method="post" noValidate>
+          <Stack spacing={4}>
+            <TextInput
+              errorMessage={actionData?.errors?.name}
               defaultValue={name}
+              name="name"
+              type="name"
+              label="Application Name"
+              isRequired
             />
-            {actionData?.errors?.name && (
-              <span className="text-danger">{actionData.errors.name}</span>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="website">Website</label>
-            <input
-              className="form-control"
-              name="website"
-              placeholder="URL"
+            <TextInput
+              errorMessage={actionData?.errors?.website}
               defaultValue={website}
+              name="website"
+              type="website"
+              label="URL of Application"
+              helperText="If this is a mobile app, put the URL to the app store page. Otherwise, leave blank for now and fill in later."
             />
-            {actionData?.errors?.website && (
-              <span asp-validation-for="Website" className="text-danger">
-                {actionData.errors.website}
-              </span>
-            )}
-          </div>
-          <input type="hidden" name="id" defaultValue={id} />
-          <input type="submit" className="btn btn-primary" value="Submit" />
+            <input type="hidden" name="id" defaultValue={id} />
+            <Stack spacing={10}>
+              <Button
+                bg={"blue.400"}
+                color={"white"}
+                type="submit"
+                onClick={() => toast.closeAll()}
+                _hover={{
+                  bg: "blue.500",
+                }}
+              >
+                Update
+              </Button>
+            </Stack>
+          </Stack>
         </Form>
-      </div>
-    </div>
+      </Box>
+    </Stack>
   );
 }
