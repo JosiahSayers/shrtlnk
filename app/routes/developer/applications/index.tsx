@@ -82,12 +82,12 @@ export default function Applications() {
 
       {applications.map((app) => (
         <BoxComponent key={app.id} w="90vw" m="3">
-          <Heading mb="4" size="lg">
+          <Heading mb="4" size="lg" overflowWrap="anywhere">
             {app.name}
           </Heading>
           <Flex w="100%" h="100%" justifyContent="space-around" flexWrap="wrap">
             <List mb="3" textAlign="left">
-              <ListItem>
+              <ListItem overflowWrap="anywhere">
                 <Text as="span" fontWeight="bold">
                   Status:
                 </Text>{" "}
@@ -115,7 +115,13 @@ export default function Applications() {
                   Website:
                 </Text>{" "}
                 {app.website ? (
-                  <ChakraLink as={Link} to={app.website}>
+                  <ChakraLink
+                    href={app.website}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    overflowWrap="anywhere"
+                    textDecoration="underline"
+                  >
                     {app.website}
                   </ChakraLink>
                 ) : (
