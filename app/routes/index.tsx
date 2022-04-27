@@ -1,15 +1,16 @@
+import { Link as ChakraLink } from "@chakra-ui/react";
+import joi from "joi";
 import {
+  ActionFunction,
+  Form,
+  json,
   Link,
   LinksFunction,
-  ActionFunction,
-  useActionData,
-  json,
-  Form,
   redirect,
+  useActionData,
 } from "remix";
-import joi from "joi";
-import styles from "~/styles/index.css";
 import { createShrtlnk } from "~/shrtlnk.server";
+import styles from "~/styles/index.css";
 
 const validateUrl = (
   url: FormDataEntryValue | string | null
@@ -87,7 +88,15 @@ export default function Index() {
       </Form>
       <footer>
         <span>Pssst, are you a developer? We have an </span>
-        <Link to="/developer">API</Link>.
+        <ChakraLink
+          as={Link}
+          to="/developer"
+          textDecoration="underline"
+          color="gray.700"
+        >
+          API
+        </ChakraLink>
+        .
       </footer>
     </main>
   );
