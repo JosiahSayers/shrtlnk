@@ -3,11 +3,12 @@ import {
   Button,
   Heading,
   Stack,
-  toast,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Application } from "@prisma/client";
 import Joi from "joi";
+import { useEffect } from "react";
 import {
   ActionFunction,
   Form,
@@ -88,6 +89,20 @@ export default function EditApplication() {
   const website = loaderData?.website || actionData?.fields?.website;
   const id = loaderData?.id || actionData?.fields?.id;
 
+  const toast = useToast();
+
+  useEffect(() => {
+    if (actionData?.formLevelError) {
+      toast({
+        title: "Error",
+        description: actionData.formLevelError,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }, [actionData]);
+
   return (
     <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
       <Stack align={"center"}>
@@ -105,7 +120,7 @@ export default function EditApplication() {
               errorMessage={actionData?.errors?.name}
               defaultValue={name}
               name="name"
-              type="name"
+              type="text"
               label="Application Name"
               isRequired
             />
@@ -113,7 +128,7 @@ export default function EditApplication() {
               errorMessage={actionData?.errors?.website}
               defaultValue={website}
               name="website"
-              type="website"
+              type="text"
               label="URL of Application"
               helperText="If this is a mobile app, put the URL to the app store page. Otherwise, leave blank for now and fill in later."
             />
