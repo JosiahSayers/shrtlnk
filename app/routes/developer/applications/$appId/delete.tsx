@@ -1,3 +1,10 @@
+import {
+  Button,
+  Flex,
+  Heading,
+  Link as ChakraLink,
+  Text,
+} from "@chakra-ui/react";
 import { Application } from "@prisma/client";
 import {
   ActionFunction,
@@ -8,6 +15,7 @@ import {
   useLoaderData,
 } from "remix";
 import { deleteApp } from "~/application.server";
+import { BoxComponent } from "~/components/developer/box";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -27,32 +35,39 @@ export default function DeleteApp() {
   const app = useLoaderData<Application>();
 
   return (
-    <div className="container">
-      <div className="card pt-4 pb-4 pr-4 pl-4">
-        <div className="card-body text-center">
-          <div className="card-title">
-            <p>Are you sure that you want to delete this?</p>
-            <p>All applications using this API key will no longer work.</p>
-            <p>
-              All shrtlnks that were created through this application will not
-              be deleted and will remain functional.
-            </p>
-          </div>
-          <div className="card-text">
-            <p>
-              <strong>App: </strong>
-              {app.name}
-            </p>
-            <Form method="post" className="mt-4">
-              <input type="hidden" name="appId" value={app.id} />
-              <input type="submit" className="btn btn-danger" value="Delete" />
-              <Link to="/developer/applications" className="btn btn-secondary">
-                Cancel
-              </Link>
-            </Form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <BoxComponent>
+      <Flex flexDirection="column" alignItems="center" justifyContent="center">
+        <Heading fontSize="3xl" mb="6">
+          Are you sure that you want to delete this?
+        </Heading>
+        <Text>All applications using this API key will no longer work.</Text>
+        <Text mb="3">
+          All shrtlnks that were created through this application will not be
+          deleted and will remain functional.
+        </Text>
+
+        <Text mb="5">
+          <Text as="strong">App: </Text>
+          {app.name}
+        </Text>
+        <Form method="post">
+          <input type="hidden" name="appId" value={app.id} />
+          <Flex alignItems="center" justifyContent="space-around">
+            <Button
+              bg="red.400"
+              color="white"
+              type="submit"
+              _hover={{ bg: "red.500" }}
+              mr="3"
+            >
+              Delete
+            </Button>
+            <ChakraLink as={Link} to="/developer/applications">
+              Cancel
+            </ChakraLink>
+          </Flex>
+        </Form>
+      </Flex>
+    </BoxComponent>
   );
 }

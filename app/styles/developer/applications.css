@@ -1,45 +1,6 @@
-.application-card {
-  margin: 2vh 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  word-break: break-word;
-}
-
-.app-buttons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.app-buttons a {
-  margin: 0 15px;
-}
-
-div.container {
-  display: flex;
-  flex-direction: column;
-}
-
-#add-app {
-  align-self: flex-end;
-}
-
-div.alert {
-  margin: 2vh 0;
-}
-
-span.hidden-text {
+.hidden-text {
   border: 1px dashed grey;
   padding: 0 0.5rem;
   cursor: pointer;
   position: relative;
-}
-
-@media only screen and (max-width: 768px) {
-  .application-card {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-  }
 }

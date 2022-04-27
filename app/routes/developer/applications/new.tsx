@@ -1,4 +1,13 @@
+import {
+  Box,
+  Button,
+  Heading,
+  Stack,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import Joi from "joi";
+import { useEffect } from "react";
 import {
   ActionFunction,
   Form,
@@ -8,6 +17,7 @@ import {
   useActionData,
 } from "remix";
 import { createApp } from "~/application.server";
+import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import { requireUserSession } from "~/utils/session.server";
 
@@ -77,32 +87,65 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function NewApplication() {
   const actionData = useActionData<ActionData>();
+  const toast = useToast();
+
+  useEffect(() => {
+    if (actionData?.formLevelError) {
+      toast({
+        title: "Error",
+        description: actionData.formLevelError,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }, [actionData]);
 
   return (
-    <div className="container">
-      <div className="card pt-4 pb-4 pr-4 pl-4">
-        <Form method="post">
-          <div className="form-group">
-            <label htmlFor="name">Application Name</label>
-            <input className="form-control" placeholder="Name" name="name" />
-            {actionData?.errors?.name && (
-              <span className="text-danger">{actionData.errors.name}</span>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="website">
-              URL of application. (If this is a mobile app, put the URL to the
-              app store page if it is available. Otherwise, leave blank for now
-              and fill in later.)
-            </label>
-            <input className="form-control" name="website" placeholder="URL" />
-            {actionData?.errors?.website && (
-              <span className="text-danger">{actionData?.errors?.website}</span>
-            )}
-          </div>
-          <input type="submit" value="Submit" className="btn btn-primary" />
+    <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack align={"center"}>
+        <Heading fontSize={"4xl"}>Create a new application</Heading>
+      </Stack>
+      <Box
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={8}
+      >
+        <Form method="post" noValidate>
+          <Stack spacing={4}>
+            <TextInput
+              errorMessage={actionData?.errors?.name}
+              defaultValue={actionData?.fields?.name}
+              name="name"
+              type="name"
+              label="Application Name"
+              isRequired
+            />
+            <TextInput
+              errorMessage={actionData?.errors?.website}
+              defaultValue={actionData?.fields?.website}
+              name="website"
+              type="website"
+              label="URL of Application"
+              helperText="If this is a mobile app, put the URL to the app store page. Otherwise, leave blank for now and fill in later."
+            />
+            <Stack spacing={10}>
+              <Button
+                bg={"blue.400"}
+                color={"white"}
+                type="submit"
+                onClick={() => toast.closeAll()}
+                _hover={{
+                  bg: "blue.500",
+                }}
+              >
+                Create
+              </Button>
+            </Stack>
+          </Stack>
         </Form>
-      </div>
-    </div>
+      </Box>
+    </Stack>
   );
 }

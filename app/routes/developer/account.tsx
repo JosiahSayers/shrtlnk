@@ -1,15 +1,34 @@
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import Joi from "joi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActionFunction,
   Form,
   json,
-  Link,
   LoaderFunction,
   redirect,
   useActionData,
   useLoaderData,
 } from "remix";
+import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import {
   changePassword,
@@ -59,20 +78,14 @@ const validateNameForm = (form: {
 const validatePasswordForm = (form: {
   currentPassword: FormDataEntryValue | null;
   newPassword: FormDataEntryValue | null;
-  confirmNewPassword: FormDataEntryValue | null;
 }) => {
   const schema = Joi.object({
     currentPassword: Joi.string().label("Current Password").required(),
     newPassword: Joi.string().label("New Password").required().min(8),
-    confirmNewPassword: Joi.string()
-      .required()
-      .valid(Joi.ref("newPassword"))
-      .messages({ "any.only": '"Confirm Password" must match "New Password"' }),
   });
   return validate<{
     currentPassword: string;
     newPassword: string;
-    confirmNewPassword: string;
   }>(schema, form);
 };
 
@@ -105,11 +118,9 @@ export const action: ActionFunction = async ({ request }) => {
   if (formType === "password") {
     const currentPassword = formData.get("currentPassword");
     const newPassword = formData.get("newPassword");
-    const confirmNewPassword = formData.get("confirmNewPassword");
     const { fields, errors } = validatePasswordForm({
       currentPassword,
       newPassword,
-      confirmNewPassword,
     });
     if (errors) {
       return json({ errors, fields, formType: "password" }, 400);
@@ -145,140 +156,135 @@ export const action: ActionFunction = async ({ request }) => {
 export default function Account() {
   const loaderData = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
-  const [formType, setFormType] = useState<"name" | "password">(
-    loaderData?.formType || actionData?.formType || "name"
-  );
+  const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false);
 
+  const formType = loaderData?.formType || actionData?.formType || "name";
   const firstName = loaderData?.firstName || actionData?.fields?.firstName;
   const lastName = loaderData?.lastName || actionData?.fields?.lastName;
 
+  useEffect(() => {
+    if (actionData?.formLevelError) {
+      toast({
+        title: "Error",
+        description: actionData.formLevelError,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }, [actionData, formType]);
+
+  enum Forms {
+    "name",
+    "password",
+  }
+
+  const handleTabClick = (newIndex: number) => {
+    document.location.href = `/developer/account?formType=${Forms[newIndex]}`;
+  };
+
   return (
-    <div className="container">
-      <div className="card text-center">
-        <div className="card-header">
-          <ul className="nav nav-tabs card-header-tabs">
-            <li
-              className="nav-item"
-              id="edit-name"
-              onClick={() => setFormType("name")}
-            >
-              <Link
-                className={`nav-link${formType === "name" ? " active" : ""}`}
-                to="/developer/account?formType=name"
-              >
-                Edit Name
-              </Link>
-            </li>
-            <li
-              className="nav-item"
-              id="change-password"
-              onClick={() => setFormType("password")}
-            >
-              <Link
-                className={`nav-link${
-                  formType === "password" ? " active" : ""
-                }`}
-                to="/developer/account?formType=password"
-              >
-                Change Password
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div className="card-body">
-          {actionData?.formLevelError && (
-            <p className="text-danger">{actionData.formLevelError}</p>
-          )}
-          {formType === "name" && (
-            <Form method="post">
-              <div className="form-group">
-                <label htmlFor="firstName">First Name</label>{" "}
-                <input
-                  type="text"
+    <Box
+      rounded="lg"
+      bg={useColorModeValue("white", "gray.700")}
+      boxShadow="lg"
+      p={8}
+      textAlign="left"
+    >
+      <Tabs index={Forms[formType]} onChange={handleTabClick}>
+        <TabList>
+          <Tab>Edit Name</Tab>
+          <Tab>Change Password</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <Form method="post" noValidate>
+              <Stack spacing={4}>
+                <TextInput
+                  errorMessage={actionData?.errors?.firstName}
                   defaultValue={firstName}
                   name="firstName"
-                  id="firstName"
+                  label="First Name"
+                  isRequired
                 />
-                {actionData?.errors?.firstName && (
-                  <p className="text-danger">{actionData.errors.firstName}</p>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>{" "}
-                <input
-                  type="text"
+                <TextInput
+                  errorMessage={actionData?.errors?.lastName}
                   defaultValue={lastName}
                   name="lastName"
-                  id="lastName"
+                  label="Last Name"
+                  isRequired
                 />
-                {actionData?.errors?.lastName && (
-                  <p className="text-danger">{actionData.errors.lastName}</p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                name="_action"
-                value="name"
-              >
-                Submit
-              </button>
+                <Button
+                  bg="blue.400"
+                  color="white"
+                  type="submit"
+                  onClick={() => toast.closeAll()}
+                  _hover={{ bg: "blue.500" }}
+                  name="_action"
+                  value="name"
+                >
+                  Save
+                </Button>
+              </Stack>
             </Form>
-          )}
-          {formType === "password" && (
-            <Form method="post">
-              <div className="form-group">
-                <label htmlFor="currentPassword">Current Password</label>{" "}
-                <input
+          </TabPanel>
+          <TabPanel>
+            <Form method="post" noValidate>
+              <Stack spacing={4}>
+                <TextInput
+                  errorMessage={actionData?.errors?.currentPassword}
                   type="password"
                   name="currentPassword"
-                  id="currentPassword"
-                  defaultValue={actionData?.fields?.currentPassword}
+                  label="Current Password"
+                  isRequired
                 />
-                {actionData?.errors?.currentPassword && (
-                  <p className="text-danger">
-                    {actionData.errors.currentPassword}
-                  </p>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="newPassword">New Password</label>{" "}
-                <input
-                  type="password"
-                  name="newPassword"
+                <FormControl
                   id="newPassword"
-                  defaultValue={actionData?.fields?.newPassword}
-                />
-                {actionData?.errors?.newPassword && (
-                  <p className="text-danger">{actionData.errors.newPassword}</p>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="confirmNewPassword">Confirm Password</label>{" "}
-                <input
-                  type="password"
-                  name="confirmNewPassword"
-                  id="confirmNewPassword"
-                  defaultValue={actionData?.fields?.confirmNewPassword}
-                />
-                {actionData?.errors?.confirmNewPassword && (
-                  <p className="text-danger">
-                    {actionData.errors.confirmNewPassword}
-                  </p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                name="_action"
-                value="password"
-              >
-                Submit
-              </button>
+                  isInvalid={!!actionData?.errors?.newPassword}
+                  isRequired
+                >
+                  <FormLabel>New Password</FormLabel>
+                  <InputGroup>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      name="newPassword"
+                      defaultValue={actionData?.fields?.newPassword}
+                    />
+                    <InputRightElement h={"full"}>
+                      <Button
+                        variant={"ghost"}
+                        onClick={() =>
+                          setShowPassword((showPassword) => !showPassword)
+                        }
+                      >
+                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  {actionData?.errors?.newPassword && (
+                    <FormErrorMessage>
+                      {actionData.errors.newPassword}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
+                <Button
+                  bg="blue.400"
+                  color="white"
+                  type="submit"
+                  onClick={() => toast.closeAll()}
+                  _hover={{ bg: "blue.500" }}
+                  name="_action"
+                  value="password"
+                >
+                  Save
+                </Button>
+              </Stack>
             </Form>
-          )}
-        </div>
-      </div>
-    </div>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Box>
   );
 }

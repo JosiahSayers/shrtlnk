@@ -183,6 +183,7 @@ export async function getUserSession(request: Request) {
 
   return userInfo;
 }
+export type UserInfo = Awaited<ReturnType<typeof getUserSession>>;
 
 export async function requireUserSession(
   request: Request,

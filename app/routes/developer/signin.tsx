@@ -1,5 +1,24 @@
+import {
+  Box,
+  Button,
+  Heading,
+  Link as ChakraLink,
+  Stack,
+  Text,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import Joi from "joi";
-import { ActionFunction, Form, json, useActionData, useSearchParams } from "remix";
+import { useEffect } from "react";
+import {
+  ActionFunction,
+  Form,
+  json,
+  Link,
+  useActionData,
+  useSearchParams,
+} from "remix";
+import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
 
@@ -61,56 +80,89 @@ export const action: ActionFunction = async ({ request }) => {
   );
 };
 
-export default function Login() {
+export default function SimpleCard() {
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
+  const toast = useToast();
+
+  useEffect(() => {
+    if (actionData?.formLevelError) {
+      toast({
+        title: "Error",
+        description: actionData.formLevelError,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }, [actionData]);
 
   return (
-    <div className="container">
-      <h1>Sign In</h1>
-
-      <div className="card pt-4 pb-4 pr-4 pl-4">
+    <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack align={"center"}>
+        <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+      </Stack>
+      <Box
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={8}
+      >
         <Form method="post" noValidate>
           <input
             type="hidden"
             name="redirectTo"
             value={searchParams.get("redirectTo") ?? undefined}
           />
-          <div className="form-group">
-            <input
-              className="form-control"
-              placeholder="Email"
+          <Stack spacing={4}>
+            <TextInput
+              errorMessage={actionData?.errors?.email}
+              defaultValue={actionData?.fields?.email}
               name="email"
               type="email"
-              defaultValue={actionData?.fields?.email}
+              label="Email Address"
             />
-            {actionData?.errors?.email && (
-              <span className="text-danger">{actionData?.errors.email}</span>
-            )}
-          </div>
-          <div className="form-group">
-            <input
-              className="form-control"
-              name="password"
-              placeholder="Password"
-              type="password"
+            <TextInput
+              errorMessage={actionData?.errors?.password}
               defaultValue={actionData?.fields?.password}
+              name="password"
+              type="password"
+              label="Password"
             />
-            {actionData?.errors?.password && (
-              <span className="text-danger">{actionData?.errors.password}</span>
-            )}
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-          {actionData?.formLevelError && (
-            <p>
-              <br />
-              <span className="text-danger">{actionData.formLevelError}</span>
-            </p>
-          )}
+            <Stack spacing={10}>
+              <Stack
+                direction={{ base: "column", sm: "row" }}
+                align={"start"}
+                justify={"space-between"}
+              ></Stack>
+              <Button
+                bg={"blue.400"}
+                color={"white"}
+                type="submit"
+                onClick={() => toast.closeAll()}
+                _hover={{
+                  bg: "blue.500",
+                }}
+              >
+                Sign in
+              </Button>
+            </Stack>
+            <Stack pt={6}>
+              <Text align={"center"}>
+                Need an account?{" "}
+                <ChakraLink
+                  as={Link}
+                  to="/developer/register"
+                  color={"blue.400"}
+                  onClick={() => toast.closeAll()}
+                >
+                  Sign up
+                </ChakraLink>
+              </Text>
+            </Stack>
+          </Stack>
         </Form>
-      </div>
-    </div>
+      </Box>
+    </Stack>
   );
 }

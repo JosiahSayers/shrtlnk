@@ -29,9 +29,9 @@ import "@testing-library/cypress/add-commands";
 const customCommands = {
   login: (email = "test@test.com", password = "password") => {
     cy.visit("/developer/signin");
-    cy.findByPlaceholderText("Email").type(email);
-    cy.findByPlaceholderText("Password").type(password);
-    cy.findByText("Submit").click();
+    cy.findByLabelText("Email Address").type(email);
+    cy.findByLabelText("Password").type(password);
+    cy.findByText("Sign in").click();
     cy.location('pathname', {timeout: 10000})
       .should('include', '/developer/applications');
   },
@@ -50,6 +50,6 @@ Object.keys(customCommands).forEach((commandKey) => {
 type CustomCommands = typeof customCommands;
 declare global {
   namespace Cypress {
-    interface Chainable extends CustomCommands {}
+    type Chainable = CustomCommands
   }
 }
