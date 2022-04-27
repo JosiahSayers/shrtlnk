@@ -2,7 +2,9 @@ import {
   Box,
   Button,
   Heading,
+  Link as ChakraLink,
   Stack,
+  Text,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
@@ -12,6 +14,7 @@ import {
   ActionFunction,
   Form,
   json,
+  Link,
   useActionData,
   useSearchParams,
 } from "remix";
@@ -143,6 +146,19 @@ export default function SimpleCard() {
               >
                 Sign in
               </Button>
+            </Stack>
+            <Stack pt={6}>
+              <Text align={"center"}>
+                Need an account?{" "}
+                <ChakraLink
+                  as={Link}
+                  to="/developer/register"
+                  color={"blue.400"}
+                  onClick={() => toast.closeAll()}
+                >
+                  Sign up
+                </ChakraLink>
+              </Text>
             </Stack>
           </Stack>
         </Form>
