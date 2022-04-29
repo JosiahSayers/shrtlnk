@@ -1,20 +1,20 @@
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Flex,
-  Text,
-  IconButton,
   Button,
-  Stack,
   Collapse,
+  Flex,
+  IconButton,
   Link as ChakraLink,
-  useColorModeValue,
+  Stack,
+  Text,
   useBreakpointValue,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { useMemo } from "react";
 import { Link } from "remix";
 import type { UserInfo } from "~/utils/session.server";
-import { useMemo } from "react";
 
 type Props = {
   userInfo?: UserInfo;
@@ -26,6 +26,82 @@ export default function NavBar({ userInfo }: Props) {
     () => navItems(userInfo),
     [userInfo, userInfo?.impersonator]
   );
+
+  const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
+    const linkColor = useColorModeValue("gray.600", "gray.200");
+    const linkHoverColor = useColorModeValue("gray.800", "white");
+
+    return (
+      <Stack direction={"row"} spacing={4}>
+        {navItems.map((navItem) => (
+          <Box key={navItem.label}>
+            <ChakraLink
+              as={Link}
+              p={2}
+              fontSize={"sm"}
+              fontWeight={500}
+              color={linkColor}
+              _hover={{
+                textDecoration: "none",
+                color: linkHoverColor,
+              }}
+              to={navItem.href}
+            >
+              {navItem.label}
+            </ChakraLink>
+          </Box>
+        ))}
+      </Stack>
+    );
+  };
+
+  const MobileNav = ({ navItems }: { navItems: NavItem[] }) => {
+    return (
+      <Stack
+        bg={useColorModeValue("white", "gray.800")}
+        p={4}
+        display={{ md: "none" }}
+      >
+        {navItems.map((navItem) => (
+          <MobileNavItem key={navItem.label} {...navItem} />
+        ))}
+      </Stack>
+    );
+  };
+
+  const MobileNavItem = ({ label, href }: NavItem) => {
+    return (
+      <>
+        <Flex
+          py={2}
+          as={Link}
+          to={href}
+          justify={"space-between"}
+          align={"center"}
+          _hover={{
+            textDecoration: "none",
+          }}
+          onClick={onToggle}
+        >
+          <Text
+            fontWeight={600}
+            color={useColorModeValue("gray.600", "gray.200")}
+          >
+            {label}
+          </Text>
+        </Flex>
+
+        <Stack
+          mt={2}
+          pl={4}
+          borderLeft={1}
+          borderStyle={"solid"}
+          borderColor={useColorModeValue("gray.200", "gray.700")}
+          align={"start"}
+        ></Stack>
+      </>
+    );
+  };
 
   return (
     <Box>
@@ -139,85 +215,6 @@ export default function NavBar({ userInfo }: Props) {
     </Box>
   );
 }
-
-const DesktopNav = ({ navItems }: { navItems: NavItem[] }) => {
-  const linkColor = useColorModeValue("gray.600", "gray.200");
-  const linkHoverColor = useColorModeValue("gray.800", "white");
-
-  return (
-    <Stack direction={"row"} spacing={4}>
-      {navItems.map((navItem) => (
-        <Box key={navItem.label}>
-          <ChakraLink
-            as={Link}
-            p={2}
-            fontSize={"sm"}
-            fontWeight={500}
-            color={linkColor}
-            _hover={{
-              textDecoration: "none",
-              color: linkHoverColor,
-            }}
-            to={navItem.href}
-          >
-            {navItem.label}
-          </ChakraLink>
-        </Box>
-      ))}
-    </Stack>
-  );
-};
-
-const MobileNav = ({ navItems }: { navItems: NavItem[] }) => {
-  return (
-    <Stack
-      bg={useColorModeValue("white", "gray.800")}
-      p={4}
-      display={{ md: "none" }}
-    >
-      {navItems.map((navItem) => (
-        <MobileNavItem key={navItem.label} {...navItem} />
-      ))}
-    </Stack>
-  );
-};
-
-const MobileNavItem = ({ label, href }: NavItem) => {
-  const { isOpen, onToggle } = useDisclosure();
-
-  return (
-    <Stack spacing={4} onClick={onToggle}>
-      <Flex
-        py={2}
-        as={Link}
-        to={href}
-        justify={"space-between"}
-        align={"center"}
-        _hover={{
-          textDecoration: "none",
-        }}
-      >
-        <Text
-          fontWeight={600}
-          color={useColorModeValue("gray.600", "gray.200")}
-        >
-          {label}
-        </Text>
-      </Flex>
-
-      <Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
-        <Stack
-          mt={2}
-          pl={4}
-          borderLeft={1}
-          borderStyle={"solid"}
-          borderColor={useColorModeValue("gray.200", "gray.700")}
-          align={"start"}
-        ></Stack>
-      </Collapse>
-    </Stack>
-  );
-};
 
 interface NavItem {
   label: string;
