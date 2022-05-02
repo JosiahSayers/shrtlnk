@@ -6,10 +6,15 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/node";
+import { Form, useActionData, useTransition } from "@remix-run/react";
 import Joi from "joi";
 import { useEffect } from "react";
-import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
 import { createApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
@@ -82,6 +87,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function NewApplication() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
+  const { state } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -133,6 +139,7 @@ export default function NewApplication() {
                 _hover={{
                   bg: "blue.500",
                 }}
+                isLoading={state !== "idle"}
               >
                 Create
               </Button>

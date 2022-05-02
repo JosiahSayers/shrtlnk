@@ -7,10 +7,20 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Application } from "@prisma/client";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/node";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useTransition,
+} from "@remix-run/react";
 import Joi from "joi";
 import { useEffect } from "react";
-import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { updateApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
@@ -78,6 +88,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function EditApplication() {
   const actionData = useActionData<ActionData>();
   const loaderData = useLoaderData<Application>();
+  const { state } = useTransition();
   const name = loaderData?.name || actionData?.fields?.name;
   const website = loaderData?.website || actionData?.fields?.website;
   const id = loaderData?.id || actionData?.fields?.id;
@@ -135,6 +146,7 @@ export default function EditApplication() {
                 _hover={{
                   bg: "blue.500",
                 }}
+                isLoading={state !== "idle"}
               >
                 Update
               </Button>

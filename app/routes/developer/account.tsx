@@ -17,10 +17,20 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/node";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useTransition,
+} from "@remix-run/react";
 import Joi from "joi";
 import { useEffect, useState } from "react";
-import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import {
@@ -151,6 +161,7 @@ export default function Account() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
+  const { state } = useTransition();
 
   const formType = loaderData?.formType || actionData?.formType || "name";
   const firstName = loaderData?.firstName || actionData?.fields?.firstName;
@@ -217,6 +228,7 @@ export default function Account() {
                   _hover={{ bg: "blue.500" }}
                   name="_action"
                   value="name"
+                  isLoading={state !== "idle"}
                 >
                   Save
                 </Button>
@@ -270,6 +282,7 @@ export default function Account() {
                   _hover={{ bg: "blue.500" }}
                   name="_action"
                   value="password"
+                  isLoading={state !== "idle"}
                 >
                   Save
                 </Button>
