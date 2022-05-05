@@ -13,7 +13,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { LinksFunction } from "@remix-run/react/routeModules";
-import { Link, LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 import { getApplicationsWithCounts } from "~/application.server";
 import { BoxComponent } from "~/components/developer/box";
 import HiddenText from "~/components/developer/hidden-text";

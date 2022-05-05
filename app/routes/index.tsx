@@ -1,14 +1,7 @@
 import { Link as ChakraLink } from "@chakra-ui/react";
 import joi from "joi";
-import {
-  ActionFunction,
-  Form,
-  json,
-  Link,
-  LinksFunction,
-  redirect,
-  useActionData,
-} from "remix";
+import { ActionFunction, json, LinksFunction, redirect } from "@remix-run/node";
+import { Form, Link, useActionData } from "@remix-run/react";
 import { createShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/index.css";
 

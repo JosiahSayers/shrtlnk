@@ -1,4 +1,4 @@
-import { LinksFunction, MetaFunction } from "remix";
+import { LinksFunction, MetaFunction } from "@remix-run/node";
 import styles from "~/styles/not-found.css";
 
 export const meta: MetaFunction = () => ({

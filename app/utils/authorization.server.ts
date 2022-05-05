@@ -1,4 +1,4 @@
-import { redirect } from "remix";
+import { redirect } from "@remix-run/node";
 import { getApp } from "~/application.server";
 import { requireUserSession } from "./session.server";
 

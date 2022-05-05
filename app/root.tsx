@@ -1,17 +1,8 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
 import { useContext, useEffect } from "react";
-import {
-  Links,
-  LinksFunction,
-  MetaFunction,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  ErrorBoundaryComponent,
-} from "remix";
+import { ErrorBoundaryComponent, LinksFunction, MetaFunction } from "@remix-run/node";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from './context'
 

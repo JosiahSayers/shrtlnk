@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { Link } from "remix";
+import { Link } from "@remix-run/react";
 import type { UserInfo } from "~/utils/session.server";
 
 type Props = {

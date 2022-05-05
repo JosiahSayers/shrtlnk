@@ -1,11 +1,6 @@
 import { Flex, useColorModeValue } from "@chakra-ui/react";
-import {
-  Form,
-  LinksFunction,
-  LoaderFunction,
-  Outlet,
-  useLoaderData,
-} from "remix";
+import { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { Form, Outlet, useLoaderData } from "@remix-run/react";
 import NavBar from "~/components/developer/navbar";
 import { getUserSession, UserInfo } from "~/utils/session.server";
 

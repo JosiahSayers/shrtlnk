@@ -9,15 +9,8 @@ import {
 import { Application } from "@prisma/client";
 import Joi from "joi";
 import { useEffect } from "react";
-import {
-  ActionFunction,
-  Form,
-  json,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-} from "remix";
+import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { updateApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";

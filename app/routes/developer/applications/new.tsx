@@ -8,14 +8,8 @@ import {
 } from "@chakra-ui/react";
 import Joi from "joi";
 import { useEffect } from "react";
-import {
-  ActionFunction,
-  Form,
-  json,
-  LoaderFunction,
-  redirect,
-  useActionData,
-} from "remix";
+import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
+import { Form, useActionData } from "@remix-run/react";
 import { createApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";

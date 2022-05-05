@@ -1,4 +1,5 @@
-import { LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import BarChartCard from "~/components/developer/admin/BarChartCard";
 import LineChartCard from "~/components/developer/admin/LineChartCard";
 import { db } from "~/utils/db.server";

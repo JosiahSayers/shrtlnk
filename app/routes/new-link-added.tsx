@@ -1,13 +1,7 @@
 import { Shrtlnk } from "@prisma/client";
 import { useState } from "react";
-import {
-  Link,
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-  redirect,
-  useLoaderData,
-} from "remix";
+import { LinksFunction, LoaderFunction, MetaFunction, redirect } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 import { getShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/newLinkAdded.css";
 

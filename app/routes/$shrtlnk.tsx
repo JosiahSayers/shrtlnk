@@ -1,4 +1,4 @@
-import { LoaderFunction, redirect } from "remix";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { getShrtlnk } from "~/shrtlnk.server";
 
 export const loader: LoaderFunction = async ({ params }) => {
