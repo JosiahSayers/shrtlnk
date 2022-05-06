@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { Button } from "@chakra-ui/react";
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { useState } from "react";
 import { db } from "~/utils/db.server";
 import {
   impersonateUser,
@@ -55,6 +56,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function Impersonate() {
   const users = useLoaderData<CleanedUser[]>();
   const [selected, setSelected] = useState<CleanedUser>(users[0]);
+  const { submission } = useTransition();
 
   return (
     <div className="container">
@@ -104,9 +106,13 @@ export default function Impersonate() {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-warning">
+        <Button
+          type="submit"
+          className="btn btn-warning"
+          isLoading={!!submission}
+        >
           Start Impersonating
-        </button>
+        </Button>
       </Form>
     </div>
   );

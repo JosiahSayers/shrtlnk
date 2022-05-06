@@ -8,10 +8,16 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { ActionFunction, json } from "@remix-run/node";
+import {
+  Form,
+  Link,
+  useActionData,
+  useSearchParams,
+  useTransition,
+} from "@remix-run/react";
 import Joi from "joi";
 import { useEffect } from "react";
-import { ActionFunction, json } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
@@ -78,6 +84,7 @@ export default function SimpleCard() {
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   const toast = useToast();
+  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -137,6 +144,7 @@ export default function SimpleCard() {
                 _hover={{
                   bg: "blue.500",
                 }}
+                isLoading={!!submission}
               >
                 Sign in
               </Button>

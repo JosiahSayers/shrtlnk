@@ -54,59 +54,57 @@ export default function AdminIndex() {
   const data = useLoaderData();
 
   return (
-    <>
-      <div
-        className="container mb-0"
-        style={{ overflow: "scroll", height: "calc(100vh - 56px - 3rem)" }}
-      >
-        <BarChartCard
-          title="Shrtlnk Totals"
-          data={data?.shrtlnkStats}
-          id="shrtlnk-stats"
-          xAxisKey="name"
-          dataKey="count"
-        />
+    <div
+      className="container mb-0"
+      style={{ overflow: "scroll", height: "calc(100vh - 56px - 3rem)" }}
+    >
+      <BarChartCard
+        title="Shrtlnk Totals"
+        data={data?.shrtlnkStats}
+        id="shrtlnk-stats"
+        xAxisKey="name"
+        dataKey="count"
+      />
 
-        <BarChartCard
-          title="User Totals"
-          data={data?.userStats}
-          id="user-stats"
-          xAxisKey="name"
-          dataKey="count"
-        />
+      <BarChartCard
+        title="User Totals"
+        data={data?.userStats}
+        id="user-stats"
+        xAxisKey="name"
+        dataKey="count"
+      />
 
-        <LineChartCard
-          title="New Shrtlnks"
-          data={data?.shrtlnks}
-          id="shrtlnks-created"
-          xAxisKey="date"
-          dataKey="shrtlnks_created"
-        />
+      <LineChartCard
+        title="New Shrtlnks"
+        data={data?.shrtlnks}
+        id="shrtlnks-created"
+        xAxisKey="date"
+        dataKey="shrtlnks_created"
+      />
 
-        <LineChartCard
-          title="Shrtlnks Loaded"
-          data={data?.shrtlnkLoads}
-          id="shrtlnks-loaded"
-          xAxisKey="date"
-          dataKey="shrtlnks_loaded"
-        />
+      <LineChartCard
+        title="Shrtlnks Loaded"
+        data={data?.shrtlnkLoads}
+        id="shrtlnks-loaded"
+        xAxisKey="date"
+        dataKey="shrtlnks_loaded"
+      />
 
-        <LineChartCard
-          title="New Users"
-          data={data?.users}
-          id="user-signups"
-          xAxisKey="date"
-          dataKey="users_created"
-        />
+      <LineChartCard
+        title="New Users"
+        data={data?.users}
+        id="user-signups"
+        xAxisKey="date"
+        dataKey="users_created"
+      />
 
-        <LineChartCard
-          title="New Applications"
-          data={data?.appsCreated}
-          id="new-apps"
-          xAxisKey="date"
-          dataKey="apps_created"
-        />
-      </div>
-    </>
+      <LineChartCard
+        title="New Applications"
+        data={data?.appsCreated}
+        id="new-apps"
+        xAxisKey="date"
+        dataKey="apps_created"
+      />
+    </div>
   );
 }

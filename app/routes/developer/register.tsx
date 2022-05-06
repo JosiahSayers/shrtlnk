@@ -17,10 +17,15 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Prisma } from "@prisma/client";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/node";
+import { Form, Link, useActionData, useTransition } from "@remix-run/react";
 import Joi from "joi";
 import { useEffect, useState } from "react";
-import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import {
@@ -102,6 +107,7 @@ export default function SignupCard() {
   const actionData = useActionData<ActionData>();
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
+  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -200,6 +206,7 @@ export default function SignupCard() {
                 }}
                 type="submit"
                 onClick={() => toast.closeAll()}
+                isLoading={!!submission}
               >
                 Sign up
               </Button>

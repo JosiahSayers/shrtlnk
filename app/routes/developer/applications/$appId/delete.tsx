@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { Application } from "@prisma/client";
 import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useTransition } from "@remix-run/react";
 import { deleteApp } from "~/application.server";
 import { BoxComponent } from "~/components/developer/box";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
@@ -27,6 +27,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function DeleteApp() {
   const app = useLoaderData<Application>();
+  const { submission } = useTransition();
 
   return (
     <BoxComponent>
@@ -53,6 +54,7 @@ export default function DeleteApp() {
               type="submit"
               _hover={{ bg: "red.500" }}
               mr="3"
+              isLoading={!!submission}
             >
               Delete
             </Button>

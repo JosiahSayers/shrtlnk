@@ -65,7 +65,7 @@ export default function Index() {
         <span>N</span>
         <span>K</span>
       </h1>
-      <Form method="post">
+      <Form method="post" reloadDocument>
         <label htmlFor="url">URL TO SHORTEN:</label>
         <input
           className="text"
