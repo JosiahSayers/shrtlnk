@@ -12,9 +12,9 @@ import {
   ListItem,
   Text,
 } from "@chakra-ui/react";
-import { LinksFunction } from "@remix-run/react/routeModules";
 import { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { LinksFunction } from "@remix-run/react/routeModules";
 import { getApplicationsWithCounts } from "~/application.server";
 import { BoxComponent } from "~/components/developer/box";
 import HiddenText from "~/components/developer/hidden-text";
@@ -160,6 +160,7 @@ export default function Applications() {
                 as={Link}
                 to={`/developer/applications/${app.id}/edit`}
                 m="2"
+                prefetch="intent"
               >
                 Edit
               </Button>
@@ -170,6 +171,7 @@ export default function Applications() {
                 _hover={{ bg: "red.300", color: "white" }}
                 to={`/developer/applications/${app.id}/delete`}
                 m="2"
+                prefetch="intent"
               >
                 Delete
               </Button>
