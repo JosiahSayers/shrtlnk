@@ -12,8 +12,8 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useMemo } from "react";
 import { Link } from "@remix-run/react";
+import { useMemo } from "react";
 import type { UserInfo } from "~/utils/session.server";
 
 type Props = {
@@ -46,6 +46,7 @@ export default function NavBar({ userInfo }: Props) {
                 color: linkHoverColor,
               }}
               to={navItem.href}
+              prefetch="intent"
             >
               {navItem.label}
             </ChakraLink>
@@ -162,6 +163,7 @@ export default function NavBar({ userInfo }: Props) {
                 fontWeight={400}
                 variant={"link"}
                 to={"/developer/account"}
+                prefetch="intent"
               >
                 Hey there, {userInfo.firstName}
               </Button>
@@ -187,6 +189,7 @@ export default function NavBar({ userInfo }: Props) {
                 fontWeight={400}
                 variant={"link"}
                 to={"/developer/signin"}
+                prefetch="intent"
               >
                 Sign In
               </Button>
@@ -201,6 +204,7 @@ export default function NavBar({ userInfo }: Props) {
                   bg: "blue.300",
                   color: "white",
                 }}
+                prefetch="intent"
               >
                 Sign Up
               </Button>
