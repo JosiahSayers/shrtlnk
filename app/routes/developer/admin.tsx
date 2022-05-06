@@ -1,4 +1,5 @@
-import { Link, LoaderFunction, Outlet, useLocation } from "remix";
+import { LoaderFunction } from "@remix-run/node";
+import { Link, Outlet, useLocation } from "@remix-run/react";
 import { requireAdminRole } from "~/utils/session.server";
 
 export const loader: LoaderFunction = async ({ request }) => {

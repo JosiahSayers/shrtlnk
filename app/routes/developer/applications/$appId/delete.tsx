@@ -6,14 +6,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Application } from "@prisma/client";
-import {
-  ActionFunction,
-  Form,
-  Link,
-  LoaderFunction,
-  redirect,
-  useLoaderData,
-} from "remix";
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import { deleteApp } from "~/application.server";
 import { BoxComponent } from "~/components/developer/box";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";

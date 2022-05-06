@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { ActionFunction, json, LoaderFunction } from "remix";
+import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import { getAppByApiKey } from "~/application.server";
 import { createShrtlnk } from "~/shrtlnk.server";
 

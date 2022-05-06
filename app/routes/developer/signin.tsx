@@ -10,14 +10,8 @@ import {
 } from "@chakra-ui/react";
 import Joi from "joi";
 import { useEffect } from "react";
-import {
-  ActionFunction,
-  Form,
-  json,
-  Link,
-  useActionData,
-  useSearchParams,
-} from "remix";
+import { ActionFunction, json } from "@remix-run/node";
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";

@@ -19,15 +19,8 @@ import {
 } from "@chakra-ui/react";
 import Joi from "joi";
 import { useEffect, useState } from "react";
-import {
-  ActionFunction,
-  Form,
-  json,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-} from "remix";
+import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import {

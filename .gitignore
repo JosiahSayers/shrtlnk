@@ -19,3 +19,5 @@ prisma/generated
 cypress/videos
 cypress/screenshots
 cypress/downloads
+
+api

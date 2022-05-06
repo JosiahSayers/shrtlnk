@@ -1,5 +1,5 @@
 import { Flex, Heading, Stack, Text } from "@chakra-ui/react";
-import { MetaFunction } from "remix";
+import { MetaFunction } from "@remix-run/node";
 import Card from "~/components/developer/card";
 
 export const meta: MetaFunction = () => ({

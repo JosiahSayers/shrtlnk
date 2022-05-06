@@ -19,15 +19,8 @@ import {
 import { Prisma } from "@prisma/client";
 import Joi from "joi";
 import { useEffect, useState } from "react";
-import {
-  ActionFunction,
-  Form,
-  json,
-  Link,
-  LoaderFunction,
-  redirect,
-  useActionData,
-} from "remix";
+import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
+import { Form, Link, useActionData } from "@remix-run/react";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
 import {
