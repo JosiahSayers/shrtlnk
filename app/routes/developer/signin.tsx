@@ -84,7 +84,7 @@ export default function SimpleCard() {
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   const toast = useToast();
-  const { state } = useTransition();
+  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -144,7 +144,7 @@ export default function SimpleCard() {
                 _hover={{
                   bg: "blue.500",
                 }}
-                isLoading={state !== "idle"}
+                isLoading={!!submission}
               >
                 Sign in
               </Button>

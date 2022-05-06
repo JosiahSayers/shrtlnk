@@ -161,7 +161,11 @@ export default function Account() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
-  const { state } = useTransition();
+  const { submission } = useTransition();
+
+  const isSubmittingName = submission?.formData.get("_action") === "name";
+  const isSubmittingPassword =
+    submission?.formData.get("_action") === "password";
 
   const formType = loaderData?.formType || actionData?.formType || "name";
   const firstName = loaderData?.firstName || actionData?.fields?.firstName;
@@ -228,7 +232,7 @@ export default function Account() {
                   _hover={{ bg: "blue.500" }}
                   name="_action"
                   value="name"
-                  isLoading={state !== "idle"}
+                  isLoading={isSubmittingName}
                 >
                   Save
                 </Button>
@@ -282,7 +286,7 @@ export default function Account() {
                   _hover={{ bg: "blue.500" }}
                   name="_action"
                   value="password"
-                  isLoading={state !== "idle"}
+                  isLoading={isSubmittingPassword}
                 >
                   Save
                 </Button>

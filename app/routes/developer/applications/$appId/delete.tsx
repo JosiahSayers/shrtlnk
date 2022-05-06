@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function DeleteApp() {
   const app = useLoaderData<Application>();
-  const { state } = useTransition();
+  const { submission } = useTransition();
 
   return (
     <BoxComponent>
@@ -54,7 +54,7 @@ export default function DeleteApp() {
               type="submit"
               _hover={{ bg: "red.500" }}
               mr="3"
-              isLoading={state !== "idle"}
+              isLoading={!!submission}
             >
               Delete
             </Button>

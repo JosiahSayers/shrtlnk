@@ -107,7 +107,7 @@ export default function SignupCard() {
   const actionData = useActionData<ActionData>();
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
-  const { state } = useTransition();
+  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -206,7 +206,7 @@ export default function SignupCard() {
                 }}
                 type="submit"
                 onClick={() => toast.closeAll()}
-                isLoading={state !== "idle"}
+                isLoading={!!submission}
               >
                 Sign up
               </Button>

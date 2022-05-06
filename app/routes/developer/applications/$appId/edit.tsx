@@ -88,7 +88,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function EditApplication() {
   const actionData = useActionData<ActionData>();
   const loaderData = useLoaderData<Application>();
-  const { state } = useTransition();
+  const { submission } = useTransition();
   const name = loaderData?.name || actionData?.fields?.name;
   const website = loaderData?.website || actionData?.fields?.website;
   const id = loaderData?.id || actionData?.fields?.id;
@@ -146,7 +146,7 @@ export default function EditApplication() {
                 _hover={{
                   bg: "blue.500",
                 }}
-                isLoading={state !== "idle"}
+                isLoading={!!submission}
               >
                 Update
               </Button>

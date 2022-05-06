@@ -87,7 +87,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function NewApplication() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
-  const { state } = useTransition();
+  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -139,7 +139,7 @@ export default function NewApplication() {
                 _hover={{
                   bg: "blue.500",
                 }}
-                isLoading={state !== "idle"}
+                isLoading={!!submission}
               >
                 Create
               </Button>
