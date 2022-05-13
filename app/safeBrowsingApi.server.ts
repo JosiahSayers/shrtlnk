@@ -4,7 +4,7 @@ const apiUrl = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${
 
 export const getUrlBatchResponses = async (
   urls: string[]
-): Promise<Response | null> => {
+): Promise<SafeBrowsingApiResponse | null> => {
   try {
     const request = createRequest(urls);
     const res = await fetch(apiUrl, {
@@ -28,7 +28,7 @@ export const isUrlSafe = async (url: string): Promise<boolean> => {
       body: JSON.stringify(request),
       method: "POST",
     });
-    const resData: Response = await res.json();
+    const resData: SafeBrowsingApiResponse = await res.json();
     return (
       !resData.matches ||
       (Array.isArray(resData.matches) && resData.matches.length === 0)
@@ -62,14 +62,16 @@ function createRequest(url: string | string[]) {
   };
 }
 
-type Response = {
-  matches: Array<{
-    threatType: string;
-    platformType: string;
-    threat: {
-      url: string;
-    };
-    cacheDuration: string;
-    threatEntryType: string;
-  }>;
+export type SafeBrowsingApiResponse = {
+  matches: ThreatMatch[];
+};
+
+export type ThreatMatch = {
+  threatType: string;
+  platformType: string;
+  threat: {
+    url: string;
+  };
+  cacheDuration: string;
+  threatEntryType: string;
 };
