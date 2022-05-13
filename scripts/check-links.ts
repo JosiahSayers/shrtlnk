@@ -1,10 +1,9 @@
 import { PrismaClient, Shrtlnk } from "@prisma/client";
-import { promises } from "fs";
-import path from "path";
 import ProgressBar from "progress";
-import { getUrlBatchResponses } from "~/safeBrowsingApi.server";
+import { getUrlBatchResponses, ThreatMatch } from "~/safeBrowsingApi.server";
 
 const db = new PrismaClient();
+type AugmentedThreatMatch = ThreatMatch & { threat: { id: string } };
 
 async function getBatchOfLinks(offset?: number) {
   return db.shrtlnk.findMany({
@@ -33,64 +32,66 @@ async function processBatch(links: Shrtlnk[]) {
   return withIds;
 }
 
-async function writeToFile(threatMatches: any[]) {
+async function processThreats(
+  threatMatches: AugmentedThreatMatch[]
+): Promise<number> {
   const dedupedIds = new Set<string>();
   threatMatches.forEach((match) => {
     if (match?.threat?.id) {
       dedupedIds.add(match.threat.id);
     }
   });
-  const asString = JSON.stringify(threatMatches, null, 2);
-  await promises.writeFile(
-    path.join(process.cwd(), "check-link-results.json"),
-    asString
-  );
-  console.log({
-    threatMatches: threatMatches.length,
-    dedupedIds: dedupedIds.size,
+  const finalIds = Array.from(dedupedIds);
+  const links = await db.shrtlnk.findMany({
+    where: { id: { in: finalIds } },
   });
-  console.log(`Found ${dedupedIds.size} unsafe links, deleting them...`);
+
+  await db.blockedUrl.createMany({
+    data: links.map((link) => ({
+      url: link.url,
+      applicationId: link.applicationId!,
+    })),
+  });
+
   await db.shrtlnk.deleteMany({
-    where: { id: { in: Array.from(dedupedIds) } },
+    where: { id: { in: finalIds } },
   });
+
+  return finalIds.length;
 }
 
-async function go() {
+export async function cleanLinks() {
+  const log = await db.cleanLinksLog.create({ data: {} });
   const totalLinks = await db.shrtlnk.count();
   const bar = new ProgressBar(":current/:total (:percent) |:bar|", {
     total: totalLinks,
   });
-
   let currentBatch: Shrtlnk[] = [];
   let offset = 0;
-  const threatMatches: any[] = [];
-  do {
-    currentBatch = await getBatchOfLinks(offset);
-    const safetyResults = await processBatch(currentBatch);
-    threatMatches.push(...safetyResults);
-    offset += 100;
-    bar.tick(100);
-  } while (currentBatch.length === 100);
-  await writeToFile(threatMatches);
+  const threatMatches: AugmentedThreatMatch[] = [];
+  try {
+    do {
+      currentBatch = await getBatchOfLinks(offset);
+      const safetyResults = await processBatch(currentBatch);
+      threatMatches.push(...safetyResults);
+      offset += 100;
+      bar.tick(currentBatch.length < 100 ? currentBatch.length : 100);
+    } while (currentBatch.length === 100);
+    const totalThreatsFound = await processThreats(threatMatches);
+    await db.cleanLinksLog.update({
+      where: { id: log.id },
+      data: {
+        status: "success",
+        completedAt: new Date(),
+        totalThreatsFound,
+      },
+    });
+  } catch (e) {
+    await db.cleanLinksLog.update({
+      where: { id: log.id },
+      data: { status: "failure", completedAt: new Date() },
+    });
+  }
 }
 
-// async function getInvalidUrls() {
-//   const allLinks = await db.shrtlnk.findMany();
-//   const invalidUrls: Shrtlnk[] = [];
-//   allLinks.forEach((link) => {
-//     try {
-//       new URL(link.url);
-//     } catch (e) {
-//       invalidUrls.push(link);
-//     }
-//   });
-//   console.log(`Found ${invalidUrls.length} invalid URLs, deleting them...`);
-//   await Promise.all(
-//     invalidUrls.map((shrtlnk) =>
-//       db.shrtlnk.delete({ where: { id: shrtlnk.id } })
-//     )
-//   );
-// }
-
-go();
-// getInvalidUrls();
+cleanLinks();
