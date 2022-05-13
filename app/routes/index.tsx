@@ -1,7 +1,7 @@
 import { Link as ChakraLink } from "@chakra-ui/react";
-import joi from "joi";
 import { ActionFunction, json, LinksFunction, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
+import joi from "joi";
 import { createShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/index.css";
 
@@ -36,10 +36,12 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const link = await createShrtlnk(
-    validationResult.value,
-    process.env.API_KEY!
-  );
+  let link;
+  try {
+    link = await createShrtlnk(validationResult.value, process.env.API_KEY!);
+  } catch (e) {
+    // throw away unsafe URL error and return generic error
+  }
 
   if (!link) {
     return json({
