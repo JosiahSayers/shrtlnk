@@ -20,5 +20,5 @@ cypress/videos
 cypress/screenshots
 cypress/downloads
 
-api
+/api
 check-link-results.json

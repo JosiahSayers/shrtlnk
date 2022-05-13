@@ -14,7 +14,7 @@
     "db:drop": "node --require esbuild-register prisma/drop.ts",
     "db:migrate": "prisma db push",
     "db:prod-refresh": "npm run db:drop && node --require esbuild-register prisma/consolidate-production.ts",
-    "check-url-safety": "node --require esbuild-register scripts/check-links.ts"
+    "clean-urls": "node --require esbuild-register scripts/check-links.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",

@@ -45,7 +45,16 @@ model BlockedUrl {
   url           String?
   createdAt     DateTime    @default(now())
   applicationId String
+  foundBy       String?
   application   Application @relation(fields: [applicationId], references: [id])
+}
+
+model CleanLinksLog {
+  id                String    @id @default(uuid())
+  createdAt         DateTime  @default(now())
+  completedAt       DateTime?
+  totalThreatsFound Int?
+  status            String?
 }
 
 model User {
