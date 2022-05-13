@@ -15,6 +15,13 @@ export async function createShrtlnk(
     /^(http)?(s)?(:\/\/)?(www.)?shrtlnk.dev/gm.test(url) ||
     !(await isUrlSafe(url))
   ) {
+    await db.blockedUrl.create({
+      data: {
+        url,
+        applicationId: apiKey,
+        foundBy: "Found at runtime",
+      },
+    });
     throw new Error("unsafe URL");
   }
 
