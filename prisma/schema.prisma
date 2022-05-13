@@ -44,6 +44,7 @@ model BlockedUrl {
   id            String      @id @default(uuid())
   url           String?
   createdAt     DateTime    @default(now())
+  linkCreatedAt DateTime?
   applicationId String
   foundBy       String?
   application   Application @relation(fields: [applicationId], references: [id])

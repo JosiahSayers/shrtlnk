@@ -53,6 +53,7 @@ async function processThreats(
       url: link.url,
       applicationId: link.applicationId!,
       foundBy: process.env.FOUND_BY || "CRON Job",
+      linkCreatedAt: link.createdAt,
     })),
   });
 
