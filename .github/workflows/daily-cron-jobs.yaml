@@ -1,7 +1,7 @@
 name: Daily Cron Jobs
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '*/5 * * * *'
 jobs:
   clean-links:
     runs-on: ubuntu-latest
