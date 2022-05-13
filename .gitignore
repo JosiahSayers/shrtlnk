@@ -21,3 +21,4 @@ cypress/screenshots
 cypress/downloads
 
 api
+check-link-results.json
