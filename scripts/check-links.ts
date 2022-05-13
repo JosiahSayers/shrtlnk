@@ -50,6 +50,7 @@ async function processThreats(
     data: links.map((link) => ({
       url: link.url,
       applicationId: link.applicationId!,
+      foundBy: process.env.FOUND_BY || "CRON Job",
     })),
   });
 
