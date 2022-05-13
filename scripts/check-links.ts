@@ -46,6 +46,8 @@ async function processThreats(
     where: { id: { in: finalIds } },
   });
 
+  console.log(`Found ${finalIds.length} threats, blocking them...`);
+
   await db.blockedUrl.createMany({
     data: links.map((link) => ({
       url: link.url,
