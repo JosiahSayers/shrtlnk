@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { parseForm } from "@formdata-helper/remix";
 import { Prisma } from "@prisma/client";
 import {
   ActionFunction,
@@ -42,14 +43,12 @@ type ActionData = {
     lastName?: string;
     email?: string;
     password?: string;
-    confirmPassword?: string;
   };
   fields?: {
     firstName?: string;
     lastName?: string;
     email?: string;
     password?: string;
-    confirmPassword?: string;
   };
 };
 
@@ -72,13 +71,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const form = {
-    firstName: formData.get("firstName"),
-    lastName: formData.get("lastName"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-  };
+  const form = await parseForm<ActionData["fields"]>(request);
   const { fields, errors } = validateForm(form);
   if (errors) {
     return json({ errors, fields }, 400);

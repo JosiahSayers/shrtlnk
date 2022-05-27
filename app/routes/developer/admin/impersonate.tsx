@@ -1,4 +1,5 @@
 import { Button } from "@chakra-ui/react";
+import { parseForm } from "@formdata-helper/remix";
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
@@ -43,13 +44,11 @@ export const loader: LoaderFunction = async () => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const action = formData.get("_action");
+  const { _action: action, user: idToImpersonate } = await parseForm(request);
   if (action === "stop") {
     return revertImpersonateSession(request, "/developer/admin/impersonate");
   }
   await requireAdminRole(request);
-  const idToImpersonate = formData.get("user") as string;
   return impersonateUser(idToImpersonate, request, "/developer/applications");
 };
 

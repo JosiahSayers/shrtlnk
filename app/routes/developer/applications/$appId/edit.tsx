@@ -6,6 +6,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { parseForm } from "@formdata-helper/remix";
 import { Application } from "@prisma/client";
 import {
   ActionFunction,
@@ -57,9 +58,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const { app } = await requireUserOwnsApplication(request, params.appId);
-  const formData = await request.formData();
-  const name = formData.get("name");
-  const website = formData.get("website");
+  const { name, website } = await parseForm(request);
 
   const { fields, errors } = validateForm({ name, website });
 

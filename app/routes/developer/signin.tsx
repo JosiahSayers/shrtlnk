@@ -8,6 +8,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { parseForm } from "@formdata-helper/remix";
 import { ActionFunction, json } from "@remix-run/node";
 import {
   Form,
@@ -46,10 +47,7 @@ const validateForm = (form: {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await request.formData();
-  const email = form.get("email");
-  const password = form.get("password");
-  const redirectTo = form.get("redirectTo");
+  const { email, password, redirectTo } = await parseForm(request);
 
   const { fields, errors } = validateForm({ email, password });
 
