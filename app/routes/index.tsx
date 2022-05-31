@@ -1,4 +1,5 @@
 import { Link as ChakraLink } from "@chakra-ui/react";
+import { parseForm } from "@formdata-helper/remix";
 import { ActionFunction, json, LinksFunction, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 import joi from "joi";
@@ -22,9 +23,8 @@ export const links: LinksFunction = () => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-
-  const validationResult = validateUrl(formData.get("url"));
+  const formData = await parseForm(request as any);
+  const validationResult = validateUrl(formData.url);
 
   if (validationResult.error) {
     return json(

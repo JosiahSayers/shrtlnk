@@ -17,6 +17,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { parseForm } from "@formdata-helper/remix";
 import {
   ActionFunction,
   json,
@@ -100,12 +101,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const userInfo = await requireUserSession(request);
-  const formData = await request.formData();
-  const formType = formData.get("_action");
+  const form = await parseForm(request);
 
-  if (formType === "name") {
-    const firstName = formData.get("firstName");
-    const lastName = formData.get("lastName");
+  if (form._action === "name") {
+    const { firstName, lastName } = form;
     const { fields, errors } = validateNameForm({ firstName, lastName });
     if (errors) {
       return json({ errors, fields, formType: "name" }, 400);
@@ -118,9 +117,8 @@ export const action: ActionFunction = async ({ request }) => {
     return createUserSession(newUser, "/developer/applications");
   }
 
-  if (formType === "password") {
-    const currentPassword = formData.get("currentPassword");
-    const newPassword = formData.get("newPassword");
+  if (form._action === "password") {
+    const { currentPassword, newPassword } = form;
     const { fields, errors } = validatePasswordForm({
       currentPassword,
       newPassword,
