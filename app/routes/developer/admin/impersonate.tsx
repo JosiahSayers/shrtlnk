@@ -3,6 +3,7 @@ import { parseForm } from "@formdata-helper/remix";
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
+import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { db } from "~/utils/db.server";
 import {
   impersonateUser,
@@ -59,7 +60,7 @@ export default function Impersonate() {
 
   return (
     <div className="container">
-      <h2>Impersonate</h2>
+      <AdminHeading>Impersonate</AdminHeading>
       <Form method="post">
         <select
           name="user"
