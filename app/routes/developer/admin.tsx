@@ -15,6 +15,10 @@ const getLinks = () => [
     href: "cleaned-links",
     title: "Link Cleaning Log",
   },
+  {
+    href: "blocked-urls",
+    title: "Blocked URLs",
+  },
 ];
 
 type LoaderData = { links: ReturnType<typeof getLinks> };
@@ -35,7 +39,10 @@ export default function Admin() {
       className="container-fluid pl-0"
       style={{ minHeight: "calc(100vh - 56px)" }}
     >
-      <div className="row no-gutters">
+      <div
+        className="row no-gutters"
+        style={{ minHeight: "calc(100vh - 56px)" }}
+      >
         <div className="col-3 bg-white">
           <h1
             className="text-center"

@@ -1,4 +1,5 @@
 import {
+  Link as ChakraLink,
   Table,
   TableContainer,
   Tbody,
@@ -9,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { CleanLinksLog } from "@prisma/client";
 import { LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { DateTime } from "luxon";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { BoxComponent } from "~/components/developer/box";
@@ -61,7 +62,16 @@ export default function CleanedLinks() {
                     log.totalThreatsFound ? "teal.100" : "Background"
                   }
                 >
-                  <Td>{new Date(log.createdAt).toLocaleString()}</Td>
+                  <Td>
+                    <ChakraLink
+                      as={Link}
+                      to={`/developer/admin/blocked-urls?date=${new Date(
+                        log.createdAt
+                      ).toLocaleDateString()}`}
+                    >
+                      {new Date(log.createdAt).toLocaleString()}
+                    </ChakraLink>
+                  </Td>
                   <Td>{log.duration}</Td>
                   <Td>{log.totalThreatsFound}</Td>
                 </Tr>
