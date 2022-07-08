@@ -91,14 +91,19 @@ async function seed() {
     create: invalidApplicationData,
   });
 
-  const blockedUrlData = {
-    url: "http://realbank.freesites.com",
-    createdAt: testDate,
-    applicationId: invalidApplication.id,
-  };
-  const blockedUrl = await db.blockedUrl.create({
-    data: blockedUrlData,
-  });
+  const currentBlocked = await db.blockedUrl.findMany();
+  if (!currentBlocked.find(url => url.url === 'http://realbank.freesites.com')) {
+    const blockedUrlData = {
+      url: "http://realbank.freesites.com",
+      createdAt: testDate,
+      linkCreatedAt: testDate,
+      applicationId: invalidApplication.id,
+      foundBy: 'Seed Data',
+    };
+    const blockedUrl = await db.blockedUrl.create({
+      data: blockedUrlData,
+    });
+  }
 
   const shrtlnkData = [
     {
@@ -138,6 +143,29 @@ async function seed() {
       },
     ],
   });
+
+  const existingLogs = await db.cleanLinksLog.findMany();
+  if (!existingLogs.find(log => log.totalThreatsFound === 4 && log.status === 'success')) {
+    await db.cleanLinksLog.create({
+      data: {
+        createdAt: testDate,
+        completedAt: new Date(testDate.getTime() + 5000),
+        totalThreatsFound: 4,
+        status: 'success'
+      }
+    });
+  }
+
+  if (!existingLogs.find(log => log.totalThreatsFound === 0 && log.status === 'failure')) {
+    await db.cleanLinksLog.create({
+      data: {
+        createdAt: testDate,
+        completedAt: new Date(testDate.getTime() + 5000),
+        totalThreatsFound: 0,
+        status: 'failure'
+      }
+    });
+  }
 }
 
 seed();
