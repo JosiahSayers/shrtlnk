@@ -6,7 +6,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "cross-env NODE_ENV=production remix build",
-    "dev": "TZ=America/Los_Angeles cross-env NODE_ENV=development remix dev",
+    "dev": "cross-env NODE_ENV=development remix dev",
     "lint": "eslint --ext ts --ext tsx app cypress/integration",
     "test": "jest",
     "cypress": "TZ=America/New_York CYPRESS_BASE_URL=${BASE_URL:=http://localhost:3000} cypress ${TEST_COMMAND:=open} --browser chrome",
