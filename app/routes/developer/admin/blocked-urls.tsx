@@ -1,4 +1,5 @@
 import {
+  Heading,
   Table,
   TableContainer,
   Tbody,
@@ -14,16 +15,20 @@ import { DateTime } from "luxon";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { BoxComponent } from "~/components/developer/box";
 import { db } from "~/utils/db.server";
+import Link from "~/components/developer/Link";
 
-type LoaderData = Array<
-  BlockedUrl & {
-    createdAt: string;
-    linkCreatedAt: string;
-    application: {
-      name: string;
-    };
-  }
->;
+type LoaderData = {
+  urls: Array<
+    BlockedUrl & {
+      createdAt: string;
+      linkCreatedAt: string;
+      application: {
+        name: string;
+      };
+    }
+  >;
+  date?: string;
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const dateString = new URL(request.url).searchParams.get("date");
@@ -41,14 +46,20 @@ export const loader: LoaderFunction = async ({ request }) => {
         },
       })
     : db.blockedUrl.findMany(commonQueryOptions));
-  return urls;
+  return { urls, date: dateString };
 };
 
 export default function BlockedURLs() {
-  const urls = useLoaderData<LoaderData>();
+  const { urls, date } = useLoaderData<LoaderData>();
   return (
     <div className="container">
       <AdminHeading>Blocked URLs</AdminHeading>
+      {date && (
+        <Heading fontSize="xl" fontWeight="semibold">
+          Filtered to date: {date} (
+          <Link to="/developer/admin/blocked-urls">show all</Link>)
+        </Heading>
+      )}
       <BoxComponent>
         <TableContainer>
           <Table size="sm">

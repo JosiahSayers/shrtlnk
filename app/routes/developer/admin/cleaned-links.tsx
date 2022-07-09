@@ -52,6 +52,7 @@ export default function CleanedLinks() {
                 <Th>Date</Th>
                 <Th>Time to complete</Th>
                 <Th>Links cleaned</Th>
+                <Th>Status</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -59,7 +60,11 @@ export default function CleanedLinks() {
                 <Tr
                   key={log.id}
                   backgroundColor={
-                    log.totalThreatsFound ? "teal.100" : "Background"
+                    log.status === "failure"
+                      ? "red.100"
+                      : log.totalThreatsFound
+                      ? "teal.100"
+                      : "Background"
                   }
                 >
                   <Td>
@@ -74,6 +79,7 @@ export default function CleanedLinks() {
                   </Td>
                   <Td>{log.duration}</Td>
                   <Td>{log.totalThreatsFound}</Td>
+                  <Td>{log.status}</Td>
                 </Tr>
               ))}
             </Tbody>
