@@ -45,8 +45,18 @@ async function seed() {
 
   const adminUser = await db.user.upsert({
     where: { email: "admin@test.com" },
-    update: { ...user1Data, firstName: "Admin", email: "admin@test.com", role: "Admin" },
-    create: { ...user1Data, firstName: "Admin", email: "admin@test.com", role: "Admin" },
+    update: {
+      ...user1Data,
+      firstName: "Admin",
+      email: "admin@test.com",
+      role: "Admin",
+    },
+    create: {
+      ...user1Data,
+      firstName: "Admin",
+      email: "admin@test.com",
+      role: "Admin",
+    },
   });
 
   const shrtlnkWebsiteApplicationData = {
@@ -92,15 +102,30 @@ async function seed() {
   });
 
   const currentBlocked = await db.blockedUrl.findMany();
-  if (!currentBlocked.find(url => url.url === 'http://realbank.freesites.com')) {
+  if (
+    !currentBlocked.find((url) => url.url === "http://realbank.freesites.com")
+  ) {
     const blockedUrlData = {
       url: "http://realbank.freesites.com",
       createdAt: testDate,
       linkCreatedAt: testDate,
       applicationId: invalidApplication.id,
-      foundBy: 'Seed Data',
+      foundBy: "Seed Data",
     };
-    const blockedUrl = await db.blockedUrl.create({
+    await db.blockedUrl.create({
+      data: blockedUrlData,
+    });
+  }
+
+  if (!currentBlocked.find((url) => url.url === "http://totally-not-a.scam")) {
+    const blockedUrlData = {
+      url: "http://totally-not-a.scam",
+      createdAt: new Date(testDate.getTime() + 1000 * 60 * 60 * 24 * 3),
+      linkCreatedAt: new Date(testDate.getTime() + 1000 * 60),
+      applicationId: application.id,
+      foundBy: "Seed Data",
+    };
+    await db.blockedUrl.create({
       data: blockedUrlData,
     });
   }
@@ -145,25 +170,33 @@ async function seed() {
   });
 
   const existingLogs = await db.cleanLinksLog.findMany();
-  if (!existingLogs.find(log => log.totalThreatsFound === 4 && log.status === 'success')) {
+  if (
+    !existingLogs.find(
+      (log) => log.totalThreatsFound === 4 && log.status === "success"
+    )
+  ) {
     await db.cleanLinksLog.create({
       data: {
         createdAt: testDate,
         completedAt: new Date(testDate.getTime() + 5000),
         totalThreatsFound: 4,
-        status: 'success'
-      }
+        status: "success",
+      },
     });
   }
 
-  if (!existingLogs.find(log => log.totalThreatsFound === 0 && log.status === 'failure')) {
+  if (
+    !existingLogs.find(
+      (log) => log.totalThreatsFound === 0 && log.status === "failure"
+    )
+  ) {
     await db.cleanLinksLog.create({
       data: {
         createdAt: testDate,
         completedAt: new Date(testDate.getTime() + 5000),
         totalThreatsFound: 0,
-        status: 'failure'
-      }
+        status: "failure",
+      },
     });
   }
 }

@@ -55,7 +55,7 @@ export default function BlockedURLs() {
     <div className="container">
       <AdminHeading>Blocked URLs</AdminHeading>
       {date && (
-        <Heading fontSize="xl" fontWeight="semibold">
+        <Heading as="h3" fontSize="xl" fontWeight="semibold">
           Filtered to date: {date} (
           <Link to="/developer/admin/blocked-urls">show all</Link>)
         </Heading>

@@ -32,24 +32,21 @@ const customCommands = {
     cy.findByLabelText("Email Address").type(email);
     cy.findByLabelText("Password").type(password);
     cy.findByText("Sign in").click();
-    cy.location('pathname', {timeout: 10000})
-      .should('include', '/developer/applications');
+    cy.location("pathname", { timeout: 10000 }).should(
+      "include",
+      "/developer/applications"
+    );
   },
   preserveAuthCookie: () => {
     Cypress.Cookies.preserveOnce("shrtlnk_session");
   },
   logout: () => {
-    cy.visit("/developer/signout")
-  }
+    cy.visit("/developer/signout");
+  },
 };
 
 Object.keys(customCommands).forEach((commandKey) => {
   Cypress.Commands.add(commandKey as any, (customCommands as any)[commandKey]);
 });
 
-type CustomCommands = typeof customCommands;
-declare global {
-  namespace Cypress {
-    type Chainable = CustomCommands
-  }
-}
+export type CustomCommands = typeof customCommands;

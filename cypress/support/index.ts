@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -14,7 +15,17 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(email?: string, password?: string): Chainable<Element>;
+      preserveAuthCookie(): Chainable<Element>;
+      logout(): Chainable<Element>;
+    }
+  }
+}
