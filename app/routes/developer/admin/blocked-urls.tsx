@@ -32,20 +32,33 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const dateString = new URL(request.url).searchParams.get("date");
-  const date = DateTime.fromJSDate(new Date(dateString ?? "")).toJSDate();
-  const nextDay = DateTime.fromJSDate(date).plus({ days: 1 }).toJSDate();
   const commonQueryOptions = {
     orderBy: { createdAt: "desc" },
     include: { application: { select: { name: true } } },
   } as any;
-  const urls = await (dateString
-    ? db.blockedUrl.findMany({
-        ...commonQueryOptions,
-        where: {
-          AND: [{ createdAt: { gte: date } }, { createdAt: { lt: nextDay } }],
-        },
-      })
-    : db.blockedUrl.findMany(commonQueryOptions));
+  let urls = [];
+
+  if (dateString) {
+    const date = DateTime.fromFormat(dateString, "M/d/yyyy")
+      .set({ hour: 0 })
+      .toJSDate();
+    const nextDay = DateTime.fromFormat(dateString, "M/d/yyyy")
+      .plus({ days: 1 })
+      .toJSDate();
+
+    date.setUTCHours(0);
+    nextDay.setUTCHours(0);
+
+    urls = await db.blockedUrl.findMany({
+      ...commonQueryOptions,
+      where: {
+        AND: [{ createdAt: { gte: date } }, { createdAt: { lt: nextDay } }],
+      },
+    });
+  } else {
+    urls = await db.blockedUrl.findMany(commonQueryOptions);
+  }
+
   return { urls, date: dateString };
 };
 
