@@ -127,7 +127,11 @@ describe("Application list", () => {
   it("shows the correct content when the user has no applications", () => {
     cy.login("noapps@test.com");
     cy.findByText("Hi, Appless.");
-    cy.findByText((_, node) => node?.textContent === "It looks like you haven't added an application yet. Click here to get started!");
+    cy.findByText(
+      (_, node) =>
+        node?.textContent ===
+        "It looks like you haven't added an application yet. Click here to get started!"
+    );
     cy.findByText("Click here").click();
     cy.findByText("Application Name");
   });
@@ -137,7 +141,8 @@ describe("Application list", () => {
     cy.findByText("Test App");
     cy.findByText((content, node) => node?.textContent === "Status: Valid");
     cy.findAllByText(
-      (content, node) => node?.textContent === "API Key: xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      (content, node) =>
+        node?.textContent === "API Key: xxxxxxxxxxxxxxxxxxxxxxxxxxx"
     );
     cy.findByText(
       (content, node) =>
@@ -150,9 +155,7 @@ describe("Application list", () => {
       /^Shrtlnks created: \d$/gm.test(node?.textContent ?? "")
     );
     cy.findAllByText((content, node) =>
-      /^Shrtlnks loaded: \d times$/gm.test(
-        node?.textContent ?? ""
-      )
+      /^Shrtlnks loaded: \d times$/gm.test(node?.textContent ?? "")
     );
     cy.findAllByText((content, node) =>
       /^Unsafe URLs detected and blocked from this application: \d$/gm.test(
@@ -163,11 +166,16 @@ describe("Application list", () => {
 
   it("shows the API key when the element is clicked", () => {
     cy.login();
-    cy.findByText((content, node) => node?.textContent === "API Key: test-api-key").should("not.exist");
+    cy.findByText(
+      (content, node) => node?.textContent === "API Key: test-api-key"
+    ).should("not.exist");
     cy.findAllByText(
-      (content, node) => node?.textContent === "API Key: xxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    ).last().click();
-    cy.findByText((content, node) => node?.textContent === "API Key: test-api-key");
+      (content, node) =>
+        node?.textContent === "API Key: xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    ).each((el) => cy.wrap(el).click());
+    cy.findByText(
+      (content, node) => node?.textContent === "API Key: test-api-key"
+    );
   });
 });
 
@@ -187,7 +195,10 @@ describe("Application CRUD", () => {
       cy.findByLabelText("Application Name*").type("Test App 1");
       cy.findByText("Create").click();
       cy.findByText("Test App 1");
-      cy.task("deleteApplication", { name: "Test App 1", email: "test@test.com" });
+      cy.task("deleteApplication", {
+        name: "Test App 1",
+        email: "test@test.com",
+      });
     });
   });
 
@@ -199,23 +210,26 @@ describe("Application CRUD", () => {
         email: "test@test.com",
         app: {
           name,
-        }
+        },
       });
       cy.reload();
       cy.findByText(name)
-      .parent("div")
-      .within(() => {
-        cy.findByText("Edit").click();
-      });
+        .parent("div")
+        .within(() => {
+          cy.findByText("Edit").click();
+        });
       cy.findByLabelText("Application Name*").clear().type(editedName);
       cy.findByLabelText("URL of Application").type("https://thisisatest.com");
       cy.findByText("Update").click();
       cy.findByText(editedName);
       cy.findAllByText(
         (content, node) =>
-        node?.textContent === "Website: https://thisisatest.com"
-        );
-        cy.task("deleteApplication", { name: editedName, email: "test@test.com" });
+          node?.textContent === "Website: https://thisisatest.com"
+      );
+      cy.task("deleteApplication", {
+        name: editedName,
+        email: "test@test.com",
+      });
     });
   });
 
@@ -226,8 +240,8 @@ describe("Application CRUD", () => {
       cy.task("createApplication", {
         email: "test@test.com",
         app: {
-          name: "Test App 1"
-        }
+          name: "Test App 1",
+        },
       });
       cy.reload();
       cy.findByText("Test App 1")
@@ -267,7 +281,7 @@ describe("Account management", () => {
     it("requires both first name and last name", () => {
       cy.findByLabelText("First Name*").clear();
       cy.findByLabelText("Last Name*").clear();
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
       cy.findByText('"First Name" is not allowed to be empty');
       cy.findByText('"Last Name" is not allowed to be empty');
     });
@@ -275,13 +289,13 @@ describe("Account management", () => {
     it("allows updates the users name", () => {
       cy.findByLabelText("First Name*").type("test-first");
       cy.findByLabelText("Last Name*").type("test-last");
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
       cy.findByText("Hey there, test-first").click();
       cy.findByLabelText("First Name*").should("have.value", "test-first");
       cy.findByLabelText("Last Name*").should("have.value", "test-last");
       cy.findByLabelText("First Name*").clear().type("John");
       cy.findByLabelText("Last Name*").clear().type("Developer");
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
     });
   });
 
@@ -289,21 +303,21 @@ describe("Account management", () => {
     beforeEach(() => cy.findByText("Change Password").click());
 
     it("requires all fields", () => {
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
       cy.findByText('"Current Password" is not allowed to be empty');
       cy.findByText('"New Password" is not allowed to be empty');
     });
 
     it("requires the new password field to be at least 8 characters", () => {
       cy.findByLabelText("New Password*").clear().type("short");
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
       cy.findByText('"New Password" length must be at least 8 characters long');
     });
 
     it("requires the current password to match the user's current password", () => {
       cy.findByLabelText("Current Password*").clear().type("wrong-password");
       cy.findByLabelText("New Password*").clear().type("password2");
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
       cy.findByText(
         "The password you entered does not match your current password"
       );
@@ -312,16 +326,16 @@ describe("Account management", () => {
     it("allows updates to the password", () => {
       cy.findByLabelText("Current Password*").clear().type("password");
       cy.findByLabelText("New Password*").clear().type("password2");
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
       cy.findByText("Sign Out").click();
       cy.login("test@test.com", "password2");
       cy.findByText("Hey there, John").click();
       cy.findByText("Change Password").click();
       cy.findByLabelText("Current Password*").clear().type("password2");
       cy.findByLabelText("New Password*").clear().type("password");
-      cy.findAllByText("Save").filter(':visible').click();
+      cy.findAllByText("Save").filter(":visible").click();
     });
   });
 });
 
-export { };
+export {};
