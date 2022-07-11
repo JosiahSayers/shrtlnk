@@ -54,10 +54,7 @@ export default function AdminIndex() {
   const data = useLoaderData();
 
   return (
-    <div
-      className="container mb-0"
-      style={{ overflow: "scroll", height: "calc(100vh - 56px - 3rem)" }}
-    >
+    <div className="container">
       <BarChartCard
         title="Shrtlnk Totals"
         data={data?.shrtlnkStats}
