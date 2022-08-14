@@ -17,6 +17,10 @@ describe("Home Page", () => {
           node?.textContent === "Pssst, are you a developer? We have an API."
       );
     });
+
+    it("loads the adsense script", () => {
+      cy.get("#adsense-script").should("not.exist");
+    });
   });
 
   describe("Form", () => {

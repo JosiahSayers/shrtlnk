@@ -1,24 +1,36 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
 import { useContext, useEffect } from "react";
-import { ErrorBoundaryComponent, LinksFunction, MetaFunction } from "@remix-run/node";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import {
+  ErrorBoundaryComponent,
+  LinksFunction,
+  MetaFunction,
+} from "@remix-run/node";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLocation,
+} from "@remix-run/react";
 import styles from "~/styles/root.css";
-import { ServerStyleContext, ClientStyleContext } from './context'
+import { ServerStyleContext, ClientStyleContext } from "./context";
 
 export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  title: 'shrtlnk - Simple Link Shortener',
-  viewport: 'width=device-width,initial-scale=1',
+  charset: "utf-8",
+  title: "shrtlnk - Simple Link Shortener",
+  viewport: "width=device-width,initial-scale=1",
 });
 
 export const links: LinksFunction = () => {
   return [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstaticom' },
+    { rel: "preconnect", href: "https://fonts.googleapis.com" },
+    { rel: "preconnect", href: "https://fonts.gstaticom" },
     {
-      rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap'
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap",
     },
     {
       rel: "stylesheet",
@@ -79,6 +91,7 @@ const Document = withEmotionCache(
   ({ children }: DocumentProps, emotionCache) => {
     const serverStyleData = useContext(ServerStyleContext);
     const clientStyleData = useContext(ClientStyleContext);
+    const { pathname } = useLocation();
 
     // Only executed on client
     useEffect(() => {
@@ -102,10 +115,18 @@ const Document = withEmotionCache(
           {serverStyleData?.map(({ key, ids, css }) => (
             <style
               key={key}
-              data-emotion={`${key} ${ids.join(' ')}`}
+              data-emotion={`${key} ${ids.join(" ")}`}
               dangerouslySetInnerHTML={{ __html: css }}
             />
           ))}
+          {!pathname.includes("developer") && (
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5073920211334393"
+              crossOrigin="anonymous"
+              id="adsense-script"
+            />
+          )}
         </head>
         <body>
           {children}
@@ -125,5 +146,5 @@ export default function App() {
         <Outlet />
       </ChakraProvider>
     </Document>
-  )
+  );
 }
