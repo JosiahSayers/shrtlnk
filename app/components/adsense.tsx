@@ -2,14 +2,17 @@ import { useLocation } from "@remix-run/react";
 
 export default function AdSense() {
   const { pathname } = useLocation();
-  if (!pathname.includes("developer")) {
+  if (
+    !pathname.includes("developer") &&
+    process.env.NODE_ENV !== "production"
+  ) {
     return (
       <>
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5073920211334393"
           crossOrigin="anonymous"
-        ></script>
+        />
         <ins
           className="adsbygoogle"
           style={{ display: "block" }}

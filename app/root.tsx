@@ -17,7 +17,7 @@ import {
 } from "@remix-run/react";
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
-import AdSense from "./components/ad";
+import AdSense from "./components/adsense";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
