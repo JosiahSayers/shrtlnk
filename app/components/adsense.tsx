@@ -20,10 +20,14 @@ export default function AdSense() {
           data-ad-slot="9768400304"
           data-ad-format="auto"
           data-full-width-responsive="true"
-        ></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "(adsbygoogle = window.adsbygoogle || []).push({})",
+          }}
+        />
       </>
     );
   }
-  return null;
+  return <></>;
 }
