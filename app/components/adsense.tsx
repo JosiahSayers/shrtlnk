@@ -4,7 +4,7 @@ export default function AdSense() {
   const { pathname } = useLocation();
   if (
     !pathname.includes("developer") &&
-    process.env.NODE_ENV !== "production"
+    process.env.NODE_ENV === "production"
   ) {
     return (
       <>
