@@ -19,7 +19,7 @@ describe("Home Page", () => {
     });
 
     it("loads the adsense script", () => {
-      cy.get("#adsense-script").should("not.exist");
+      cy.get("#adsense-script").should("exist");
     });
   });
 
