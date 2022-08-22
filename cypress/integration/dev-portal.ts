@@ -25,10 +25,6 @@ describe("Developer landing page", () => {
     );
     cy.findByText("View Documentation");
   });
-
-  it("does not render the adsense script", () => {
-    cy.get("#adsense-script").should("not.exist");
-  });
 });
 
 describe("Registering for an account", () => {
