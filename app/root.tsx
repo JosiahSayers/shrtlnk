@@ -13,16 +13,15 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLocation,
 } from "@remix-run/react";
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
-import AdSense from "./components/adsense";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "shrtlnk - Simple Link Shortener",
   viewport: "width=device-width,initial-scale=1",
+  propeller: "ca94f7201f84b75922ec54935ae6a1ce",
 });
 
 export const links: LinksFunction = () => {
@@ -92,7 +91,6 @@ const Document = withEmotionCache(
   ({ children }: DocumentProps, emotionCache) => {
     const serverStyleData = useContext(ServerStyleContext);
     const clientStyleData = useContext(ClientStyleContext);
-    const { pathname } = useLocation();
 
     // Only executed on client
     useEffect(() => {
@@ -120,17 +118,9 @@ const Document = withEmotionCache(
               dangerouslySetInnerHTML={{ __html: css }}
             />
           ))}
-          {!pathname.includes("developer") && (
-            <script
-              async
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5073920211334393"
-              crossOrigin="anonymous"
-            />
-          )}
         </head>
         <body>
           {children}
-          <AdSense />
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
