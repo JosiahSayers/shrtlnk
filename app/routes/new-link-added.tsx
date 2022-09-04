@@ -1,9 +1,15 @@
 import { Shrtlnk } from "@prisma/client";
 import { useState } from "react";
-import { LinksFunction, LoaderFunction, MetaFunction, redirect } from "@remix-run/node";
+import {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+} from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/newLinkAdded.css";
+import MockNotificationAd from "~/components/ads/mock-notification";
 
 export const links: LinksFunction = () => [
   {
@@ -80,6 +86,7 @@ export default function NewLinkAddec() {
           </li>
         </ul>
       </div>
+      <MockNotificationAd />
     </main>
   );
 }
