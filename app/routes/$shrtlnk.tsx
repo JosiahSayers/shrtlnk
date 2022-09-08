@@ -7,17 +7,12 @@ import { getShrtlnk } from "~/shrtlnk.server";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const link = await getShrtlnk(params.shrtlnk!, true);
-  const displayAdChance = 0.5;
-  const displayAd = Math.random() < displayAdChance;
+
   if (!link) {
     return redirect("/not-found");
   }
 
-  if (displayAd) {
-    return json(link);
-  }
-
-  return redirect(link.url);
+  return json(link);
 };
 
 export default function RedirectPage() {
