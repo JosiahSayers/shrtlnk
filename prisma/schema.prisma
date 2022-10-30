@@ -20,7 +20,7 @@ model Application {
   shrtlnks    Shrtlnk[]
   blockedUrls BlockedUrl[]
 
-  @@unique(fields: [id, userId], name: "idAndUserId")
+  @@unique([id, userId], name: "idAndUserId")
 }
 
 model Shrtlnk {
