@@ -52,7 +52,7 @@ export const loader: LoaderFunction = async () => {
   const safeData = JSON.parse(
     JSON.stringify(data, (key, value) => {
       if (typeof value === "bigint") {
-        return value.toString();
+        return Number(value);
       }
 
       if (key === "date") {
