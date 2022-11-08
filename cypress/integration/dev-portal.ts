@@ -63,6 +63,21 @@ describe("Registering for an account", () => {
     cy.findByText("Create Account").click();
     cy.findByText("Test App");
   });
+
+  it("keeps you signed in after registering", () => {
+    const email = `integration-${new Date().getTime()}@test.com`;
+    cy.findByLabelText("First Name*").clear().type("integration");
+    cy.findByLabelText("Last Name*").clear().type(new Date().toLocaleString());
+    cy.findByLabelText("Email Address*").clear().type(email);
+    cy.findByLabelText("Password*").clear().type("password");
+    cy.findByText("Sign up").click();
+    cy.findByText("Your Applications");
+    cy.findByText("Hey there, integration");
+    cy.findAllByText("Documentation").first().click();
+    cy.findAllByText("My Applications").first().click();
+    cy.findByText("Hey there, integration");
+    cy.task("deleteUser", email);
+  });
 });
 
 describe("Signing into an account", () => {
