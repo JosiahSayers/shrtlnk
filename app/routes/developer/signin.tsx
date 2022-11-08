@@ -107,7 +107,7 @@ export default function SimpleCard() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate>
+        <Form method="post" noValidate reloadDocument>
           <input
             type="hidden"
             name="redirectTo"

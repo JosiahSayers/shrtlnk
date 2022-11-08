@@ -127,7 +127,7 @@ export default function SignupCard() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate>
+        <Form method="post" noValidate reloadDocument>
           <Stack spacing={4}>
             <HStack>
               <Box>
