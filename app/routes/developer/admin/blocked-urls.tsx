@@ -46,8 +46,6 @@ export const loader: LoaderFunction = async ({ request }) => {
       .plus({ days: 1 })
       .toJSDate();
 
-    console.log({ date, nextDay });
-
     date.setUTCHours(0);
     nextDay.setUTCHours(0);
 
