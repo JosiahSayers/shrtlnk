@@ -14,8 +14,10 @@ type Props = {
   data: any;
   id: string;
   xAxisKey: string;
-  dataKey: string;
+  dataKeys: string | string[];
 };
+
+const colors = ["#8884d8", "#84aad8", "#b284d8"];
 
 export default function LineChartCard({
   title,
@@ -24,8 +26,10 @@ export default function LineChartCard({
   data,
   id,
   xAxisKey,
-  dataKey,
+  dataKeys,
 }: Props) {
+  const dataKeyArray = Array.isArray(dataKeys) ? dataKeys : [dataKeys];
+
   return (
     <div className="card text-center mb-3">
       <div className="card-body">
@@ -35,7 +39,14 @@ export default function LineChartCard({
           <XAxis dataKey={xAxisKey} tick={false} />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey={dataKey} stroke="#8884d8" />
+          {dataKeyArray.map((key, index) => (
+            <Line
+              key={key}
+              type="monotone"
+              dataKey={key}
+              stroke={colors[index]}
+            />
+          ))}
         </LineChart>
       </div>
     </div>
