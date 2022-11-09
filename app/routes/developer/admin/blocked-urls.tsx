@@ -31,7 +31,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const dateString = new URL(request.url).searchParams.get("date");
+  const dateString = new URL(request.url).searchParams.get("utc_date");
   const commonQueryOptions = {
     orderBy: { createdAt: "desc" },
     include: { application: { select: { name: true } } },
@@ -39,12 +39,14 @@ export const loader: LoaderFunction = async ({ request }) => {
   let urls = [];
 
   if (dateString) {
-    const date = DateTime.fromFormat(dateString, "M/d/yyyy")
+    const date = DateTime.fromFormat(dateString, "M/d/yyyy", { zone: "UTC" })
       .set({ hour: 0 })
       .toJSDate();
-    const nextDay = DateTime.fromFormat(dateString, "M/d/yyyy")
+    const nextDay = DateTime.fromFormat(dateString, "M/d/yyyy", { zone: "UTC" })
       .plus({ days: 1 })
       .toJSDate();
+
+    console.log({ date, nextDay });
 
     date.setUTCHours(0);
     nextDay.setUTCHours(0);

@@ -19,6 +19,8 @@ import { db } from "~/utils/db.server";
 type LoaderData = Array<
   CleanLinksLog & {
     duration: string;
+    createdAt: string;
+    completedAt: string | null;
   }
 >;
 
@@ -41,6 +43,12 @@ export const loader: LoaderFunction = async () => {
 
 export default function CleanedLinks() {
   const logs = useLoaderData<LoaderData>();
+
+  const getDateForUrl = (date: string) =>
+    DateTime.fromISO(date, {
+      zone: "UTC",
+    }).toFormat("M/d/yyyy");
+
   return (
     <div className="container">
       <AdminHeading>Link Cleaning Log</AdminHeading>
@@ -70,9 +78,9 @@ export default function CleanedLinks() {
                   <Td>
                     <ChakraLink
                       as={Link}
-                      to={`/developer/admin/blocked-urls?date=${new Date(
+                      to={`/developer/admin/blocked-urls?utc_date=${getDateForUrl(
                         log.createdAt
-                      ).toLocaleDateString()}`}
+                      )}`}
                     >
                       {new Date(log.createdAt).toLocaleString()}
                     </ChakraLink>
