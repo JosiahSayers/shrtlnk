@@ -16,7 +16,7 @@ describe("Admin Impersonate", () => {
     cy.findByText("Appless Developer (noapps@test.com)");
     cy.findByText("Legacy User (legacy@test.com)");
     cy.findByText("John Developer (test@test.com)");
-    cy.get("select").children().should("have.length", 4);
+    cy.get("select").children().should("have.length", 5);
   });
 
   it("allows an admin to start and stop impersonating a user", () => {

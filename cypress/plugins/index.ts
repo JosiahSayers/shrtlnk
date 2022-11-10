@@ -71,6 +71,8 @@ export default function (on: any, config: any) {
         include: { impersonated: true, impersonator: true },
         orderBy: { createdAt: "asc" },
       }),
+    getShrtlnk: async (key: string) =>
+      db.shrtlnk.findUnique({ where: { key } }),
   });
   return config;
 }

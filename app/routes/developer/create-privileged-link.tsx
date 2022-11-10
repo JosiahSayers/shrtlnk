@@ -126,7 +126,7 @@ export default function CreatePrivilegedLink() {
                 }}
                 isLoading={!!submission}
               >
-                Create Shrtlink
+                Create Shrtlnk
               </Button>
             </Stack>
           </Stack>
