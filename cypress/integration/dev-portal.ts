@@ -119,6 +119,15 @@ describe("Signing into an account", () => {
     cy.findByText("Sign Out");
   });
 
+  it("shows the updated navbar for privileged users", () => {
+    cy.login("privileged@test.com");
+    cy.findAllByText("My Applications");
+    cy.findAllByText("Shorten Link (without ads)");
+    cy.findByText("Admin Dashboard").should("not.exist");
+    cy.findByText("Hey there, Privileged");
+    cy.findByText("Sign Out");
+  });
+
   it("allows legacy users to log in", () => {
     cy.findByLabelText("Email Address").type("legacy@test.com");
     cy.findByLabelText("Password").type("password");

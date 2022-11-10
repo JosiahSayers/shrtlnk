@@ -19,7 +19,7 @@ export type RegisterForm = {
   email: string;
   password: string;
   confirmPassword: string;
-}
+};
 
 export async function register(form: RegisterForm) {
   return db.user.create({
@@ -28,9 +28,9 @@ export async function register(form: RegisterForm) {
       lastName: form.lastName,
       email: form.email,
       password: await hashPassword(form.password),
-      role: 'Developer',
-      verified: true
-    }
+      role: "Developer",
+      verified: true,
+    },
   });
 }
 
@@ -121,7 +121,12 @@ export async function createUserSession(user: User, redirectTo: string) {
   });
 }
 
-export async function createImpersonateSession(session: Session, impersonatedUser: User, logId: string, redirectTo: string) {
+export async function createImpersonateSession(
+  session: Session,
+  impersonatedUser: User,
+  logId: string,
+  redirectTo: string
+) {
   session.set("impersonatorId", session.get("userId"));
   session.set("impersonatorFirstName", session.get("firstName"));
   session.set("impersonatorLastName", session.get("lastName"));
@@ -133,12 +138,15 @@ export async function createImpersonateSession(session: Session, impersonatedUse
   session.set("role", impersonatedUser.role);
   return redirect(redirectTo, {
     headers: {
-      "Set-Cookie": await storage.commitSession(session)
-    }
+      "Set-Cookie": await storage.commitSession(session),
+    },
   });
 }
 
-export async function revertImpersonateSession(request: Request, redirectTo: string) {
+export async function revertImpersonateSession(
+  request: Request,
+  redirectTo: string
+) {
   const session = await getSession(request);
   session.set("userId", session.get("impersonatorId"));
   session.set("firstName", session.get("impersonatorFirstName"));
@@ -150,11 +158,14 @@ export async function revertImpersonateSession(request: Request, redirectTo: str
   session.unset("impersonatorRole");
   const logId = session.get("impersonationLogId");
   session.unset("impersonationLogId");
-  await db.impersonation.update({ where: { id: logId }, data: { endedAt: new Date() } });
+  await db.impersonation.update({
+    where: { id: logId },
+    data: { endedAt: new Date() },
+  });
   return redirect(redirectTo, {
     headers: {
-      "Set-Cookie": await storage.commitSession(session)
-    }
+      "Set-Cookie": await storage.commitSession(session),
+    },
   });
 }
 
@@ -169,12 +180,14 @@ export async function getUserSession(request: Request) {
     firstName: session?.get("firstName"),
     lastName: session?.get("lastName"),
     role: session?.get("role"),
-    impersonator: session.has("impersonatorId") ? {
-      id: session.get("impersonatorId"),
-      firstName: session.get("impersonatorFirstName"),
-      lastName: session.get("impersonatorLastName"),
-      role: session.get("impersonatorRole"),
-    } : undefined
+    impersonator: session.has("impersonatorId")
+      ? {
+          id: session.get("impersonatorId"),
+          firstName: session.get("impersonatorFirstName"),
+          lastName: session.get("impersonatorLastName"),
+          role: session.get("impersonatorRole"),
+        }
+      : undefined,
   };
 
   if (!userInfo.id) {
@@ -197,32 +210,64 @@ export async function requireUserSession(
   return userSession;
 }
 
-export async function requireAdminRole(request: Request, redirectTo: string = new URL(request.url).pathname) {
+export async function requireAdminRole(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname
+) {
   const userData = await requireUserSession(request, redirectTo);
   const user = await db.user.findUnique({ where: { id: userData.id } });
-  const isAdmin = user?.role === 'Admin';
+  const isAdmin = user?.role === "Admin";
   if (!isAdmin) {
     throw redirect(`/not-found`);
   }
   return user;
 }
 
-export async function impersonateUser(idToImpersonate: string, request: Request, redirectTo: string) {
-  const userToImpersonate = await db.user.findUnique({ where: { id: idToImpersonate } });
-  if (!userToImpersonate) throw redirect('/developer/admin');
+export async function requirePrivilegedRole(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname
+) {
+  const userData = await requireUserSession(request, redirectTo);
+  const user = await db.user.findUnique({ where: { id: userData.id } });
+  const isPrivileged = user?.role === "Privileged" || user?.role === "Admin";
+  if (!isPrivileged) {
+    throw redirect("/not-found");
+  }
+  return user;
+}
+
+export async function impersonateUser(
+  idToImpersonate: string,
+  request: Request,
+  redirectTo: string
+) {
+  const userToImpersonate = await db.user.findUnique({
+    where: { id: idToImpersonate },
+  });
+  if (!userToImpersonate) throw redirect("/developer/admin");
   const session = await getSession(request);
-  const impersonationLog = await db.impersonation.create({ data: {
-    impersonatorId: session.get("userId"),
-    impersonatedId: userToImpersonate.id
-  }});
-  return createImpersonateSession(session, userToImpersonate, impersonationLog.id, redirectTo);
+  const impersonationLog = await db.impersonation.create({
+    data: {
+      impersonatorId: session.get("userId"),
+      impersonatedId: userToImpersonate.id,
+    },
+  });
+  return createImpersonateSession(
+    session,
+    userToImpersonate,
+    impersonationLog.id,
+    redirectTo
+  );
 }
 
 export async function signout(request: Request) {
   const session = await getSession(request);
   const impersonationLogId = session.get("impersonationLogId");
   if (impersonationLogId) {
-    await db.impersonation.update({ where: { id: impersonationLogId }, data: { endedAt: new Date() } });
+    await db.impersonation.update({
+      where: { id: impersonationLogId },
+      data: { endedAt: new Date() },
+    });
   }
   const headers = await getSignoutHeaders(session);
   return redirect("/developer", { headers });
@@ -230,6 +275,6 @@ export async function signout(request: Request) {
 
 export async function getSignoutHeaders(session: Session) {
   return new Headers({
-    "Set-Cookie": await storage.destroySession(session)
+    "Set-Cookie": await storage.destroySession(session),
   });
 }
