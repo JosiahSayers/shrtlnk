@@ -1,5 +1,6 @@
 import {
   CartesianGrid,
+  Legend,
   Line,
   LineChart,
   Tooltip,
@@ -39,6 +40,7 @@ export default function LineChartCard({
           <XAxis dataKey={xAxisKey} tick={false} />
           <YAxis />
           <Tooltip />
+          {dataKeyArray.length > 1 && <Legend />}
           {dataKeyArray.map((key, index) => (
             <Line
               key={key}
