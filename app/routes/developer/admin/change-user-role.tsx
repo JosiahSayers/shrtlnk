@@ -1,4 +1,4 @@
-import { Button, Select, useToast } from "@chakra-ui/react";
+import { Button, HStack, Select, useToast } from "@chakra-ui/react";
 import { parseForm } from "@formdata-helper/remix";
 import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import {
@@ -85,24 +85,27 @@ export default function ChangeUserRole() {
     <div className="container">
       <AdminHeading>Change User Role</AdminHeading>
       <Form method="post">
-        <Select
-          name="user"
-          id="impersonate-select"
-          bg="white"
-          onChange={(event) => {
-            setSelectedUser(users.find((u) => u.id === event.target.value)!);
-            setSelectedRole(
-              users.find((u) => u.id === event.target.value)!.role
-            );
-          }}
-          value={selectedUser.id}
-        >
-          {users.map((user) => (
-            <option value={user.id} key={user.id}>
-              {user.firstName} {user.lastName} ({user.email})
-            </option>
-          ))}
-        </Select>
+        <HStack>
+          <label htmlFor="user">User:</label>
+          <Select
+            name="user"
+            id="user"
+            bg="white"
+            onChange={(event) => {
+              setSelectedUser(users.find((u) => u.id === event.target.value)!);
+              setSelectedRole(
+                users.find((u) => u.id === event.target.value)!.role
+              );
+            }}
+            value={selectedUser.id}
+          >
+            {users.map((user) => (
+              <option value={user.id} key={user.id}>
+                {user.firstName} {user.lastName} ({user.email})
+              </option>
+            ))}
+          </Select>
+        </HStack>
 
         <BoxComponent className="my-3">
           <div className="card-body">
@@ -114,7 +117,9 @@ export default function ChangeUserRole() {
                 <strong>Email:</strong> {selectedUser.email}
               </p>
               <p>
-                <strong className="mr-2">Role:</strong>
+                <label htmlFor="selectedRole">
+                  <strong className="mr-2">Role:</strong>
+                </label>
                 <Select
                   name="selectedRole"
                   id="selectedRole"
