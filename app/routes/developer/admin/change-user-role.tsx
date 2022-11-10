@@ -26,10 +26,11 @@ interface LoaderData {
 
 const validRoles = ["Developer", "Privileged", "Admin"];
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  const currentUser = await requireAdminRole(request);
   const users = await db.user.findMany({
     orderBy: { firstName: "asc" },
-    where: { role: { not: "Admin" } },
+    where: { id: { not: currentUser.id } },
   });
   return {
     users: users.map(({ id, email, firstName, lastName, role }) => ({
@@ -120,7 +121,6 @@ export default function ChangeUserRole() {
                   display="inline-block"
                   size="sm"
                   width="fit-content"
-                  variant="filled"
                   onChange={(event) => {
                     setSelectedRole(event.target.value);
                   }}
@@ -137,7 +137,13 @@ export default function ChangeUserRole() {
           </div>
         </BoxComponent>
 
-        <Button type="submit" variant="solid" isLoading={!!submission}>
+        <Button
+          bg={"blue.400"}
+          color={"white"}
+          type="submit"
+          variant="solid"
+          isLoading={!!submission}
+        >
           Change Role
         </Button>
       </Form>
