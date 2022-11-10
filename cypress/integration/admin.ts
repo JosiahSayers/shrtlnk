@@ -9,12 +9,10 @@ describe("Admin", () => {
       cy.findByText("Admin Tools");
       cy.findAllByText("Dashboard");
       cy.findByText("Impersonate");
-      cy.findByText("Shrtlnk Totals");
-      cy.findByText("User Totals");
-      cy.findByText("New Shrtlnks");
-      cy.findByText("Shrtlnks Loaded");
-      cy.findByText("New Users");
-      cy.findByText("New Applications");
+      cy.findAllByText("Shrtlnk Totals").should("have.class", "card-title");
+      cy.findAllByText("User Totals").should("have.class", "card-title");
+      cy.findAllByText("Shrtlnks").should("have.class", "card-title");
+      cy.findAllByText("Users").should("have.class", "card-title");
     });
   });
 
@@ -80,7 +78,7 @@ describe("Admin", () => {
     it("Allows the user to click on a date and see all blocked URLs from that date", () => {
       cy.findAllByText("3/5/2022, 7:34:27 AM").first().click();
       cy.location("pathname").should("eq", "/developer/admin/blocked-urls");
-      cy.location("search").should("eq", "?date=3/5/2022");
+      cy.location("search").should("eq", "?utc_date=3/5/2022");
     });
   });
 
@@ -114,7 +112,9 @@ describe("Admin", () => {
     });
 
     it("Allows you to filter to a specific date", () => {
-      cy.location("pathname").then((path) => cy.visit(`${path}?date=3/8/2022`));
+      cy.location("pathname").then((path) =>
+        cy.visit(`${path}?utc_date=3/8/2022`)
+      );
       cy.get("h3").should("have.text", "Filtered to date: 3/8/2022 (show all)");
       cy.get("tr").should("have.length", 2);
 
