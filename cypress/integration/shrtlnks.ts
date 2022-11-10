@@ -1,3 +1,5 @@
+import { Shrtlnk } from "@prisma/client";
+
 describe("Home Page", () => {
   before(() => cy.visit("/"));
 
@@ -34,12 +36,27 @@ describe("Home Page", () => {
 });
 
 describe("shrtlnk functionality", () => {
-  before(() => cy.visit("/"));
+  beforeEach(() => cy.visit("/"));
 
   it("allows users to submit valid links", () => {
     cy.findByLabelText("URL TO SHORTEN:").type("https://google.com");
     cy.findByText("CREATE SHORT LINK").click();
     cy.findByText("SUCCESS! HERE'S YOUR NEW LINK:");
+  });
+
+  it("marks links as eligible for ads", () => {
+    cy.findByLabelText("URL TO SHORTEN:").type("https://google.com");
+    cy.findByText("CREATE SHORT LINK").click();
+    cy.findByText("SUCCESS! HERE'S YOUR NEW LINK:");
+    cy.get("#shrtlnk").then((currentSubject) => {
+      console.log({ currentSubject });
+      const key = currentSubject.text().split("/")[1];
+      cy.task("getShrtlnk", key).then((shrtlnk) => {
+        expect(shrtlnk).not.to.be.null;
+        expect(shrtlnk).not.to.be.undefined;
+        expect((shrtlnk as Shrtlnk).eligibleForAd).to.eq(true);
+      });
+    });
   });
 
   it("redirects to the not-found page when a shrtlnk key is not found", () => {

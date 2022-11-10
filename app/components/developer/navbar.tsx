@@ -251,5 +251,12 @@ const navItems = (userInfo?: UserInfo): NavItem[] => {
       href: "/developer/admin",
     });
   }
+
+  if (userInfo?.role === "Admin" || userInfo?.role === "Privileged") {
+    items.push({
+      label: "Shorten Link (without ads)",
+      href: "/developer/create-privileged-link",
+    });
+  }
   return items;
 };

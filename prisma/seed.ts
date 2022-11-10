@@ -59,6 +59,22 @@ async function seed() {
     },
   });
 
+  const privilegedUser = await db.user.upsert({
+    where: { email: "privileged@test.com" },
+    update: {
+      ...user1Data,
+      firstName: "Privileged",
+      email: "privileged@test.com",
+      role: "Privileged",
+    },
+    create: {
+      ...user1Data,
+      firstName: "Privileged",
+      email: "privileged@test.com",
+      role: "Privileged",
+    },
+  });
+
   const shrtlnkWebsiteApplicationData = {
     name: "shrtlnk",
     website: "shrtlnk.dev",

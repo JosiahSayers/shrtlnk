@@ -19,6 +19,10 @@ const getLinks = () => [
     href: "blocked-urls",
     title: "Blocked URLs",
   },
+  {
+    href: "change-user-role",
+    title: "Change User Role",
+  },
 ];
 
 type LoaderData = { links: ReturnType<typeof getLinks> };

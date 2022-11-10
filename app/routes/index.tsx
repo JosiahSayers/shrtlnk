@@ -6,7 +6,7 @@ import joi from "joi";
 import { createShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/index.css";
 
-const validateUrl = (
+export const validateUrl = (
   url: FormDataEntryValue | string | null
 ): joi.ValidationResult<string> => {
   const urlSchema = joi.string().label("URL").uri();
