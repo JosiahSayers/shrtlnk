@@ -4,6 +4,7 @@ import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Form, useLoaderData, useTransition } from "@remix-run/react";
 import { useState } from "react";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
+import { BoxComponent } from "~/components/developer/box";
 import { db } from "~/utils/db.server";
 import {
   impersonateUser,
@@ -77,34 +78,36 @@ export default function Impersonate() {
           ))}
         </select>
 
-        <div className="card text-center mb-3">
+        <BoxComponent className="my-3">
           <div className="card-body">
             <h5 className="card-title">
               {selected.firstName} {selected.lastName}
             </h5>
             <div className="card-text">
-              <p>Email: {selected.email}</p>
               <p>
-                Created:{" "}
+                <strong>Email:</strong> {selected.email}
+              </p>
+              <p>
+                <strong>Created:</strong>{" "}
                 {Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
                   new Date(selected.createdAt)
                 )}
               </p>
               <p>
-                Last Login:{" "}
+                <strong>Last Login:</strong>{" "}
                 {Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
                   new Date(selected.lastLoginSuccess)
                 )}
               </p>
               <p>
-                Last Login Attempt:{" "}
+                <strong>Last Login Attempt:</strong>{" "}
                 {Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
                   new Date(selected.lastLoginAttempt)
                 )}
               </p>
             </div>
           </div>
-        </div>
+        </BoxComponent>
 
         <Button
           type="submit"
