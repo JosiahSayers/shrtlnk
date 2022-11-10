@@ -9,7 +9,10 @@ export async function createShrtlnk(
   eligibleForAd = true
 ): Promise<Shrtlnk | null> {
   const application = await db.application.findFirst({ where: { apiKey } });
-  if (!application) return null;
+  if (!application) {
+    console.error(`application not found when creating shrtlnk. ${apiKey}`);
+    return null;
+  }
 
   if (
     !isValidUrl(url) ||

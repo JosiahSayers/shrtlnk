@@ -59,6 +59,7 @@ export const action: ActionFunction = async ({ request }) => {
       false
     );
   } catch (e) {
+    console.error("Failed creating privileged link", e);
     // throw away unsafe URL error and return generic error
   }
 

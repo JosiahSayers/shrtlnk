@@ -40,6 +40,7 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     link = await createShrtlnk(validationResult.value, process.env.API_KEY!);
   } catch (e) {
+    console.error("Failed creating link from home page", e);
     // throw away unsafe URL error and return generic error
   }
 
