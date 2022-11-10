@@ -27,6 +27,7 @@ model Shrtlnk {
   id            String        @id @default(uuid())
   key           String        @unique
   url           String
+  eligibleForAd Boolean       @default(true)
   createdAt     DateTime      @default(now())
   applicationId String?
   application   Application?  @relation(fields: [applicationId], references: [id], onDelete: SetNull)

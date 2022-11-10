@@ -12,6 +12,10 @@ export const loader: LoaderFunction = async ({ params }) => {
     return redirect("/not-found");
   }
 
+  if (!link.eligibleForAd) {
+    return redirect(link.url);
+  }
+
   return json(link);
 };
 
