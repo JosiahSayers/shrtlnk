@@ -215,6 +215,21 @@ async function seed() {
       },
     });
   }
+
+  if (
+    !existingLogs.find(
+      (log) => log.totalThreatsFound === 0 && log.status === "success"
+    )
+  ) {
+    await db.cleanLinksLog.create({
+      data: {
+        createdAt: testDate,
+        completedAt: new Date(testDate.getTime() + 5000),
+        totalThreatsFound: 0,
+        status: "success",
+      },
+    });
+  }
 }
 
 seed();

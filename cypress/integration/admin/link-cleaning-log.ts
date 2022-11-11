@@ -13,11 +13,11 @@ describe("Admin Link Cleaning Log", () => {
     cy.findByText("Time to complete");
     cy.findByText("Links cleaned");
     cy.findByText("Status");
-    cy.findAllByText("3/5/2022, 7:34:27 AM").should("have.length", 2);
-    cy.findAllByText("5.00s").should("have.length", 2);
+    cy.findAllByText("3/5/2022, 7:34:27 AM").should("have.length", 3);
+    cy.findAllByText("5.00s").should("have.length", 3);
     cy.findByText(4);
-    cy.findByText(0);
-    cy.findByText("success");
+    cy.findAllByText(0).should("have.length", 2);
+    cy.findAllByText("success").should("have.length", 2);
     cy.findByText("failure");
   });
 
