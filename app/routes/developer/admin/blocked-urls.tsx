@@ -16,6 +16,9 @@ import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { BoxComponent } from "~/components/developer/box";
 import { db } from "~/utils/db.server";
 import Link from "~/components/developer/Link";
+import Pagination, {
+  getPaginationData,
+} from "~/components/developer/pagination";
 
 type LoaderData = {
   urls: Array<
@@ -28,15 +31,21 @@ type LoaderData = {
     }
   >;
   date?: string;
+  currentPage: number;
+  totalPages: number;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const { currentPage, pageSize, skip } = getPaginationData(request);
   const dateString = new URL(request.url).searchParams.get("utc_date");
   const commonQueryOptions = {
     orderBy: { createdAt: "desc" },
     include: { application: { select: { name: true } } },
+    skip,
+    take: pageSize,
   } as any;
   let urls = [];
+  let totalPages: number;
 
   if (dateString) {
     const date = DateTime.fromFormat(dateString, "M/d/yyyy", { zone: "UTC" })
@@ -49,21 +58,38 @@ export const loader: LoaderFunction = async ({ request }) => {
     date.setUTCHours(0);
     nextDay.setUTCHours(0);
 
-    urls = await db.blockedUrl.findMany({
+    const query = {
       ...commonQueryOptions,
       where: {
         AND: [{ createdAt: { gte: date } }, { createdAt: { lt: nextDay } }],
       },
-    });
+    };
+
+    const [urlResults, totalResults] = await db.$transaction([
+      db.blockedUrl.findMany(query),
+      db.blockedUrl.count({ ...query, take: undefined, skip: undefined, include: undefined }),
+    ]);
+    urls = urlResults;
+    totalPages = Math.ceil(totalResults / pageSize);
   } else {
-    urls = await db.blockedUrl.findMany(commonQueryOptions);
+    const [urlResults, totalResults] = await db.$transaction([
+      db.blockedUrl.findMany(commonQueryOptions),
+      db.blockedUrl.count({
+        ...commonQueryOptions,
+        take: undefined,
+        skip: undefined,
+        include: undefined,
+      }),
+    ]);
+    urls = urlResults;
+    totalPages = Math.ceil(totalResults / pageSize);
   }
 
-  return { urls, date: dateString };
+  return { urls, date: dateString, currentPage, totalPages };
 };
 
 export default function BlockedURLs() {
-  const { urls, date } = useLoaderData<LoaderData>();
+  const { urls, date, currentPage, totalPages } = useLoaderData<LoaderData>();
   return (
     <div className="container">
       <AdminHeading>Blocked URLs</AdminHeading>
@@ -99,6 +125,7 @@ export default function BlockedURLs() {
           </Table>
         </TableContainer>
       </BoxComponent>
+      <Pagination currentPage={currentPage} totalPages={totalPages} />
     </div>
   );
 }

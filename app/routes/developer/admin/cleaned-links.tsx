@@ -14,21 +14,31 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { DateTime } from "luxon";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { BoxComponent } from "~/components/developer/box";
+import Pagination, {
+  getPaginationData,
+} from "~/components/developer/pagination";
 import { db } from "~/utils/db.server";
 
-type LoaderData = Array<
-  CleanLinksLog & {
-    duration: string;
-    createdAt: string;
-    completedAt: string | null;
-  }
->;
+type LoaderData = {
+  logs: Array<
+    CleanLinksLog & {
+      duration: string;
+      createdAt: string;
+      completedAt: string | null;
+    }
+  >;
+  currentPage: number;
+  totalPages: number;
+};
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  const { currentPage, pageSize, skip } = getPaginationData(request);
   const logs = await db.cleanLinksLog.findMany({
     orderBy: { createdAt: "desc" },
+    skip,
+    take: pageSize,
   });
-  return logs.map((log) => {
+  const mappedLogs = logs.map((log) => {
     const created = DateTime.fromJSDate(log.createdAt);
     const completed = DateTime.fromJSDate(log.completedAt ?? new Date());
     const diff = completed.diff(created, "seconds").toObject();
@@ -39,15 +49,35 @@ export const loader: LoaderFunction = async () => {
         : "Still running...",
     };
   });
+  const totalLogs = await db.cleanLinksLog.count();
+  const totalPages = Math.ceil(totalLogs / pageSize);
+
+  return {
+    logs: mappedLogs,
+    currentPage,
+    totalPages,
+  };
 };
 
 export default function CleanedLinks() {
-  const logs = useLoaderData<LoaderData>();
+  const { logs, currentPage, totalPages } = useLoaderData<LoaderData>();
 
   const getDateForUrl = (date: string) =>
     DateTime.fromISO(date, {
       zone: "UTC",
     }).toFormat("M/d/yyyy");
+
+  const getBackgroundColor = (log: CleanLinksLog) => {
+    if (log.status === "failure") {
+      return "red.100";
+    }
+
+    if (log.totalThreatsFound) {
+      return "teal.100";
+    }
+
+    return "";
+  }
 
   return (
     <div className="container">
@@ -67,13 +97,7 @@ export default function CleanedLinks() {
               {logs.map((log) => (
                 <Tr
                   key={log.id}
-                  backgroundColor={
-                    log.status === "failure"
-                      ? "red.100"
-                      : log.totalThreatsFound
-                      ? "teal.100"
-                      : "Background"
-                  }
+                  backgroundColor={getBackgroundColor(log)}
                 >
                   <Td>
                     <ChakraLink
@@ -94,6 +118,7 @@ export default function CleanedLinks() {
           </Table>
         </TableContainer>
       </BoxComponent>
+      <Pagination currentPage={currentPage} totalPages={totalPages} />
     </div>
   );
 }
