@@ -1,5 +1,7 @@
-import { User } from "@prisma/client";
+import { PasswordReset, User } from "@prisma/client";
 import { createCookieSessionStorage, redirect, Session } from "@remix-run/node";
+import ShortUniqueId from "short-unique-id";
+import { passwordResetEmail } from "~/utils/email.server";
 
 import { db } from "./db.server";
 import {
@@ -89,6 +91,74 @@ export async function changePassword(
     where: { id },
     data: { password: await hashPassword(newPassword) },
   });
+}
+
+export async function startPasswordReset(
+  email: string
+): Promise<{ userFound: boolean; success: boolean }> {
+  try {
+    const user = await db.user.findUnique({ where: { email } });
+    if (!user) {
+      return { userFound: false, success: false };
+    }
+    await db.passwordReset.updateMany({
+      data: { valid: false },
+      where: { userId: user.id, valid: true },
+    });
+    const passwordReset = await db.passwordReset.create({
+      data: {
+        userId: user.id,
+        key: new ShortUniqueId({
+          dictionary: "alphanum_lower",
+          length: 55,
+        }).randomUUID(),
+      },
+    });
+    const emailSent = await passwordResetEmail(user, passwordReset);
+    return { userFound: true, success: emailSent };
+  } catch (e) {
+    console.error("Error setting up password reset", e);
+    return { userFound: true, success: false };
+  }
+}
+
+export function isPasswordResetValid(
+  passwordReset: PasswordReset | null
+): passwordReset is PasswordReset {
+  return (
+    !!passwordReset &&
+    passwordReset.valid &&
+    !passwordReset.usedAt &&
+    new Date().getTime() - passwordReset.createdAt.getTime() <
+      24 * 60 * 60 * 1000 // 24 hours
+  );
+}
+
+export async function resetPassword(
+  passwordChangeKey: string,
+  newPassword: string
+) {
+  try {
+    const passwordReset = await db.passwordReset.findUnique({
+      where: { key: passwordChangeKey },
+    });
+    if (!isPasswordResetValid(passwordReset)) {
+      return { passwordResetValid: false, success: false };
+    }
+
+    await db.user.update({
+      where: { id: passwordReset.userId },
+      data: { password: await hashPassword(newPassword) },
+    });
+    await db.passwordReset.update({
+      where: { id: passwordReset.id },
+      data: { usedAt: new Date() },
+    });
+    return { passwordResetValid: true, success: true };
+  } catch (e) {
+    console.error("error resetting a user's password", e);
+    return { success: false };
+  }
 }
 
 const sessionSecret = process.env.SESSION_SECRET!;

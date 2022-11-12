@@ -9,11 +9,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { parseForm } from "@formdata-helper/remix";
-import { ActionFunction, json } from "@remix-run/node";
+import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import {
   Form,
   Link,
   useActionData,
+  useLoaderData,
   useSearchParams,
   useTransition,
 } from "@remix-run/react";
@@ -44,6 +45,13 @@ const validateForm = (form: {
     password: Joi.string().required(),
   });
   return validate(schema, form);
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const passwordResetStatus = new URL(request.url).searchParams.get(
+    "password-reset"
+  );
+  return json({ passwordResetStatus });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -79,6 +87,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function SimpleCard() {
+  const { passwordResetStatus } = useLoaderData();
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   const toast = useToast();
@@ -90,6 +99,27 @@ export default function SimpleCard() {
         title: "Error",
         description: actionData.formLevelError,
         status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+
+    if (passwordResetStatus === "invalid") {
+      toast({
+        title: "Invalid Password Reset Link",
+        description: "This password reset link is invalid",
+        status: "error",
+        duration: null,
+        isClosable: true,
+      });
+    }
+
+    if (passwordResetStatus === "success") {
+      toast({
+        title: "Password Reset",
+        description:
+          "Your password has been reset. You can now log in with your new password.",
+        status: "success",
         duration: 9000,
         isClosable: true,
       });
@@ -157,6 +187,18 @@ export default function SimpleCard() {
                   onClick={() => toast.closeAll()}
                 >
                   Sign up
+                </ChakraLink>
+              </Text>
+
+              <Text align={"center"}>
+                Forgot your password?{" "}
+                <ChakraLink
+                  as={Link}
+                  to="/developer/request-password-reset"
+                  color={"blue.400"}
+                  onClick={() => toast.closeAll()}
+                >
+                  Reset it
                 </ChakraLink>
               </Text>
             </Stack>
