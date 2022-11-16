@@ -50,9 +50,8 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const { userFound, success } = await startPasswordReset(email);
-  // if the user isn't found, return success message to not leak emails
-  if (userFound && !success) {
+  const { success } = await startPasswordReset(email);
+  if (!success) {
     return json(
       { formLevelError: "Something went wrong, please try again" },
       500
@@ -62,7 +61,7 @@ export const action: ActionFunction = async ({ request }) => {
   return json({ success: true, fields });
 };
 
-export default function SimpleCard() {
+export default function RequestPasswordReset() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
   const { submission } = useTransition();

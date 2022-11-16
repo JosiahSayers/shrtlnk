@@ -1,6 +1,5 @@
 import { PasswordReset, User } from "@prisma/client";
 import { createCookieSessionStorage, redirect, Session } from "@remix-run/node";
-import ShortUniqueId from "short-unique-id";
 import { passwordResetEmail } from "~/utils/email.server";
 
 import { db } from "./db.server";
@@ -8,7 +7,12 @@ import {
   authenticateLegacyUser,
   isLegacyUser,
 } from "./legacy-authenticate.server";
-import { doPasswordsMatch, hashPassword } from "./password.server";
+import {
+  createPasswordResetForUser,
+  doPasswordsMatch,
+  hashPassword,
+  invalidateExistingPasswordResets,
+} from "./password.server";
 
 type LoginForm = {
   email: string;
@@ -101,19 +105,11 @@ export async function startPasswordReset(
     if (!user) {
       return { userFound: false, success: false };
     }
-    await db.passwordReset.updateMany({
-      data: { valid: false },
-      where: { userId: user.id, valid: true },
-    });
-    const passwordReset = await db.passwordReset.create({
-      data: {
-        userId: user.id,
-        key: new ShortUniqueId({
-          dictionary: "alphanum_lower",
-          length: 55,
-        }).randomUUID(),
-      },
-    });
+    await invalidateExistingPasswordResets(user.id);
+    const passwordReset = await createPasswordResetForUser(user.id);
+    if (!passwordReset) {
+      return { userFound: true, success: false };
+    }
     const emailSent = await passwordResetEmail(user, passwordReset);
     return { userFound: true, success: emailSent };
   } catch (e) {
@@ -135,12 +131,12 @@ export function isPasswordResetValid(
 }
 
 export async function resetPassword(
-  passwordChangeKey: string,
+  passwordResetKey: string,
   newPassword: string
 ) {
   try {
     const passwordReset = await db.passwordReset.findUnique({
-      where: { key: passwordChangeKey },
+      where: { key: passwordResetKey },
     });
     if (!isPasswordResetValid(passwordReset)) {
       return { passwordResetValid: false, success: false };
