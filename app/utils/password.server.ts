@@ -1,7 +1,7 @@
 import { PasswordReset } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import ShortUniqueId from "short-unique-id";
-import { db } from "~/utils/db.server";
+import { db } from "../utils/db.server";
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);
