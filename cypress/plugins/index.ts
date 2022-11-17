@@ -3,7 +3,10 @@
 import { User } from "@prisma/client";
 import ShortUniqueId from "short-unique-id";
 import { db } from "~/utils/db.server";
-import { hashPassword } from "~/utils/password.server";
+import {
+  createPasswordResetForUser,
+  hashPassword,
+} from "~/utils/password.server";
 
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
@@ -73,6 +76,25 @@ export default function (on: any, config: any) {
       }),
     getShrtlnk: async (key: string) =>
       db.shrtlnk.findUnique({ where: { key } }),
+    getPasswordResetsForUser: async (email: string) => {
+      const user = await db.user.findUnique({ where: { email } });
+      if (!user) {
+        console.error(`unable to find user with email ${email}`);
+        return;
+      }
+      return db.passwordReset.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+      });
+    },
+    createPasswordResetForUser: async (email: string) => {
+      const user = await db.user.findUnique({ where: { email } });
+      if (!user) {
+        console.error(`unable to find user with email ${email}`);
+        return;
+      }
+      return createPasswordResetForUser(user.id);
+    },
   });
   return config;
 }

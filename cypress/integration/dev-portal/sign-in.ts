@@ -2,6 +2,14 @@ describe("Signing into an account", () => {
   beforeEach(() => cy.visit("/developer/signin"));
   after(() => cy.logout());
 
+  it("has a link to the password reset page", () => {
+    cy.findByText("Reset it").should(
+      "have.attr",
+      "href",
+      "/developer/request-password-reset"
+    );
+  });
+
   it("requires email and password", () => {
     cy.findByText("Sign in").click();
     cy.findByText('"email" is not allowed to be empty');
