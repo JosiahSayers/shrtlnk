@@ -29,7 +29,7 @@ jobs:
       run: docker-compose -f docker-compose.ci.yml exec -T app npm run db:seed
 
     - name: Integration Tests
-      run: docker-compose -f docker-compose.ci.yml exec -T -e TEST_COMMAND=run app npm run cypress
+      run: docker-compose -f docker-compose.ci.yml exec -T -e TEST_COMMAND=run -e CYPRESS_RECORD_KEY=${{ secrets.CYPRESS_RECORD_KEY }} app npm run cypress -- --record
 
     - name: Stop containers
       if: always()
