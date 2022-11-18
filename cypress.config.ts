@@ -1,9 +1,9 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
-  projectId: '9osebq',
-  video: false,
-  screenshotOnRunFailure: false,
+  projectId: "9osebq",
+  video: true,
+  screenshotOnRunFailure: true,
   retries: {
     runMode: 2,
     openMode: 0,
