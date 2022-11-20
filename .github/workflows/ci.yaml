@@ -24,19 +24,22 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 18
+        cache: 'npm'
 
-    - run: npm i
+    - name: Install Deps
+      run: npm i
 
-    - run: npm run build
-
-    - name: DB container
-      run: docker-compose -f docker-compose.ci.yml up -d --build --remove-orphans --force-recreate
+    - name: Build app
+      run: npm run build
 
     - name: "Lint"
       run: npm run lint
 
     - name: "Unit Tests"
       run: npm run test
+
+    - name: DB container
+      run: docker-compose -f docker-compose.ci.yml up -d --build --remove-orphans --force-recreate
 
     - name: Migrate database
       run: npm run db:migrate
