@@ -1,8 +1,15 @@
 import { Flex, useColorModeValue } from "@chakra-ui/react";
-import { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json, LinksFunction, LoaderFunction } from "@remix-run/node";
 import { Form, Outlet, useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
+import LogRocket from "logrocket";
 import NavBar from "~/components/developer/navbar";
 import { getUserSession, UserInfo } from "~/utils/session.server";
+
+interface LoaderData {
+  userInfo?: UserInfo;
+  useLogRocket: boolean;
+}
 
 export const links: LinksFunction = () => [
   {
@@ -13,11 +20,28 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userInfo = await getUserSession(request);
-  return { userInfo };
+  const useLogRocket = process.env.NODE_ENV === "production";
+  return json<LoaderData>({ userInfo, useLogRocket });
 };
 
 export default function DeveloperRoot() {
-  const { userInfo } = useLoaderData<{ userInfo?: UserInfo }>();
+  const { userInfo, useLogRocket } = useLoaderData<LoaderData>();
+
+  useEffect(() => {
+    if (useLogRocket) {
+      LogRocket.init("hdaq1j/shrtlnk");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (useLogRocket && userInfo) {
+      LogRocket.identify(userInfo.id, {
+        name: `${userInfo.firstName} ${userInfo.lastName}`,
+        email: userInfo.email,
+        role: userInfo.role,
+      });
+    }
+  }, [userInfo]);
 
   return (
     <>

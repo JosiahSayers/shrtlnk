@@ -78,7 +78,7 @@ export const action: ActionFunction = async ({ request }) => {
   );
 };
 
-export default function SimpleCard() {
+export default function SignIn() {
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   const toast = useToast();
