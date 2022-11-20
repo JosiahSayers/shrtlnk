@@ -1,13 +1,18 @@
 import { User, PasswordReset } from "@prisma/client";
 import sendgrid from "@sendgrid/mail";
 
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY!);
+const shouldSendEmail = process.env.NODE_ENV === "production";
 
 export async function passwordResetEmail(
   user: User,
   passwordReset: PasswordReset
 ): Promise<any> {
+  if (!shouldSendEmail) {
+    return true;
+  }
+
   try {
+    sendgrid.setApiKey(process.env.SENDGRID_API_KEY!);
     await sendgrid.send({
       to: user.email,
       from: "no-reply@shrtlnk.dev",

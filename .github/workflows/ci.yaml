@@ -12,6 +12,7 @@ jobs:
       PORT: 3000
       API_KEY: shrtlnk-test-api-key
       SESSION_SECRET: super-secure-secret
+      SENDGRID_API_KEY: SG.testing
       BASE_URL: http://localhost:3000
       SAFE_BROWSING_API_KEY: ${{ secrets.SAFE_BROWSING_API_KEY }}
 
