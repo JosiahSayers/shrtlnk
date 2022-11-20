@@ -33,6 +33,7 @@
     "bcryptjs": "^2.4.3",
     "framer-motion": "^6.2.10",
     "joi": "^17.6.0",
+    "logrocket": "^3.0.1",
     "luxon": "^2.4.0",
     "pbkdf2-hmac": "^1.0.4",
     "react": "^17.0.2",

@@ -180,6 +180,7 @@ export async function createUserSession(user: User, redirectTo: string) {
   session.set("firstName", user.firstName);
   session.set("lastName", user.lastName);
   session.set("role", user.role);
+  session.set("email", user.email);
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
@@ -246,6 +247,7 @@ export async function getUserSession(request: Request) {
     firstName: session?.get("firstName"),
     lastName: session?.get("lastName"),
     role: session?.get("role"),
+    email: session?.get("email"),
     impersonator: session.has("impersonatorId")
       ? {
           id: session.get("impersonatorId"),

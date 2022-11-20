@@ -86,7 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
   );
 };
 
-export default function SimpleCard() {
+export default function SignIn() {
   const { passwordResetStatus } = useLoaderData();
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
