@@ -19,7 +19,7 @@ export async function passwordResetEmail(
       templateId: "d-85b380b4bcd8493c9c581a53f23cacde",
       dynamicTemplateData: {
         name: `${user.firstName} ${user.lastName}`,
-        resetLink: `https://shrtlnk.dev/developer/change-password?reset=${passwordReset.key}`,
+        resetLink: `https://shrtlnk.dev/developer/reset-password?key=${passwordReset.key}`,
       },
     });
     return true;
