@@ -7,29 +7,59 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
+      NODE_ENV: testing
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/shrtlnk
+      PORT: 3000
+      API_KEY: shrtlnk-test-api-key
+      SESSION_SECRET: super-secure-secret
+      SENDGRID_API_KEY: SG.testing
+      BASE_URL: http://localhost:3000
       SAFE_BROWSING_API_KEY: ${{ secrets.SAFE_BROWSING_API_KEY }}
+      TZ: America/New_York
 
     steps:
     - name: Setup - Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
-    - name: Start API and DB containers
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+
+    - name: DB container
       run: docker-compose -f docker-compose.ci.yml up -d --build --remove-orphans --force-recreate
 
+    - name: Install Deps
+      run: npm i
+
+    - name: Build app
+      run: npm run build
+
     - name: "Lint"
-      run: "docker-compose -f docker-compose.ci.yml exec -T app npm run lint"
+      run: npm run lint
 
     - name: "Unit Tests"
-      run: "docker-compose -f docker-compose.ci.yml exec -T app npm run test"
+      run: npm run test
 
     - name: Migrate database
-      run: docker-compose -f docker-compose.ci.yml exec -T app npm run db:migrate
+      run: npm run db:migrate
 
     - name: Seed database
-      run: docker-compose -f docker-compose.ci.yml exec -T app npm run db:seed
+      run: npm run db:seed
 
     - name: Integration Tests
-      run: docker-compose -f docker-compose.ci.yml exec -T -e TEST_COMMAND=run app npm run cypress
+      uses: cypress-io/github-action@v4
+      with:
+        browser: chrome
+        record: true
+        start: npm run dev
+        wait-on: 'http://localhost:3000/health'
+      env:
+        CYPRESS_BASE_URL: http://localhost:3000
+        # pass the Dashboard record key as an environment variable
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        # pass GitHub token to allow accurately detecting a build vs a re-run build
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Stop containers
       if: always()

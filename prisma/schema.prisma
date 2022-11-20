@@ -75,6 +75,17 @@ model User {
   applications            Application[]
   initiatedImpersonations Impersonation[] @relation("impersonator")
   impersonations          Impersonation[] @relation("impersonated")
+  passwordResets          PasswordReset[] @relation("password_reset")
+}
+
+model PasswordReset {
+  id        String    @id @default(uuid())
+  key       String    @unique
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+  valid     Boolean   @default(true)
+  userId    String
+  user      User      @relation("password_reset", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Impersonation {
