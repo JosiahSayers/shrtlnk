@@ -1,5 +1,6 @@
 import { User, PasswordReset } from "@prisma/client";
 import sendgrid from "@sendgrid/mail";
+import { logger } from "~/utils/logger.server";
 
 const shouldSendEmail = process.env.NODE_ENV === "production";
 
@@ -24,7 +25,7 @@ export async function passwordResetEmail(
     });
     return true;
   } catch (e) {
-    console.error("Error sending password reset email", e);
+    logger.error("Error sending password reset email", e);
     return false;
   }
 }

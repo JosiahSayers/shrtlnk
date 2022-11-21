@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { createApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
+import { logger } from "~/utils/logger.server";
 import { requireUserSession } from "~/utils/session.server";
 
 type ActionData = {
@@ -73,7 +74,7 @@ export const action: ActionFunction = async ({ request }) => {
     });
     return redirect("/developer/applications");
   } catch (e) {
-    console.log(e);
+    logger.error("Failed to create application", e);
     return json(
       {
         formLevelError: "Something went wrong, please try again",

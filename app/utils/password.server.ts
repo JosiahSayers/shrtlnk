@@ -1,6 +1,7 @@
 import { PasswordReset } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import ShortUniqueId from "short-unique-id";
+import { logger } from "~/utils/logger.server";
 import { db } from "../utils/db.server";
 
 export async function hashPassword(password: string): Promise<string> {
@@ -24,7 +25,7 @@ export async function invalidateExistingPasswordResets(
     });
     return true;
   } catch (e) {
-    console.error(
+    logger.error(
       `Error invalidating existing password resets for ${userId}`,
       e
     );
@@ -46,7 +47,7 @@ export async function createPasswordResetForUser(
       },
     });
   } catch (e) {
-    console.error(`Error creating password reset for user ${userId}`, e);
+    logger.error(`Error creating password reset for user ${userId}`, e);
     return null;
   }
 }

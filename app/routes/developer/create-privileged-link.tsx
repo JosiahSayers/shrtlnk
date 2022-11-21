@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import TextInput from "~/components/developer/text-input";
 import { validateUrl } from "~/routes";
 import { createShrtlnk } from "~/shrtlnk.server";
+import { logger } from "~/utils/logger.server";
 import { requirePrivilegedRole } from "~/utils/session.server";
 
 interface ActionData {
@@ -59,7 +60,7 @@ export const action: ActionFunction = async ({ request }) => {
       false
     );
   } catch (e) {
-    console.error("Failed creating privileged link", e);
+    logger.error("Failed creating privileged link", e);
     // throw away unsafe URL error and return generic error
   }
 

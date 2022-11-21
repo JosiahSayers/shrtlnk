@@ -5,6 +5,7 @@ import { Form, Link, useActionData } from "@remix-run/react";
 import joi from "joi";
 import { createShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/index.css";
+import { logger } from "~/utils/logger.server";
 
 export const validateUrl = (
   url: FormDataEntryValue | string | null
@@ -40,7 +41,7 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     link = await createShrtlnk(validationResult.value, process.env.API_KEY!);
   } catch (e) {
-    console.error("Failed creating link from home page", e);
+    logger.error("Failed creating link from home page", e);
     // throw away unsafe URL error and return generic error
   }
 

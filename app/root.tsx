@@ -63,12 +63,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({
-  error,
-}: {
-  error: any;
-}) => {
-  console.error(error);
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   return (
     <html>
       <head>

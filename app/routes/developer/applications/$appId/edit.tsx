@@ -26,6 +26,7 @@ import { updateApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
 import { validate } from "~/utils/get-validation-errors.server";
+import { logger } from "~/utils/logger.server";
 
 type ActionData = {
   formLevelError?: string;
@@ -76,7 +77,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     await updateApp({ id: app.id, name: fields.name, website: fields.website });
     return redirect("/developer/applications");
   } catch (e) {
-    console.log(e);
+    logger.log("Failed to edit application", e);
     return json(
       { formLevelError: "Something went wrong, please try again. " },
       { status: 500 }
