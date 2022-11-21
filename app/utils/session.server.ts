@@ -144,7 +144,11 @@ export async function resetPassword(
 
     await db.user.update({
       where: { id: passwordReset.userId },
-      data: { password: await hashPassword(newPassword) },
+      data: {
+        password: await hashPassword(newPassword),
+        dotnetPassword: null,
+        dotnetSaltArray: null,
+      },
     });
     await db.passwordReset.update({
       where: { id: passwordReset.id },
