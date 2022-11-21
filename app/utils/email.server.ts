@@ -1,6 +1,6 @@
 import { User, PasswordReset } from "@prisma/client";
 import sendgrid from "@sendgrid/mail";
-import { logger } from "~/utils/logger";
+import { logger } from "~/utils/logger.server";
 
 const shouldSendEmail = process.env.NODE_ENV === "production";
 

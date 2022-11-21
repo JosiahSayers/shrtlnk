@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import TextInput from "~/components/developer/text-input";
 import { validateUrl } from "~/routes";
 import { createShrtlnk } from "~/shrtlnk.server";
-import { logger } from "~/utils/logger";
+import { logger } from "~/utils/logger.server";
 import { requirePrivilegedRole } from "~/utils/session.server";
 
 interface ActionData {

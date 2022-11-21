@@ -1,7 +1,7 @@
 import { PasswordReset, User } from "@prisma/client";
 import { createCookieSessionStorage, redirect, Session } from "@remix-run/node";
 import { passwordResetEmail } from "~/utils/email.server";
-import { logger } from "~/utils/logger";
+import { logger } from "~/utils/logger.server";
 
 import { db } from "./db.server";
 import {

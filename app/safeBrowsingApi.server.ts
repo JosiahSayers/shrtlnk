@@ -1,4 +1,4 @@
-import { logger } from "~/utils/logger";
+import { logger } from "~/utils/logger.server";
 
 const apiKey = process.env.SAFE_BROWSING_API_KEY;
 if (!apiKey) throw new Error("SAFE_BROWSING_API_KEY not defined");

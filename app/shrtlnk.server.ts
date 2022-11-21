@@ -1,6 +1,6 @@
 import { Shrtlnk } from "@prisma/client";
 import ShortUniqueId from "short-unique-id";
-import { logger } from "~/utils/logger";
+import { logger } from "~/utils/logger.server";
 import { isUrlSafe } from "./safeBrowsingApi.server";
 import { db } from "./utils/db.server";
 

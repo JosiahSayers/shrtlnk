@@ -26,7 +26,7 @@ import { updateApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
 import { validate } from "~/utils/get-validation-errors.server";
-import { logger } from "~/utils/logger";
+import { logger } from "~/utils/logger.server";
 
 type ActionData = {
   formLevelError?: string;

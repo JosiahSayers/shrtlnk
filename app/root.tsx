@@ -16,7 +16,6 @@ import {
 } from "@remix-run/react";
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
-import { logger } from "~/utils/logger";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -64,12 +63,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({
-  error,
-}: {
-  error: any;
-}) => {
-  logger.error(error);
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   return (
     <html>
       <head>

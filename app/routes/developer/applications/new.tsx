@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import { createApp } from "~/application.server";
 import TextInput from "~/components/developer/text-input";
 import { validate } from "~/utils/get-validation-errors.server";
-import { logger } from "~/utils/logger";
+import { logger } from "~/utils/logger.server";
 import { requireUserSession } from "~/utils/session.server";
 
 type ActionData = {
