@@ -1,3 +1,5 @@
+import { logger } from "~/utils/logger";
+
 const apiKey = process.env.SAFE_BROWSING_API_KEY;
 if (!apiKey) throw new Error("SAFE_BROWSING_API_KEY not defined");
 const apiUrl = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKey}`;
@@ -12,11 +14,14 @@ export const getUrlBatchResponses = async (
       method: "POST",
     });
     if (res.status === 400) {
-      console.log({ urls, request });
+      logger.log("Gota 400 response from getUrlBatchResponses", {
+        urls,
+        request,
+      });
     }
     return res.json();
   } catch (e) {
-    console.error("Failed to check Safe Browsing API", e);
+    logger.error("Failed to check Safe Browsing API", e);
     return null;
   }
 };
@@ -34,7 +39,7 @@ export const isUrlSafe = async (url: string): Promise<boolean> => {
       (Array.isArray(resData.matches) && resData.matches.length === 0)
     );
   } catch (e) {
-    console.error("Failed to check Safe Browsing API", e);
+    logger.error("Failed to check Safe Browsing API", e);
     return true;
   }
 };

@@ -1,6 +1,7 @@
 import { PasswordReset, User } from "@prisma/client";
 import { createCookieSessionStorage, redirect, Session } from "@remix-run/node";
 import { passwordResetEmail } from "~/utils/email.server";
+import { logger } from "~/utils/logger";
 
 import { db } from "./db.server";
 import {
@@ -113,7 +114,7 @@ export async function startPasswordReset(
     const emailSent = await passwordResetEmail(user, passwordReset);
     return { userFound: true, success: emailSent };
   } catch (e) {
-    console.error("Error setting up password reset", e);
+    logger.error("Error setting up password reset", e);
     return { userFound: true, success: false };
   }
 }
@@ -156,7 +157,7 @@ export async function resetPassword(
     });
     return { passwordResetValid: true, success: true };
   } catch (e) {
-    console.error("error resetting a user's password", e);
+    logger.error("error resetting a user's password", e);
     return { success: false };
   }
 }

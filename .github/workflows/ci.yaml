@@ -51,7 +51,7 @@ jobs:
       uses: cypress-io/github-action@v4
       with:
         browser: chrome
-        record: true
+        record: false
         start: npm run dev
         wait-on: 'http://localhost:3000/health'
       env:

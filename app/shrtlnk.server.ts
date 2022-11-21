@@ -1,5 +1,6 @@
 import { Shrtlnk } from "@prisma/client";
 import ShortUniqueId from "short-unique-id";
+import { logger } from "~/utils/logger";
 import { isUrlSafe } from "./safeBrowsingApi.server";
 import { db } from "./utils/db.server";
 
@@ -10,7 +11,7 @@ export async function createShrtlnk(
 ): Promise<Shrtlnk | null> {
   const application = await db.application.findFirst({ where: { apiKey } });
   if (!application) {
-    console.error(`application not found when creating shrtlnk. ${apiKey}`);
+    logger.error(`application not found when creating shrtlnk. ${apiKey}`);
     return null;
   }
 
