@@ -46,7 +46,7 @@ describe("Application list", () => {
     cy.findByText(
       (content, node) => node?.textContent === "API Key: test-api-key"
     ).should("not.exist");
-    cy.get(".api-key-toggle").first().click();
+    cy.get(".api-key-toggle").click({ multiple: true });
     cy.findByText(
       (content, node) => node?.textContent === "API Key: test-api-key"
     );
