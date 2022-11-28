@@ -35,7 +35,8 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
-  return { user, applications: await getApplicationsWithCounts(user.id) };
+  const applications = await getApplicationsWithCounts(user.id);
+  return { user, applications };
 };
 
 export default function Applications() {

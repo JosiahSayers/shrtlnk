@@ -1,6 +1,5 @@
 .hidden-text {
   border: 1px dashed grey;
   padding: 0 0.5rem;
-  cursor: pointer;
   position: relative;
 }
