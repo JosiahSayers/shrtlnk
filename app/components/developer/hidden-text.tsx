@@ -1,4 +1,5 @@
-import { Text, Tooltip } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Button, Text, Tooltip } from "@chakra-ui/react";
 import { ReactNode, useState } from "react";
 
 type Props = {
@@ -8,17 +9,22 @@ type Props = {
 export default function HiddenText({ children }: Props) {
   const [hidden, setHidden] = useState(true);
   return (
-    <Tooltip
-      label={`Click to ${hidden ? "reveal" : "hide"}`}
-      aria-label="A tooltip"
-    >
-      <Text
-        as="span"
+    <>
+      <Button
+        className="api-key-toggle"
+        variant="ghost"
         onClick={() => setHidden(!hidden)}
-        className="hidden-text"
       >
-        {hidden ? "xxxxxxxxxxxxxxxxxxxxxxxxxxx" : children}
-      </Text>
-    </Tooltip>
+        {hidden ? <ViewIcon /> : <ViewOffIcon />}
+      </Button>
+      <Tooltip
+        label={`Click the "eye" icon to ${hidden ? "reveal" : "hide"}`}
+        aria-label="A tooltip"
+      >
+        <Text as="span" className="hidden-text">
+          {hidden ? "xxxxxxxxxxxxxxxxxxxxxxxxxxx" : children}
+        </Text>
+      </Tooltip>
+    </>
   );
 }
