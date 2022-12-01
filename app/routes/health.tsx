@@ -5,8 +5,9 @@ export const loader: LoaderFunction = async () => {
   const dbConnected = await isDbConnected();
   const currentTime = new Date().getTime();
   const status = dbConnected && currentTime ? "ok" : "error";
+  const version = process.env.VERCEL_GIT_COMMIT_SHA;
   return json(
-    { dbConnected, currentTime, status },
+    { dbConnected, currentTime, status, version },
     { status: status === "ok" ? 200 : 500 }
   );
 };
