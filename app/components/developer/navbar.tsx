@@ -14,13 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useMemo } from "react";
+import { useUserInfo } from "~/components/developer/dev-portal-context";
 import type { UserInfo } from "~/utils/session.server";
 
-type Props = {
-  userInfo?: UserInfo;
-};
-
-export default function NavBar({ userInfo }: Props) {
+export default function NavBar() {
+  const userInfo = useUserInfo();
   const { isOpen, onToggle } = useDisclosure();
   const currentNavItems = useMemo(
     () => navItems(userInfo),
@@ -33,25 +31,31 @@ export default function NavBar({ userInfo }: Props) {
 
     return (
       <Stack direction={"row"} spacing={4}>
-        {navItems.map((navItem) => (
-          <Box key={navItem.label}>
-            <ChakraLink
-              as={Link}
-              p={2}
-              fontSize={"sm"}
-              fontWeight={500}
-              color={linkColor}
-              _hover={{
-                textDecoration: "none",
-                color: linkHoverColor,
-              }}
-              to={navItem.href}
-              prefetch="intent"
-            >
-              {navItem.label}
-            </ChakraLink>
-          </Box>
-        ))}
+        {navItems.map((navItem) => {
+          if (navItem.mobileOnly) {
+            return null;
+          }
+
+          return (
+            <Box key={navItem.label}>
+              <ChakraLink
+                as={Link}
+                p={2}
+                fontSize={"sm"}
+                fontWeight={500}
+                color={linkColor}
+                _hover={{
+                  textDecoration: "none",
+                  color: linkHoverColor,
+                }}
+                to={navItem.href}
+                prefetch="intent"
+              >
+                {navItem.label}
+              </ChakraLink>
+            </Box>
+          );
+        })}
       </Stack>
     );
   };
@@ -169,7 +173,6 @@ export default function NavBar({ userInfo }: Props) {
               </Button>
               <Button
                 as={Link}
-                display={{ base: "none", md: "inline-flex" }}
                 fontSize={"sm"}
                 fontWeight={400}
                 variant={"link"}
@@ -224,14 +227,11 @@ interface NavItem {
   label: string;
   subLabel?: string;
   href: string;
+  mobileOnly?: boolean;
 }
 
 const navItems = (userInfo?: UserInfo): NavItem[] => {
-  const items = [
-    {
-      label: "Dev Portal",
-      href: "/developer",
-    },
+  const items: NavItem[] = [
     {
       label: "Documentation",
       href: "/developer/documentation",
@@ -242,6 +242,11 @@ const navItems = (userInfo?: UserInfo): NavItem[] => {
     items.push({
       label: "My Applications",
       href: "/developer/applications",
+    });
+  } else {
+    items.push({
+      label: "Dev Portal",
+      href: "/developer",
     });
   }
 
@@ -258,5 +263,14 @@ const navItems = (userInfo?: UserInfo): NavItem[] => {
       href: "/developer/create-privileged-link",
     });
   }
+
+  if (userInfo) {
+    items.push({
+      label: `Edit Account Information`,
+      href: "/developer/account",
+      mobileOnly: true,
+    });
+  }
+
   return items;
 };

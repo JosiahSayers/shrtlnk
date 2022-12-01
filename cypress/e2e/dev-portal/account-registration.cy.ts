@@ -30,8 +30,7 @@ describe("Registering for an account", () => {
 
   it("redirects to the applications page when logged in", () => {
     cy.login();
-    cy.findAllByText("Dev Portal").filter(":visible").click();
-    cy.findByText("Create Account").click();
+    cy.visit("/developer/register");
     cy.findByText("Test App");
   });
 
