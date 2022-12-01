@@ -31,25 +31,31 @@ export default function NavBar() {
 
     return (
       <Stack direction={"row"} spacing={4}>
-        {navItems.map((navItem) => (
-          <Box key={navItem.label}>
-            <ChakraLink
-              as={Link}
-              p={2}
-              fontSize={"sm"}
-              fontWeight={500}
-              color={linkColor}
-              _hover={{
-                textDecoration: "none",
-                color: linkHoverColor,
-              }}
-              to={navItem.href}
-              prefetch="intent"
-            >
-              {navItem.label}
-            </ChakraLink>
-          </Box>
-        ))}
+        {navItems.map((navItem) => {
+          if (navItem.mobileOnly) {
+            return null;
+          }
+
+          return (
+            <Box key={navItem.label}>
+              <ChakraLink
+                as={Link}
+                p={2}
+                fontSize={"sm"}
+                fontWeight={500}
+                color={linkColor}
+                _hover={{
+                  textDecoration: "none",
+                  color: linkHoverColor,
+                }}
+                to={navItem.href}
+                prefetch="intent"
+              >
+                {navItem.label}
+              </ChakraLink>
+            </Box>
+          );
+        })}
       </Stack>
     );
   };
@@ -167,7 +173,6 @@ export default function NavBar() {
               </Button>
               <Button
                 as={Link}
-                display={{ base: "none", md: "inline-flex" }}
                 fontSize={"sm"}
                 fontWeight={400}
                 variant={"link"}
@@ -222,14 +227,11 @@ interface NavItem {
   label: string;
   subLabel?: string;
   href: string;
+  mobileOnly?: boolean;
 }
 
 const navItems = (userInfo?: UserInfo): NavItem[] => {
-  const items = [
-    {
-      label: "Dev Portal",
-      href: "/developer",
-    },
+  const items: NavItem[] = [
     {
       label: "Documentation",
       href: "/developer/documentation",
@@ -240,6 +242,11 @@ const navItems = (userInfo?: UserInfo): NavItem[] => {
     items.push({
       label: "My Applications",
       href: "/developer/applications",
+    });
+  } else {
+    items.push({
+      label: "Dev Portal",
+      href: "/developer",
     });
   }
 
@@ -256,5 +263,14 @@ const navItems = (userInfo?: UserInfo): NavItem[] => {
       href: "/developer/create-privileged-link",
     });
   }
+
+  if (userInfo) {
+    items.push({
+      label: `Edit Account Information`,
+      href: "/developer/account",
+      mobileOnly: true,
+    });
+  }
+
   return items;
 };
