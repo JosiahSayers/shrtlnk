@@ -14,13 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useMemo } from "react";
+import { useUserInfo } from "~/components/developer/dev-portal-context";
 import type { UserInfo } from "~/utils/session.server";
 
-type Props = {
-  userInfo?: UserInfo;
-};
-
-export default function NavBar({ userInfo }: Props) {
+export default function NavBar() {
+  const userInfo = useUserInfo();
   const { isOpen, onToggle } = useDisclosure();
   const currentNavItems = useMemo(
     () => navItems(userInfo),

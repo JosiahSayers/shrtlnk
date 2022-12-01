@@ -1,10 +1,12 @@
 import { Flex, useColorModeValue } from "@chakra-ui/react";
 import { json, LinksFunction, LoaderFunction } from "@remix-run/node";
-import { Form, Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import LogRocket from "logrocket";
 import NavBar from "~/components/developer/navbar";
 import { getUserSession, UserInfo } from "~/utils/session.server";
+import ImpersonationBar from "~/components/developer/impersonation-bar";
+import { DevPortalContext } from "~/components/developer/dev-portal-context";
 
 interface LoaderData {
   userInfo?: UserInfo;
@@ -44,27 +46,9 @@ export default function DeveloperRoot() {
   }, [userInfo]);
 
   return (
-    <>
-      <NavBar userInfo={userInfo} />
-      {userInfo?.impersonator && (
-        <div className="bg-warning d-flex justify-content-center align-items-center">
-          <p className="mb-0 mr-3">
-            {userInfo.impersonator.firstName} {userInfo.impersonator.lastName}{" "}
-            impersonating!
-          </p>
-          <Form method="post" action="/developer/admin/impersonate">
-            <button
-              type="submit"
-              name="_action"
-              id="_action"
-              value="stop"
-              className="btn btn-link"
-            >
-              Stop Impersonating
-            </button>
-          </Form>
-        </div>
-      )}
+    <DevPortalContext.Provider value={{ userInfo }}>
+      <NavBar />
+      <ImpersonationBar />
       <Flex
         minH="calc(100vh - 60px)"
         w="100vw"
@@ -76,6 +60,6 @@ export default function DeveloperRoot() {
       >
         <Outlet />
       </Flex>
-    </>
+    </DevPortalContext.Provider>
   );
 }

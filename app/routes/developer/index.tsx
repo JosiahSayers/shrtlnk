@@ -1,10 +1,19 @@
 import { Flex, Heading, Stack, Text } from "@chakra-ui/react";
-import { MetaFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction, redirect } from "@remix-run/node";
 import Card from "~/components/developer/card";
+import { getUserSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
   title: "Developer Portal - shrtlnk - Simple Link Shortener",
 });
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const userInfo = await getUserSession(request);
+  if (userInfo) {
+    return redirect("/developer/applications");
+  }
+  return null;
+};
 
 export default function DeveloperHome() {
   return (
