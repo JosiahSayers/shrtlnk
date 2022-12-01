@@ -11,6 +11,7 @@ import { DevPortalContext } from "~/components/developer/dev-portal-context";
 interface LoaderData {
   userInfo?: UserInfo;
   useLogRocket: boolean;
+  release?: string;
 }
 
 export const links: LinksFunction = () => [
@@ -23,15 +24,21 @@ export const links: LinksFunction = () => [
 export const loader: LoaderFunction = async ({ request }) => {
   const userInfo = await getUserSession(request);
   const useLogRocket = process.env.NODE_ENV === "production";
-  return json<LoaderData>({ userInfo, useLogRocket });
+  const release = process.env.VERCEL_GIT_COMMIT_SHA;
+
+  return json<LoaderData>({
+    userInfo,
+    useLogRocket,
+    release,
+  });
 };
 
 export default function DeveloperRoot() {
-  const { userInfo, useLogRocket } = useLoaderData<LoaderData>();
+  const { userInfo, useLogRocket, release } = useLoaderData<LoaderData>();
 
   useEffect(() => {
     if (useLogRocket) {
-      LogRocket.init("hdaq1j/shrtlnk");
+      LogRocket.init("hdaq1j/shrtlnk", { release });
     }
   }, []);
 
