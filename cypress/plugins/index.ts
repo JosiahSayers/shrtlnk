@@ -95,6 +95,7 @@ export default function (on: any, config: any) {
       }
       return createPasswordResetForUser(user.id);
     },
+    getFeedback: async () => db.feedback.findMany(),
   });
   return config;
 }

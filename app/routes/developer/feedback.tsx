@@ -15,6 +15,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
+  useTransition,
 } from "@remix-run/react";
 import { sentenceCase } from "change-case";
 import { useEffect } from "react";
@@ -57,6 +58,7 @@ export default function Feedback() {
   const actionData = useActionData();
   const toast = useToast();
   const navigate = useNavigate();
+  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.error) {
@@ -85,7 +87,7 @@ export default function Feedback() {
     <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
       <Stack align={"center"}>
         <Heading fontSize={"4xl"} textAlign={"center"}>
-          Send Feedback
+          Feedback Form
         </Heading>
         <Text>
           Your feedback is always appreciated. Let us know how we can make
@@ -123,7 +125,7 @@ export default function Feedback() {
                 }}
                 type="submit"
                 onClick={() => toast.closeAll()}
-                // isLoading={!!submission}
+                isLoading={!!submission}
               >
                 Send Feedback
               </Button>

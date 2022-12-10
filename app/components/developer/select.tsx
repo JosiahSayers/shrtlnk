@@ -21,7 +21,7 @@ export default function Select({
   const [value, setValue] = useState(defaultValue ?? values[0]);
   return (
     <HStack>
-      <label htmlFor="user">{label}</label>
+      <label htmlFor={name}>{label}</label>
       <ChakraSelect
         name={name}
         id={id}
