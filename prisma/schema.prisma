@@ -76,6 +76,8 @@ model User {
   initiatedImpersonations Impersonation[] @relation("impersonator")
   impersonations          Impersonation[] @relation("impersonated")
   passwordResets          PasswordReset[] @relation("password_reset")
+  feedbackSubmitted       Feedback[]      @relation("feedback_submission")
+  feedbackAcknowledged    Feedback[]      @relation("feedback_acknowledge")
 }
 
 model PasswordReset {
@@ -96,4 +98,24 @@ model Impersonation {
   impersonator   User      @relation("impersonator", fields: [impersonatorId], references: [id], onDelete: Cascade)
   impersonatedId String
   impersonated   User      @relation("impersonated", fields: [impersonatedId], references: [id], onDelete: Cascade)
+}
+
+enum FeedbackType {
+  bugReport
+  featureRequest
+  suggestion
+  other
+}
+
+model Feedback {
+  id                   String       @id @default(uuid())
+  text                 String
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  from                 User         @relation("feedback_submission", fields: [fromId], references: [id])
+  fromId               String
+  type                 FeedbackType
+  acknowledgedAt       DateTime?
+  acknowledgedBy       User?        @relation("feedback_acknowledge", fields: [acknowledgedByUserId], references: [id])
+  acknowledgedByUserId String?
 }

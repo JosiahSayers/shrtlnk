@@ -239,10 +239,16 @@ const navItems = (userInfo?: UserInfo): NavItem[] => {
   ];
 
   if (userInfo) {
-    items.push({
-      label: "My Applications",
-      href: "/developer/applications",
-    });
+    items.push(
+      {
+        label: "My Applications",
+        href: "/developer/applications",
+      },
+      {
+        label: "Feedback",
+        href: "/developer/feedback",
+      }
+    );
   } else {
     items.push({
       label: "Dev Portal",
