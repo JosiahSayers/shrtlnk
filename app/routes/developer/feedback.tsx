@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import Select from "~/components/developer/select";
 import TextArea from "~/components/developer/text-area";
 import { db } from "~/utils/db.server";
+import { newFeedbackEmail } from "~/utils/email.server";
 import { logger } from "~/utils/logger.server";
 import { requireUserSession } from "~/utils/session.server";
 
@@ -46,6 +47,7 @@ export const action: ActionFunction = async ({ request }) => {
         type: feedbackType,
       },
     });
+    await newFeedbackEmail(`${session.firstName} ${session.lastName}`);
     return json({ success: true });
   } catch (e: any) {
     logger.error(e, { msg: "failed to create feedback record" });
