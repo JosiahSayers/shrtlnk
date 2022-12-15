@@ -53,7 +53,29 @@ export async function newFeedbackEmail(userName: string): Promise<boolean> {
     }
     return true;
   } catch (e: any) {
-    logger.error("e", { msg: "Error sending new feedback email" });
+    logger.error(e, { msg: "Error sending new feedback email" });
+    return false;
+  }
+}
+
+export async function makeUserPrivilegedRoleEmail(user: User): Promise<boolean> {
+  if (!shouldSendEmail) {
+    return true;
+  }
+
+  try {
+    sendgrid.setApiKey(process.env.SENDGRID_API_KEY!);
+    await sendgrid.send({
+      to: user.email,
+      from: "no-reply@shrtlnk.dev",
+      templateId: "d-ba71a3c8cb004f94bc41e0c4724e798c",
+      dynamicTemplateData: {
+        name: user.firstName,
+      },
+    });
+    return true;
+  } catch (e: any) {
+    logger.error(e, { msg: "Error sending make user privileged role email", userId: user.id });
     return false;
   }
 }

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { BoxComponent } from "~/components/developer/box";
 import { db } from "~/utils/db.server";
+import { makeUserPrivilegedRoleEmail } from "~/utils/email.server";
 import { requireAdminRole } from "~/utils/session.server";
 
 interface LoaderData {
@@ -54,10 +55,11 @@ export const action: ActionFunction = async ({ request }) => {
   ) {
     return json({ msg: "form not valid" }, 403);
   }
-  await db.user.update({
+  const user = await db.user.update({
     where: { id: form.user },
     data: { role: form.selectedRole },
   });
+  await makeUserPrivilegedRoleEmail(user)
   return json({ userUpdated: true });
 };
 
