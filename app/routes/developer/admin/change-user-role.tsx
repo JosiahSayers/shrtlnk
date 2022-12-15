@@ -59,7 +59,9 @@ export const action: ActionFunction = async ({ request }) => {
     where: { id: form.user },
     data: { role: form.selectedRole },
   });
-  await makeUserPrivilegedRoleEmail(user)
+  if (form.selectedRole === 'Privileged') {
+    await makeUserPrivilegedRoleEmail(user);
+  }
   return json({ userUpdated: true });
 };
 
