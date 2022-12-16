@@ -6,10 +6,9 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
+import { useField } from "remix-validated-form";
 
 interface Props extends FormControlProps {
-  errorMessage?: string;
-  defaultValue?: string;
   label: string;
   name: string;
   type?: HTMLInputElement["type"];
@@ -18,8 +17,6 @@ interface Props extends FormControlProps {
 }
 
 export default function TextInput({
-  errorMessage,
-  defaultValue,
   label,
   name,
   type = "text",
@@ -27,11 +24,13 @@ export default function TextInput({
   helperText,
   ...props
 }: Props) {
+  const { error, getInputProps } = useField(name);
+
   return (
-    <FormControl id={id} isInvalid={!!errorMessage} {...props}>
-      <FormLabel>{label}</FormLabel>
-      <Input type={type} name={name} defaultValue={defaultValue} />
-      {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
+    <FormControl id={id} isInvalid={!!error} {...props}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <Input type={type} {...getInputProps()} />
+      {error && <FormErrorMessage>{error}</FormErrorMessage>}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );

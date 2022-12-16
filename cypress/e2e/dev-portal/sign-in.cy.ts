@@ -12,8 +12,8 @@ describe("Signing into an account", () => {
 
   it("requires email and password", () => {
     cy.findByText("Sign in").click();
-    cy.findByText('"email" is not allowed to be empty');
-    cy.findByText('"password" is not allowed to be empty');
+    cy.findByText("Email is required");
+    cy.findByText("Password is required");
   });
 
   it("display a form level error when the email is not found", () => {

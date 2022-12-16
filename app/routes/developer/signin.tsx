@@ -8,20 +8,19 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
 import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import {
-  Form,
   Link,
   useActionData,
   useLoaderData,
   useSearchParams,
   useTransition,
 } from "@remix-run/react";
-import Joi from "joi";
+import { withZod } from "@remix-validated-form/with-zod";
 import { useEffect } from "react";
+import { ValidatedForm, validationError } from "remix-validated-form";
+import { z } from "zod";
 import TextInput from "~/components/developer/text-input";
-import { validate } from "~/utils/get-validation-errors.server";
 import { createUserSession, signin } from "~/utils/session.server";
 
 type ActionData = {
@@ -36,16 +35,12 @@ type ActionData = {
   };
 };
 
-const validateForm = (form: {
-  email: FormDataEntryValue | null;
-  password: FormDataEntryValue | null;
-}) => {
-  const schema = Joi.object({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-  });
-  return validate(schema, form);
-};
+const schema = z.object({
+  email: z.string().min(1, "Email is required").email(),
+  password: z.string().min(1, "Password is required"),
+  redirectTo: z.string().optional(),
+});
+const validator = withZod(schema);
 
 export const loader: LoaderFunction = async ({ request }) => {
   const passwordResetStatus = new URL(request.url).searchParams.get(
@@ -55,32 +50,24 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const { email, password, redirectTo } = await parseForm(request);
+  const result = await validator.validate(await request.formData());
 
-  const { fields, errors } = validateForm({ email, password });
-
-  if (errors) {
-    return json(
-      {
-        errors,
-        fields,
-      },
-      { status: 400 }
-    );
+  if (result.error) {
+    return validationError(result.error, result.submittedData);
   }
 
-  const user = await signin(fields);
+  const user = await signin(result.data);
   if (user) {
     return createUserSession(
       user,
-      (redirectTo as string) || "/developer/applications"
+      result.data.redirectTo || "/developer/applications"
     );
   }
 
   return json(
     {
       formLevelError: "Could not log you in with these credentials",
-      fields: fields,
+      fields: result.submittedData,
     },
     { status: 400 }
   );
@@ -137,7 +124,12 @@ export default function SignIn() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate reloadDocument>
+        <ValidatedForm
+          validator={validator}
+          method="post"
+          noValidate
+          reloadDocument
+        >
           <input
             type="hidden"
             name="redirectTo"
@@ -145,14 +137,12 @@ export default function SignIn() {
           />
           <Stack spacing={4}>
             <TextInput
-              errorMessage={actionData?.errors?.email}
               defaultValue={actionData?.fields?.email}
               name="email"
               type="email"
               label="Email Address"
             />
             <TextInput
-              errorMessage={actionData?.errors?.password}
               defaultValue={actionData?.fields?.password}
               name="password"
               type="password"
@@ -203,7 +193,7 @@ export default function SignIn() {
               </Text>
             </Stack>
           </Stack>
-        </Form>
+        </ValidatedForm>
       </Box>
     </Stack>
   );
