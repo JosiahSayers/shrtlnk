@@ -13,7 +13,6 @@
     "db:seed": "node --require esbuild-register prisma/seed.ts",
     "db:drop": "node --require esbuild-register prisma/drop.ts",
     "db:migrate": "prisma db push",
-    "db:prod-refresh": "npm run db:drop && node --require esbuild-register prisma/consolidate-production.ts",
     "clean-urls": "node --require esbuild-register scripts/check-links.ts",
     "postinstall": "prisma generate"
   },
