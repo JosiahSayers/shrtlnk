@@ -1,8 +1,9 @@
-import { Stack, Button, toast } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { ValidatedForm } from "remix-validated-form";
 import { z } from "zod";
 import PasswordInput from "~/components/developer/password-input";
+import SubmitButton from "~/components/developer/submit-button";
 import TextInput from "~/components/developer/text-input";
 
 const schema = z.object({
@@ -14,14 +15,10 @@ const schema = z.object({
 export const changePasswordFormValidator = withZod(schema);
 
 interface Props {
-  isSubmitting: boolean;
   defaultValues: any;
 }
 
-export default function ChangePasswordForm({
-  isSubmitting,
-  defaultValues,
-}: Props) {
+export default function ChangePasswordForm({ defaultValues }: Props) {
   return (
     <ValidatedForm
       method="post"
@@ -37,18 +34,7 @@ export default function ChangePasswordForm({
           isRequired
         />
         <PasswordInput name="newPassword" label="New Password" isRequired />
-        <Button
-          bg="blue.400"
-          color="white"
-          type="submit"
-          onClick={() => toast.closeAll()}
-          _hover={{ bg: "blue.500" }}
-          name="_action"
-          value="password"
-          isLoading={isSubmitting}
-        >
-          Save
-        </Button>
+        <SubmitButton text="Save" action="password" />
       </Stack>
     </ValidatedForm>
   );

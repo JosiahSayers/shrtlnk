@@ -1,22 +1,16 @@
-import {
-  Box,
-  Button,
-  Heading,
-  Stack,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Heading, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import {
   ActionFunction,
   json,
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { z } from "zod";
 import PasswordInput from "~/components/developer/password-input";
+import SubmitButton from "~/components/developer/submit-button";
 import { db } from "~/utils/db.server";
 import { isPasswordResetValid, resetPassword } from "~/utils/session.server";
 
@@ -79,7 +73,6 @@ export const action: ActionFunction = async ({ request }) => {
 export default function SimpleCard() {
   const loaderData = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
-  const { submission } = useTransition();
 
   return (
     <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
@@ -113,17 +106,7 @@ export default function SimpleCard() {
             />
             <PasswordInput name="password" label="New Password" />
             <Stack spacing={10}>
-              <Button
-                bg={"blue.400"}
-                color={"white"}
-                type="submit"
-                _hover={{
-                  bg: "blue.500",
-                }}
-                isLoading={!!submission}
-              >
-                Reset Password
-              </Button>
+              <SubmitButton text="Reset Password" />
             </Stack>
           </Stack>
         </ValidatedForm>

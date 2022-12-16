@@ -3,9 +3,10 @@ import { useIsSubmitting } from "remix-validated-form";
 
 interface Props {
   text?: string;
+  action?: string;
 }
 
-export default function SubmitButton({ text = "Submit" }: Props) {
+export default function SubmitButton({ text = "Submit", action }: Props) {
   const toast = useToast();
   const isSubmitting = useIsSubmitting();
 
@@ -19,6 +20,8 @@ export default function SubmitButton({ text = "Submit" }: Props) {
         bg: "blue.500",
       }}
       isLoading={isSubmitting}
+      name={action ? "_action" : undefined}
+      value={action}
     >
       {text}
     </Button>

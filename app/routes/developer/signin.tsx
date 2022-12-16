@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Heading,
   Link as ChakraLink,
   Stack,
@@ -14,12 +13,12 @@ import {
   useActionData,
   useLoaderData,
   useSearchParams,
-  useTransition,
 } from "@remix-run/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { useEffect } from "react";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { z } from "zod";
+import SubmitButton from "~/components/developer/submit-button";
 import TextInput from "~/components/developer/text-input";
 import { createUserSession, signin } from "~/utils/session.server";
 
@@ -71,7 +70,6 @@ export default function SignIn() {
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   const toast = useToast();
-  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -148,18 +146,7 @@ export default function SignIn() {
                 align={"start"}
                 justify={"space-between"}
               ></Stack>
-              <Button
-                bg={"blue.400"}
-                color={"white"}
-                type="submit"
-                onClick={() => toast.closeAll()}
-                _hover={{
-                  bg: "blue.500",
-                }}
-                isLoading={!!submission}
-              >
-                Sign in
-              </Button>
+              <SubmitButton text="Sign in" />
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>

@@ -14,7 +14,7 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { validationError } from "remix-validated-form";
 import ChangeNameForm, {
@@ -114,11 +114,6 @@ export default function Account() {
   const loaderData = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
   const toast = useToast();
-  const { submission } = useTransition();
-
-  const isSubmittingName = submission?.formData.get("_action") === "name";
-  const isSubmittingPassword =
-    submission?.formData.get("_action") === "password";
 
   const formType = loaderData?.formType || actionData?.formType || "name";
   const firstName = loaderData?.firstName || actionData?.fields?.firstName;
@@ -161,16 +156,10 @@ export default function Account() {
 
         <TabPanels>
           <TabPanel>
-            <ChangeNameForm
-              isSubmitting={isSubmittingName}
-              defaultValues={{ firstName, lastName }}
-            />
+            <ChangeNameForm defaultValues={{ firstName, lastName }} />
           </TabPanel>
           <TabPanel>
-            <ChangePasswordForm
-              isSubmitting={isSubmittingPassword}
-              defaultValues={actionData?.fields}
-            />
+            <ChangePasswordForm defaultValues={actionData?.fields} />
           </TabPanel>
         </TabPanels>
       </Tabs>

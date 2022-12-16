@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Heading,
   HStack,
   Link as ChakraLink,
@@ -16,12 +15,13 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import { Link, useActionData, useTransition } from "@remix-run/react";
+import { Link, useActionData } from "@remix-run/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { useEffect } from "react";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { z } from "zod";
 import PasswordInput from "~/components/developer/password-input";
+import SubmitButton from "~/components/developer/submit-button";
 import TextInput from "~/components/developer/text-input";
 import {
   createUserSession,
@@ -99,7 +99,6 @@ export const action: ActionFunction = async ({ request }) => {
 export default function SignupCard() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
-  const { submission } = useTransition();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -160,20 +159,7 @@ export default function SignupCard() {
             />
             <PasswordInput label="Password" name="password" isRequired />
             <Stack spacing={10} pt={2}>
-              <Button
-                loadingText="Submitting"
-                size="lg"
-                bg={"blue.400"}
-                color={"white"}
-                _hover={{
-                  bg: "blue.500",
-                }}
-                type="submit"
-                onClick={() => toast.closeAll()}
-                isLoading={!!submission}
-              >
-                Sign up
-              </Button>
+              <SubmitButton text="Sign up" />
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>

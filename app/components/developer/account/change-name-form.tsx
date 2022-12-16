@@ -1,11 +1,11 @@
-import { Stack, Button, toast } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { ValidatedForm } from "remix-validated-form";
 import { z } from "zod";
+import SubmitButton from "~/components/developer/submit-button";
 import TextInput from "~/components/developer/text-input";
 
 interface Props {
-  isSubmitting: boolean;
   defaultValues: any;
 }
 
@@ -15,7 +15,7 @@ const schema = z.object({
 });
 export const changeNameFormValidator = withZod(schema);
 
-export default function ChangeNameForm({ isSubmitting, defaultValues }: Props) {
+export default function ChangeNameForm({ defaultValues }: Props) {
   return (
     <ValidatedForm
       method="post"
@@ -26,18 +26,7 @@ export default function ChangeNameForm({ isSubmitting, defaultValues }: Props) {
       <Stack spacing={4}>
         <TextInput name="firstName" label="First Name" isRequired />
         <TextInput name="lastName" label="Last Name" isRequired />
-        <Button
-          bg="blue.400"
-          color="white"
-          type="submit"
-          onClick={() => toast.closeAll()}
-          _hover={{ bg: "blue.500" }}
-          name="_action"
-          value="name"
-          isLoading={isSubmitting}
-        >
-          Save
-        </Button>
+        <SubmitButton text="Save" action="name" />
       </Stack>
     </ValidatedForm>
   );
