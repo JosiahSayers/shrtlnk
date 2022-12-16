@@ -8,49 +8,36 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
 import { ActionFunction, json } from "@remix-run/node";
-import { Form, Link, useActionData, useTransition } from "@remix-run/react";
-import Joi from "joi";
+import { Link, useActionData, useTransition } from "@remix-run/react";
+import { withZod } from "@remix-validated-form/with-zod";
 import { useEffect } from "react";
+import { ValidatedForm, validationError } from "remix-validated-form";
+import { z } from "zod";
 import TextInput from "~/components/developer/text-input";
-import { validate } from "~/utils/get-validation-errors.server";
 import { startPasswordReset } from "~/utils/session.server";
 
 type ActionData = {
   formLevelError?: string;
-  errors?: {
-    email?: string;
-  };
-  fields?: {
-    email?: string;
-  };
+  fields?: z.infer<typeof schema>;
   success: boolean;
 };
 
-const validateForm = (form: { email: FormDataEntryValue | null }) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required(),
-  });
-  return validate(schema, form);
-};
+const schema = z.object({
+  email: z.string().min(1, "Email is required").email(),
+});
+const validator = withZod(schema);
 
 export const action: ActionFunction = async ({ request }) => {
-  const { email } = await parseForm(request);
-  const { fields, errors } = validateForm({ email });
-
-  if (errors) {
-    return json(
-      {
-        errors,
-        fields,
-        success: false,
-      },
-      { status: 400 }
+  const validationResult = await validator.validate(await request.formData());
+  if (validationResult.error) {
+    return validationError(
+      validationResult.error,
+      validationResult.submittedData
     );
   }
 
-  const { success } = await startPasswordReset(email);
+  const { success } = await startPasswordReset(validationResult.data.email);
   if (!success) {
     return json(
       { formLevelError: "Something went wrong, please try again" },
@@ -58,7 +45,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  return json({ success: true, fields });
+  return json({ success: true, fields: validationResult.submittedData });
 };
 
 export default function RequestPasswordReset() {
@@ -100,15 +87,15 @@ export default function RequestPasswordReset() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate reloadDocument>
+        <ValidatedForm
+          method="post"
+          validator={validator}
+          defaultValues={actionData?.fields}
+          noValidate
+          reloadDocument
+        >
           <Stack spacing={4}>
-            <TextInput
-              errorMessage={actionData?.errors?.email}
-              defaultValue={actionData?.fields?.email}
-              name="email"
-              type="email"
-              label="Email Address"
-            />
+            <TextInput name="email" type="email" label="Email Address" />
             <Stack spacing={10}>
               <Button
                 bg={"blue.400"}
@@ -136,7 +123,7 @@ export default function RequestPasswordReset() {
               </Text>
             </Stack>
           </Stack>
-        </Form>
+        </ValidatedForm>
       </Box>
     </Stack>
   );

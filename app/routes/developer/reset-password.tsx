@@ -6,23 +6,18 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
 import {
   ActionFunction,
   json,
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import {
-  Form,
-  useActionData,
-  useLoaderData,
-  useTransition,
-} from "@remix-run/react";
-import Joi from "joi";
-import TextInput from "~/components/developer/text-input";
+import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import { withZod } from "@remix-validated-form/with-zod";
+import { ValidatedForm, validationError } from "remix-validated-form";
+import { z } from "zod";
+import PasswordInput from "~/components/developer/password-input";
 import { db } from "~/utils/db.server";
-import { validate } from "~/utils/get-validation-errors.server";
 import { isPasswordResetValid, resetPassword } from "~/utils/session.server";
 
 interface LoaderData {
@@ -32,26 +27,15 @@ interface LoaderData {
 
 type ActionData = {
   formLevelError?: string;
-  errors?: {
-    password?: string;
-  };
-  fields?: {
-    password?: string;
-    key?: string;
-  };
+  fields?: z.infer<typeof schema>;
   success: boolean;
 };
 
-const validateForm = (form: {
-  password: FormDataEntryValue | null;
-  key: FormDataEntryValue | null;
-}) => {
-  const schema = Joi.object({
-    password: Joi.string().label("Password").required().min(8),
-    key: Joi.string().required(),
-  });
-  return validate(schema, form);
-};
+const schema = z.object({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  key: z.string(),
+});
+const validator = withZod(schema);
 
 export const loader: LoaderFunction = async ({ request }) => {
   const passwordResetKey = new URL(request.url).searchParams.get("key");
@@ -75,23 +59,18 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const { password, key } = await parseForm(request);
-  const { fields, errors } = validateForm({ password, key });
-
-  if (errors) {
-    return json(
-      {
-        errors,
-        fields,
-        success: false,
-      },
-      { status: 400 }
+  const validationResult = await validator.validate(await request.formData());
+  if (validationResult.error) {
+    return validationError(
+      validationResult.error,
+      validationResult.submittedData
     );
   }
+  const { password, key } = validationResult.data;
 
   const passwordUpdated = await resetPassword(key, password);
   if (!passwordUpdated) {
-    return json({ success: false, fields });
+    return json({ success: false, fields: validationResult.submittedData });
   }
 
   return redirect("/developer/signin?password-reset=success");
@@ -118,7 +97,13 @@ export default function SimpleCard() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate reloadDocument>
+        <ValidatedForm
+          method="post"
+          validator={validator}
+          defaultValues={actionData?.fields}
+          noValidate
+          reloadDocument
+        >
           <Stack spacing={4}>
             <input
               name="key"
@@ -126,13 +111,7 @@ export default function SimpleCard() {
               type="hidden"
               value={loaderData.key ?? actionData?.fields?.key}
             />
-            <TextInput
-              errorMessage={actionData?.errors?.password}
-              defaultValue={actionData?.fields?.password}
-              name="password"
-              type="password"
-              label="New Password"
-            />
+            <PasswordInput name="password" label="New Password" />
             <Stack spacing={10}>
               <Button
                 bg={"blue.400"}
@@ -147,7 +126,7 @@ export default function SimpleCard() {
               </Button>
             </Stack>
           </Stack>
-        </Form>
+        </ValidatedForm>
       </Box>
     </Stack>
   );
