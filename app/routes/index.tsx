@@ -89,7 +89,7 @@ export default function Index() {
           as={Link}
           to="/developer"
           textDecoration="underline"
-          color="gray.700"
+          color="white"
         >
           API
         </ChakraLink>
