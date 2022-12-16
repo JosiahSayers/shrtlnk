@@ -30,6 +30,15 @@ describe("Signing into an account", () => {
     cy.findByText("Could not log you in with these credentials");
   });
 
+  it("keeps the form populated with previous values when there is a sign in error", () => {
+    cy.findByLabelText("Email Address").type("test@test.com");
+    cy.findByLabelText("Password").type("incorrect password");
+    cy.findByText("Sign in").click();
+    cy.findByText("Could not log you in with these credentials");
+    cy.findByLabelText("Email Address").should("have.value", "test@test.com");
+    cy.findByLabelText("Password").should("have.value", "incorrect password");
+  });
+
   it("logs the user in when given correct credentials", () => {
     cy.findByLabelText("Email Address").type("test@test.com");
     cy.findByLabelText("Password").type("password");

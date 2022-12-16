@@ -25,14 +25,7 @@ import { createUserSession, signin } from "~/utils/session.server";
 
 type ActionData = {
   formLevelError?: string;
-  errors?: {
-    email?: string;
-    password?: string;
-  };
-  fields?: {
-    email?: string;
-    password?: string;
-  };
+  fields?: Partial<z.infer<typeof schema>>;
 };
 
 const schema = z.object({
@@ -126,6 +119,7 @@ export default function SignIn() {
       >
         <ValidatedForm
           validator={validator}
+          defaultValues={actionData?.fields}
           method="post"
           noValidate
           reloadDocument

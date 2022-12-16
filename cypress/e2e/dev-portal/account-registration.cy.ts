@@ -4,16 +4,16 @@ describe("Registering for an account", () => {
 
   it("requires all fields", () => {
     cy.findByText("Sign up").click();
-    cy.findByText('"First Name" is not allowed to be empty');
-    cy.findByText('"Last Name" is not allowed to be empty');
-    cy.findByText('"Email" is not allowed to be empty');
-    cy.findByText('"Password" is not allowed to be empty');
+    cy.findByText("First Name is required");
+    cy.findByText("Last Name is required");
+    cy.findByText("Email is required");
+    cy.findByText("Password must be at least 8 characters");
   });
 
   it("requires that password is at least 8 characters", () => {
     cy.findByLabelText("Password*").clear().type("short");
     cy.findByText("Sign up").click();
-    cy.findByText('"Password" length must be at least 8 characters long');
+    cy.findByText("Password must be at least 8 characters");
   });
 
   it("allows you to register for an account", () => {

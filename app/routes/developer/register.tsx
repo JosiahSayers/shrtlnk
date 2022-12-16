@@ -1,22 +1,14 @@
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
   HStack,
-  Input,
-  InputGroup,
-  InputRightElement,
   Link as ChakraLink,
   Stack,
   Text,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
 import { Prisma } from "@prisma/client";
 import {
   ActionFunction,
@@ -24,16 +16,17 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import { Form, Link, useActionData, useTransition } from "@remix-run/react";
-import Joi from "joi";
-import { useEffect, useState } from "react";
+import { Link, useActionData, useTransition } from "@remix-run/react";
+import { withZod } from "@remix-validated-form/with-zod";
+import { useEffect } from "react";
+import { ValidatedForm, validationError } from "remix-validated-form";
+import { z } from "zod";
+import PasswordInput from "~/components/developer/password-input";
 import TextInput from "~/components/developer/text-input";
-import { validate } from "~/utils/get-validation-errors.server";
 import {
   createUserSession,
   getUserSession,
   register,
-  RegisterForm,
 } from "~/utils/session.server";
 
 type ActionData = {
@@ -52,15 +45,14 @@ type ActionData = {
   };
 };
 
-const validateForm = (form: any) => {
-  const schema = Joi.object({
-    firstName: Joi.string().label("First Name").required(),
-    lastName: Joi.string().label("Last Name").required(),
-    email: Joi.string().email().label("Email").required(),
-    password: Joi.string().label("Password").required().min(8),
-  });
-  return validate<RegisterForm>(schema, form);
-};
+const schema = z.object({
+  firstName: z.string().min(1, "First Name is required"),
+  lastName: z.string().min(1, "Last Name is required"),
+  email: z.string().min(1, "Email is required").email(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+const validator = withZod(schema);
+export type RegisterForm = z.infer<typeof schema>;
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userInfo = await getUserSession(request);
@@ -71,13 +63,17 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await parseForm<ActionData["fields"]>(request);
-  const { fields, errors } = validateForm(form);
-  if (errors) {
-    return json({ errors, fields }, 400);
+  const validationResult = await validator.validate(await request.formData());
+
+  if (validationResult.error) {
+    return validationError(
+      validationResult.error,
+      validationResult.submittedData
+    );
   }
+
   try {
-    const newUser = await register(fields);
+    const newUser = await register(validationResult.data);
     if (newUser) {
       return createUserSession(newUser, "/developer/applications");
     }
@@ -86,19 +82,22 @@ export const action: ActionFunction = async ({ request }) => {
       e instanceof Prisma.PrismaClientKnownRequestError &&
       e.code === "P2002"
     ) {
-      return json({ formLevelError: "Email is already in use.", fields });
+      return json({
+        formLevelError: "Email is already in use.",
+        fields: validationResult.submittedData,
+      });
     }
   }
 
   return json({
     formLevelError:
       "Sorry about this, but something unexpected happened on our end. Please submit the form again.",
+    fields: validationResult.submittedData,
   });
 };
 
 export default function SignupCard() {
   const actionData = useActionData<ActionData>();
-  const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
   const { submission } = useTransition();
 
@@ -127,13 +126,17 @@ export default function SignupCard() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate reloadDocument>
+        <ValidatedForm
+          method="post"
+          validator={validator}
+          defaultValues={actionData?.fields}
+          noValidate
+          reloadDocument
+        >
           <Stack spacing={4}>
             <HStack>
               <Box>
                 <TextInput
-                  errorMessage={actionData?.errors?.firstName}
-                  defaultValue={actionData?.fields?.firstName}
                   name="firstName"
                   type="firstName"
                   label="First Name"
@@ -142,8 +145,6 @@ export default function SignupCard() {
               </Box>
               <Box>
                 <TextInput
-                  errorMessage={actionData?.errors?.lastName}
-                  defaultValue={actionData?.fields?.lastName}
                   name="lastName"
                   type="lastName"
                   label="Last Name"
@@ -152,42 +153,12 @@ export default function SignupCard() {
               </Box>
             </HStack>
             <TextInput
-              errorMessage={actionData?.errors?.email}
-              defaultValue={actionData?.fields?.email}
               name="email"
               type="email"
               label="Email Address"
               isRequired
             />
-            <FormControl
-              id="password"
-              isInvalid={!!actionData?.errors?.password}
-              isRequired
-            >
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  defaultValue={actionData?.fields?.password}
-                />
-                <InputRightElement h={"full"}>
-                  <Button
-                    variant={"ghost"}
-                    onClick={() =>
-                      setShowPassword((showPassword) => !showPassword)
-                    }
-                  >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              {actionData?.errors?.password && (
-                <FormErrorMessage>
-                  {actionData.errors.password}
-                </FormErrorMessage>
-              )}
-            </FormControl>
+            <PasswordInput label="Password" name="password" isRequired />
             <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"
@@ -218,7 +189,7 @@ export default function SignupCard() {
               </Text>
             </Stack>
           </Stack>
-        </Form>
+        </ValidatedForm>
       </Box>
     </Stack>
   );
