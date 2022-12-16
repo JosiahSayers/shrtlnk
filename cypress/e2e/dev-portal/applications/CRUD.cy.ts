@@ -7,7 +7,7 @@ describe("Application CRUD", () => {
     it("requires an application name", () => {
       cy.findByText("Add an application").click();
       cy.findByText("Create").click();
-      cy.findByText('"name" is not allowed to be empty');
+      cy.findByText("Name is required");
     });
 
     it("Allows you to create an application without a website", () => {
