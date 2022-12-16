@@ -1,14 +1,5 @@
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -17,23 +8,21 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
 import {
   ActionFunction,
   json,
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import {
-  Form,
-  useActionData,
-  useLoaderData,
-  useTransition,
-} from "@remix-run/react";
-import Joi from "joi";
-import { useEffect, useState } from "react";
-import TextInput from "~/components/developer/text-input";
-import { validate } from "~/utils/get-validation-errors.server";
+import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import { useEffect } from "react";
+import { validationError } from "remix-validated-form";
+import ChangeNameForm, {
+  changeNameFormValidator,
+} from "~/components/developer/account/change-name-form";
+import ChangePasswordForm, {
+  changePasswordFormValidator,
+} from "~/components/developer/account/change-password-form";
 import {
   changePassword,
   createUserSession,
@@ -50,14 +39,6 @@ type LoaderData = {
 type ActionData = {
   formType?: "name" | "password";
   formLevelError?: string;
-  errors?: {
-    firstName?: string;
-    lastName?: string;
-    formType?: string;
-    currentPassword?: string;
-    newPassword?: string;
-    confirmNewPassword?: string;
-  };
   fields?: {
     firstName?: string;
     lastName?: string;
@@ -68,31 +49,6 @@ type ActionData = {
   };
 };
 
-const validateNameForm = (form: {
-  firstName: FormDataEntryValue | null;
-  lastName: FormDataEntryValue | null;
-}) => {
-  const schema = Joi.object({
-    firstName: Joi.string().label("First Name").required(),
-    lastName: Joi.string().label("Last Name").required(),
-  });
-  return validate<{ firstName: string; lastName: string }>(schema, form);
-};
-
-const validatePasswordForm = (form: {
-  currentPassword: FormDataEntryValue | null;
-  newPassword: FormDataEntryValue | null;
-}) => {
-  const schema = Joi.object({
-    currentPassword: Joi.string().label("Current Password").required(),
-    newPassword: Joi.string().label("New Password").required().min(8),
-  });
-  return validate<{
-    currentPassword: string;
-    newPassword: string;
-  }>(schema, form);
-};
-
 export const loader: LoaderFunction = async ({ request }) => {
   const { firstName, lastName } = await requireUserSession(request);
   const formType = new URL(request.url).searchParams.get("formType");
@@ -101,38 +57,40 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const userInfo = await requireUserSession(request);
-  const form = await parseForm(request);
+  const form = await request.formData();
+  const action = form.get("_action");
 
-  if (form._action === "name") {
-    const { firstName, lastName } = form;
-    const { fields, errors } = validateNameForm({ firstName, lastName });
-    if (errors) {
-      return json({ errors, fields, formType: "name" }, 400);
+  if (action === "name") {
+    const validationResult = await changeNameFormValidator.validate(form);
+    if (validationResult.error) {
+      return validationError(
+        validationResult.error,
+        validationResult.submittedData
+      );
     }
     const newUser = await updateName(
-      fields.firstName,
-      fields.lastName,
+      validationResult.data.firstName,
+      validationResult.data.lastName,
       userInfo.id
     );
     return createUserSession(newUser, "/developer/applications");
   }
 
-  if (form._action === "password") {
-    const { currentPassword, newPassword } = form;
-    const { fields, errors } = validatePasswordForm({
-      currentPassword,
-      newPassword,
-    });
-    if (errors) {
-      return json({ errors, fields, formType: "password" }, 400);
+  if (action === "password") {
+    const validationResult = await changePasswordFormValidator.validate(form);
+    if (validationResult.error) {
+      return validationError(
+        validationResult.error,
+        validationResult.submittedData
+      );
     }
     try {
-      const newUser = await changePassword(
-        fields.currentPassword,
-        fields.newPassword,
+      const updatedUser = await changePassword(
+        validationResult.data.currentPassword,
+        validationResult.data.newPassword,
         userInfo.id
       );
-      if (!newUser) {
+      if (!updatedUser) {
         return json({
           formLevelError: "Something went wrong, please try again.",
           formType: "password",
@@ -142,11 +100,9 @@ export const action: ActionFunction = async ({ request }) => {
     } catch (e: any) {
       if (e.message === "password mismatch") {
         return json({
-          errors: {
-            currentPassword:
-              "The password you entered does not match your current password",
-          },
-          fields,
+          formLevelError:
+            "The password you entered does not match your current password",
+          fields: validationResult.submittedData,
           formType: "password",
         });
       }
@@ -158,7 +114,6 @@ export default function Account() {
   const loaderData = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
   const toast = useToast();
-  const [showPassword, setShowPassword] = useState(false);
   const { submission } = useTransition();
 
   const isSubmittingName = submission?.formData.get("_action") === "name";
@@ -206,90 +161,16 @@ export default function Account() {
 
         <TabPanels>
           <TabPanel>
-            <Form method="post" noValidate>
-              <Stack spacing={4}>
-                <TextInput
-                  errorMessage={actionData?.errors?.firstName}
-                  defaultValue={firstName}
-                  name="firstName"
-                  label="First Name"
-                  isRequired
-                />
-                <TextInput
-                  errorMessage={actionData?.errors?.lastName}
-                  defaultValue={lastName}
-                  name="lastName"
-                  label="Last Name"
-                  isRequired
-                />
-                <Button
-                  bg="blue.400"
-                  color="white"
-                  type="submit"
-                  onClick={() => toast.closeAll()}
-                  _hover={{ bg: "blue.500" }}
-                  name="_action"
-                  value="name"
-                  isLoading={isSubmittingName}
-                >
-                  Save
-                </Button>
-              </Stack>
-            </Form>
+            <ChangeNameForm
+              isSubmitting={isSubmittingName}
+              defaultValues={{ firstName, lastName }}
+            />
           </TabPanel>
           <TabPanel>
-            <Form method="post" noValidate>
-              <Stack spacing={4}>
-                <TextInput
-                  errorMessage={actionData?.errors?.currentPassword}
-                  type="password"
-                  name="currentPassword"
-                  label="Current Password"
-                  isRequired
-                />
-                <FormControl
-                  id="newPassword"
-                  isInvalid={!!actionData?.errors?.newPassword}
-                  isRequired
-                >
-                  <FormLabel>New Password</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      name="newPassword"
-                      defaultValue={actionData?.fields?.newPassword}
-                    />
-                    <InputRightElement h={"full"}>
-                      <Button
-                        variant={"ghost"}
-                        onClick={() =>
-                          setShowPassword((showPassword) => !showPassword)
-                        }
-                      >
-                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                  {actionData?.errors?.newPassword && (
-                    <FormErrorMessage>
-                      {actionData.errors.newPassword}
-                    </FormErrorMessage>
-                  )}
-                </FormControl>
-                <Button
-                  bg="blue.400"
-                  color="white"
-                  type="submit"
-                  onClick={() => toast.closeAll()}
-                  _hover={{ bg: "blue.500" }}
-                  name="_action"
-                  value="password"
-                  isLoading={isSubmittingPassword}
-                >
-                  Save
-                </Button>
-              </Stack>
-            </Form>
+            <ChangePasswordForm
+              isSubmitting={isSubmittingPassword}
+              defaultValues={actionData?.fields}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
