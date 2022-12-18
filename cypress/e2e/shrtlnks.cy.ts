@@ -4,10 +4,6 @@ describe("Home Page", () => {
   before(() => cy.visit("/"));
 
   describe("Page content", () => {
-    it("Renders the page title", () => {
-      cy.findByText((content, node) => node?.textContent === "SHRTLNK");
-    });
-
     it("Renders the form", () => {
       cy.findByLabelText("URL TO SHORTEN:");
       cy.findByText("CREATE SHORT LINK");
