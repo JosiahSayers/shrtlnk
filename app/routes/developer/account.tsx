@@ -15,7 +15,7 @@ import {
   redirect,
 } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { validationError } from "remix-validated-form";
 import ChangeNameForm, {
   changeNameFormValidator,
@@ -115,7 +115,9 @@ export default function Account() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
 
-  const formType = loaderData?.formType || actionData?.formType || "name";
+  const [formType, setFormType] = useState<any>(
+    loaderData?.formType || actionData?.formType || "name"
+  );
   const firstName = loaderData?.firstName || actionData?.fields?.firstName;
   const lastName = loaderData?.lastName || actionData?.fields?.lastName;
 
@@ -137,7 +139,7 @@ export default function Account() {
   }
 
   const handleTabClick = (newIndex: number) => {
-    document.location.href = `/developer/account?formType=${Forms[newIndex]}`;
+    setFormType(Forms[newIndex]);
   };
 
   return (
@@ -148,7 +150,7 @@ export default function Account() {
       p={8}
       textAlign="left"
     >
-      <Tabs index={Forms[formType]} onChange={handleTabClick}>
+      <Tabs index={Forms[formType] as any} onChange={handleTabClick}>
         <TabList>
           <Tab>Edit Name</Tab>
           <Tab>Change Password</Tab>
