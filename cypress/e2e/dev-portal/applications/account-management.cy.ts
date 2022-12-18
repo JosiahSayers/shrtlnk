@@ -11,8 +11,8 @@ describe("Account management", () => {
       cy.findByLabelText("First Name*").clear();
       cy.findByLabelText("Last Name*").clear();
       cy.findAllByText("Save").filter(":visible").click();
-      cy.findByText('"First Name" is not allowed to be empty');
-      cy.findByText('"Last Name" is not allowed to be empty');
+      cy.findByText("First Name is required");
+      cy.findByText("Last Name is required");
     });
 
     it("allows updates the users name", () => {
@@ -33,14 +33,14 @@ describe("Account management", () => {
 
     it("requires all fields", () => {
       cy.findAllByText("Save").filter(":visible").click();
-      cy.findByText('"Current Password" is not allowed to be empty');
-      cy.findByText('"New Password" is not allowed to be empty');
+      cy.findByText("Current Password is required");
+      cy.findByText("New Password has a minimum length of 8 characters");
     });
 
     it("requires the new password field to be at least 8 characters", () => {
       cy.findByLabelText("New Password*").clear().type("short");
       cy.findAllByText("Save").filter(":visible").click();
-      cy.findByText('"New Password" length must be at least 8 characters long');
+      cy.findByText("New Password has a minimum length of 8 characters");
     });
 
     it("requires the current password to match the user's current password", () => {

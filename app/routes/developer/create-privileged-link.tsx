@@ -7,30 +7,31 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
 import {
   ActionFunction,
   json,
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import { Form, useActionData, useTransition } from "@remix-run/react";
+import { useActionData, useTransition } from "@remix-run/react";
+import { withZod } from "@remix-validated-form/with-zod";
 import { useEffect } from "react";
+import { ValidatedForm, validationError } from "remix-validated-form";
+import { z } from "zod";
 import TextInput from "~/components/developer/text-input";
-import { validateUrl } from "~/routes";
 import { createShrtlnk } from "~/shrtlnk.server";
 import { logger } from "~/utils/logger.server";
 import { requirePrivilegedRole } from "~/utils/session.server";
 
 interface ActionData {
-  fields: {
-    url: string;
-  };
-  errors: {
-    url?: string;
-  };
+  fields: z.infer<typeof schema>;
   formLevelError?: string;
 }
+
+const schema = z.object({
+  url: z.string().url(),
+});
+const validator = withZod(schema);
 
 export const loader: LoaderFunction = async ({ request }) => {
   await requirePrivilegedRole(request);
@@ -39,23 +40,19 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   await requirePrivilegedRole(request);
-  const formData = await parseForm(request as any);
-  const validationResult = validateUrl(formData.url);
+  const validationResult = await validator.validate(await request.formData());
 
   if (validationResult.error) {
-    return json(
-      {
-        errors: { url: validationResult.error.message },
-        values: { url: validationResult.value },
-      },
-      { status: 400 }
+    return validationError(
+      validationResult.error,
+      validationResult.submittedData
     );
   }
 
   let link;
   try {
     link = await createShrtlnk(
-      validationResult.value,
+      validationResult.data.url,
       process.env.API_KEY!,
       false
     );
@@ -67,7 +64,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (!link) {
     return json({
       errors: {},
-      values: { url: validationResult.value },
+      values: { url: validationResult.data.url },
       formLevelError: "Something went wrong, please try again.",
     });
   }
@@ -108,15 +105,14 @@ export default function CreatePrivilegedLink() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate>
+        <ValidatedForm
+          method="post"
+          validator={validator}
+          defaultValues={actionData?.fields}
+          noValidate
+        >
           <Stack spacing={4}>
-            <TextInput
-              errorMessage={actionData?.errors?.url}
-              defaultValue={actionData?.fields?.url}
-              name="url"
-              type="text"
-              label="URL to shorten"
-            />
+            <TextInput name="url" type="text" label="URL to shorten" />
             <Stack spacing={10}>
               <Button
                 bg={"blue.400"}
@@ -132,7 +128,7 @@ export default function CreatePrivilegedLink() {
               </Button>
             </Stack>
           </Stack>
-        </Form>
+        </ValidatedForm>
       </Box>
     </Stack>
   );

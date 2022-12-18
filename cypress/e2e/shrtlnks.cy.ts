@@ -4,10 +4,6 @@ describe("Home Page", () => {
   before(() => cy.visit("/"));
 
   describe("Page content", () => {
-    it("Renders the page title", () => {
-      cy.findByText((content, node) => node?.textContent === "SHRTLNK");
-    });
-
     it("Renders the form", () => {
       cy.findByLabelText("URL TO SHORTEN:");
       cy.findByText("CREATE SHORT LINK");
@@ -24,13 +20,13 @@ describe("Home Page", () => {
   describe("Form", () => {
     it("renders an error if the text input is empty", () => {
       cy.findByText("CREATE SHORT LINK").click();
-      cy.findByText('"URL" is not allowed to be empty');
+      cy.findByText("url is required");
     });
 
     it("renders an error if the text is not a valid URI", () => {
-      cy.findByLabelText("URL TO SHORTEN:").type("google");
+      cy.findByLabelText("URL TO SHORTEN:").type("google is the best website.");
       cy.findByText("CREATE SHORT LINK").click();
-      cy.findByText('"URL" must be a valid uri');
+      cy.findByText("not a valid url");
     });
   });
 });
@@ -39,7 +35,7 @@ describe("shrtlnk functionality", () => {
   beforeEach(() => cy.visit("/"));
 
   it("allows users to submit valid links", () => {
-    cy.findByLabelText("URL TO SHORTEN:").type("https://google.com");
+    cy.findByLabelText("URL TO SHORTEN:").type("google.com");
     cy.findByText("CREATE SHORT LINK").click();
     cy.findByText("SUCCESS! HERE'S YOUR NEW LINK:");
   });

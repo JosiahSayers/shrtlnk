@@ -1,80 +1,57 @@
 import {
   Box,
-  Button,
   Heading,
   Stack,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
-import { Application } from "@prisma/client";
 import {
   ActionFunction,
   json,
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import {
-  Form,
-  useActionData,
-  useLoaderData,
-  useTransition,
-} from "@remix-run/react";
-import Joi from "joi";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
+import { validationError } from "remix-validated-form";
 import { updateApp } from "~/application.server";
-import TextInput from "~/components/developer/text-input";
+import ApplicationForm, {
+  applicationFormValidator,
+} from "~/components/developer/applications/app-form";
 import { requireUserOwnsApplication } from "~/utils/authorization.server";
-import { validate } from "~/utils/get-validation-errors.server";
 import { logger } from "~/utils/logger.server";
 
-type ActionData = {
-  formLevelError?: string;
-  errors?: {
-    name?: string;
-    website?: string;
-  };
-  fields?: {
-    name?: string;
-    website?: string;
-    id?: string;
-  };
-};
+interface LoaderData {
+  id: string;
+  name: string;
+  website: string;
+}
 
-const validateForm = (form: {
-  name: FormDataEntryValue | null;
-  website: FormDataEntryValue | null;
-}) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    website: Joi.string().allow("").optional(),
-  });
-  return validate<{ name: string; website: string }>(schema, form);
-};
+interface ActionData {
+  formLevelError?: string;
+}
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const { app } = await requireUserOwnsApplication(request, params.appId);
-  return app;
+  return json<LoaderData>({
+    name: app.name,
+    website: app.website ?? "",
+    id: app.id,
+  });
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
   const { app } = await requireUserOwnsApplication(request, params.appId);
-  const { name, website } = await parseForm(request);
-
-  const { fields, errors } = validateForm({ name, website });
-
-  if (errors) {
-    return json(
-      {
-        errors,
-        fields,
-      },
-      { status: 400 }
-    );
+  const validationResult = await applicationFormValidator.validate(
+    await request.formData()
+  );
+  if (validationResult.error) {
+    return validationError(validationResult.error);
   }
 
   try {
-    await updateApp({ id: app.id, name: fields.name, website: fields.website });
+    const { name, website } = validationResult.data;
+    await updateApp({ id: app.id, name, website });
     return redirect("/developer/applications");
   } catch (e) {
     logger.log("Failed to edit application", e);
@@ -87,11 +64,9 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function EditApplication() {
   const actionData = useActionData<ActionData>();
-  const loaderData = useLoaderData<Application>();
-  const { submission } = useTransition();
-  const name = loaderData?.name || actionData?.fields?.name;
-  const website = loaderData?.website || actionData?.fields?.website;
-  const id = loaderData?.id || actionData?.fields?.id;
+  const loaderData = useLoaderData<LoaderData>();
+  const name = loaderData?.name;
+  const website = loaderData?.website;
 
   const toast = useToast();
 
@@ -118,41 +93,10 @@ export default function EditApplication() {
         boxShadow={"lg"}
         p={8}
       >
-        <Form method="post" noValidate>
-          <Stack spacing={4}>
-            <TextInput
-              errorMessage={actionData?.errors?.name}
-              defaultValue={name}
-              name="name"
-              type="text"
-              label="Application Name"
-              isRequired
-            />
-            <TextInput
-              errorMessage={actionData?.errors?.website}
-              defaultValue={website}
-              name="website"
-              type="text"
-              label="URL of Application"
-              helperText="If this is a mobile app, put the URL to the app store page. Otherwise, leave blank for now and fill in later."
-            />
-            <input type="hidden" name="id" defaultValue={id} />
-            <Stack spacing={10}>
-              <Button
-                bg={"blue.400"}
-                color={"white"}
-                type="submit"
-                onClick={() => toast.closeAll()}
-                _hover={{
-                  bg: "blue.500",
-                }}
-                isLoading={!!submission}
-              >
-                Update
-              </Button>
-            </Stack>
-          </Stack>
-        </Form>
+        <ApplicationForm
+          defaultValues={{ name, website }}
+          submitButtonText="Update"
+        />
       </Box>
     </Stack>
   );

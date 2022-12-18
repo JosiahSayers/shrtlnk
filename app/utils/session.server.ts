@@ -1,5 +1,6 @@
 import { PasswordReset, User } from "@prisma/client";
 import { createCookieSessionStorage, redirect, Session } from "@remix-run/node";
+import { RegisterForm } from "~/routes/developer/register";
 import { passwordResetEmail } from "~/utils/email.server";
 import { logger } from "~/utils/logger.server";
 
@@ -18,14 +19,6 @@ import {
 type LoginForm = {
   email: string;
   password: string;
-};
-
-export type RegisterForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
 };
 
 export async function register(form: RegisterForm) {

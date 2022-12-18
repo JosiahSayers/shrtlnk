@@ -70,11 +70,11 @@ describe("API", () => {
     cy.request({
       url: "/api/v2/link",
       method: "POST",
-      body: { url: "google.com" },
+      body: { url: "google is the best website." },
       headers: { "api-key": "shrtlnk-test-api-key" },
       failOnStatusCode: false,
     }).then((res) => {
-      expect(res.body.message).to.eq('"url" must be a valid uri');
+      expect(res.body.message).to.eq("not a valid url");
       expect(res.status).to.eq(400);
     });
   });
