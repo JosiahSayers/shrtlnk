@@ -1,18 +1,40 @@
 import { Link as ChakraLink } from "@chakra-ui/react";
-import { parseForm } from "@formdata-helper/remix";
-import { ActionFunction, json, LinksFunction, redirect } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
-import joi from "joi";
+import { ActionFunction, LinksFunction, redirect } from "@remix-run/node";
+import { Link, useActionData } from "@remix-run/react";
+import { withZod } from "@remix-validated-form/with-zod";
+import { useField, ValidatedForm, validationError } from "remix-validated-form";
+import { z } from "zod";
 import { createShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/index.css";
 import { logger } from "~/utils/logger.server";
 
-export const validateUrl = (
-  url: FormDataEntryValue | string | null
-): joi.ValidationResult<string> => {
-  const urlSchema = joi.string().label("URL").uri();
-  return urlSchema.validate(url);
-};
+export const urlSchema = z
+  .string()
+  .min(1, "url is required")
+  .transform((u) => {
+    if (!u.startsWith("http://") && !u.startsWith("https://")) {
+      return `https://${u}`;
+    }
+    return u;
+  })
+  .refine(
+    (u) => {
+      try {
+        new URL(u);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    {
+      message: "not a valid url",
+    }
+  );
+
+const schema = z.object({
+  url: urlSchema,
+});
+export const validator = withZod(schema);
 
 export const links: LinksFunction = () => {
   return [
@@ -23,33 +45,35 @@ export const links: LinksFunction = () => {
   ];
 };
 
+export const loader = () => {
+  console.log("HELLO");
+  console.log(urlSchema.safeParse("google"));
+  return null;
+};
+
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await parseForm(request as any);
-  const validationResult = validateUrl(formData.url);
+  const validationResult = await validator.validate(await request.formData());
 
   if (validationResult.error) {
-    return json(
-      {
-        errors: { url: validationResult.error.message },
-        values: { url: validationResult.value },
-      },
-      { status: 400 }
+    return validationError(
+      validationResult.error,
+      validationResult.submittedData
     );
   }
 
   let link;
   try {
-    link = await createShrtlnk(validationResult.value, process.env.API_KEY!);
-  } catch (e) {
-    logger.error("Failed creating link from home page", e);
+    link = await createShrtlnk(validationResult.data.url, process.env.API_KEY!);
+  } catch (e: any) {
+    logger.error(e, "Failed creating link from home page");
     // throw away unsafe URL error and return generic error
   }
 
   if (!link) {
-    return json({
-      errors: { url: "Something went wrong, please try again " },
-      values: { url: validationResult.value },
-    });
+    return validationError(
+      { fieldErrors: { url: "Something went wrong, please try again" } },
+      validationResult.submittedData
+    );
   }
 
   return redirect(`/new-link-added?key=${link.key}`);
@@ -57,6 +81,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Index() {
   const actionData = useActionData();
+  const { error, getInputProps } = useField("url", { formId: "url-form" });
 
   return (
     <main>
@@ -69,20 +94,24 @@ export default function Index() {
         <span>N</span>
         <span>K</span>
       </h1>
-      <Form method="post" reloadDocument>
+      <ValidatedForm
+        method="post"
+        id="url-form"
+        validator={validator}
+        defaultValues={actionData?.fields}
+      >
         <label htmlFor="url">URL TO SHORTEN:</label>
         <input
+          {...getInputProps()}
           className="text"
           type="text"
           name="url"
           id="url"
           defaultValue={actionData?.values?.url}
         />
-        {actionData?.errors?.url && (
-          <p className="error">{actionData?.errors?.url}</p>
-        )}
+        {error && <p className="error">{error}</p>}
         <input className="button" type="submit" value="CREATE SHORT LINK" />
-      </Form>
+      </ValidatedForm>
       <footer>
         <span>Pssst, are you a developer? We have an </span>
         <ChakraLink
