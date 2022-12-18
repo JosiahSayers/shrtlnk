@@ -14,7 +14,7 @@ export const loader: LoaderFunction = async () => {
 
 const isDbConnected = async () => {
   try {
-    return !!(await db.shrtlnk.findFirst());
+    return !!(await db.$queryRaw`SELECT 1`);
   } catch (e) {
     return false;
   }
