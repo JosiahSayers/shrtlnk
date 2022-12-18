@@ -23,7 +23,7 @@ export async function createShrtlnk(
     await db.blockedUrl.create({
       data: {
         url,
-        applicationId: apiKey,
+        applicationId: application.id,
         foundBy: "Found at runtime",
       },
     });
