@@ -1,6 +1,6 @@
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
-import Joi from "joi";
 import { getAppByApiKey } from "~/application.server";
+import { urlSchema } from "~/routes";
 import { createShrtlnk } from "~/shrtlnk.server";
 import { defaultCorsHeaders, jsonWithCors } from "~/utils/api-helpers.server";
 
@@ -19,32 +19,30 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const apiKey = request.headers.get("api-key");
-  const apiKeyValidation = Joi.string().required().validate(apiKey);
 
-  if (apiKeyValidation.error) {
+  if (!apiKey) {
     return jsonWithCors({ message: "api-key header is required" }, 403);
   }
 
-  const application = await getAppByApiKey(apiKeyValidation.value);
+  const application = await getAppByApiKey(apiKey);
 
   if (!application || application.status !== "Valid") {
     return jsonWithCors({ message: "API key is not valid" }, 403);
   }
 
   const data = await request.json();
-  const urlValidationResult = Joi.string()
-    .label("url")
-    .required()
-    .uri()
-    .validate(data.url);
+  const urlValidationResult = urlSchema.safeParse(data.url);
 
-  if (urlValidationResult.error) {
-    return jsonWithCors({ message: urlValidationResult.error.message }, 400);
+  if (!urlValidationResult.success) {
+    return jsonWithCors(
+      { message: urlValidationResult.error.issues[0].message },
+      400
+    );
   }
 
   try {
     const newShrtlnk = await createShrtlnk(
-      urlValidationResult.value,
+      urlValidationResult.data,
       application.apiKey
     );
     if (!newShrtlnk) {
