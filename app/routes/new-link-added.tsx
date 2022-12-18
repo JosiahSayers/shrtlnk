@@ -12,6 +12,7 @@ import { Link as ChakraLink } from "@chakra-ui/react";
 import { getShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/newLinkAdded.css";
 import MockNotificationAd from "~/components/ads/mock-notification";
+import WebsiteTitle from "~/components/title";
 
 export const links: LinksFunction = () => [
   {
@@ -71,17 +72,7 @@ export default function NewLinkAddec() {
 
   return (
     <main>
-      <Link className="home-link" to="/">
-        <h1 className="title">
-          <span>s</span>
-          <span>h</span>
-          <span>r</span>
-          <span>t</span>
-          <span>L</span>
-          <span>n</span>
-          <span>k</span>
-        </h1>
-      </Link>
+      <WebsiteTitle />
       <div className="new-link-container">
         <div className="box-title">
           <h2>

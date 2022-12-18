@@ -4,11 +4,6 @@ body {
   margin: 0;
 }
 
-main {
-  padding-top: 50px;
-  padding-bottom: 20px;
-}
-
 form {
   position: absolute;
   top: 50%;

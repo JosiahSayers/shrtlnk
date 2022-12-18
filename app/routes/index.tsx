@@ -4,6 +4,7 @@ import { Link, useActionData } from "@remix-run/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { useField, ValidatedForm, validationError } from "remix-validated-form";
 import { z } from "zod";
+import WebsiteTitle from "~/components/title";
 import { createShrtlnk } from "~/shrtlnk.server";
 import styles from "~/styles/index.css";
 import { logger } from "~/utils/logger.server";
@@ -45,12 +46,6 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const loader = () => {
-  console.log("HELLO");
-  console.log(urlSchema.safeParse("google"));
-  return null;
-};
-
 export const action: ActionFunction = async ({ request }) => {
   const validationResult = await validator.validate(await request.formData());
 
@@ -85,15 +80,7 @@ export default function Index() {
 
   return (
     <main>
-      <h1 className="title">
-        <span>S</span>
-        <span>H</span>
-        <span>R</span>
-        <span>T</span>
-        <span>L</span>
-        <span>N</span>
-        <span>K</span>
-      </h1>
+      <WebsiteTitle />
       <ValidatedForm
         method="post"
         id="url-form"
