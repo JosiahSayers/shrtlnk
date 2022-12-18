@@ -49,6 +49,8 @@ input[type="submit"] {
   height: 4vh;
   border-radius: 3px;
   outline: none;
+  font-weight: 700;
+  font-size: 1.5em;
 }
 
 p.error {
@@ -68,8 +70,25 @@ footer {
   padding: 10px 0;
 }
 
-@media only screen and (max-width: 400px) {
+@media screen and (max-width: 768px) {
   h1.title {
-    font-size: 4em;
+    font-size: 3.5em;
+  }
+
+  label {
+    font-size: 2rem;
+  }
+
+  footer {
+    bottom: 100px;
+  }
+
+  #url, input[type="submit"] {
+    width: 90vw;
+    height: 9vh;
+  }
+
+  input[type="submit"] {
+    height: 6vh;
   }
 }

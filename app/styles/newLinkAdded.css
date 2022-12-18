@@ -1,6 +1,7 @@
 main {
   padding-top: 50px;
   padding-bottom: 20px;
+  height: 100vh;
 }
 
 a.home-link {
@@ -20,13 +21,15 @@ h1.title {
   font-size: 5em;
 }
 
-h1.box-title {
+.box-title {
   background-color: #2ecc71;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  font-size: 2em;
+  padding: 0.5em;
 }
 
-div {
+.new-link-container {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -25%);
@@ -35,6 +38,7 @@ div {
   border-radius: 10px;
   margin: 0;
   padding: 0;
+  width: 50vw;
 }
 
 #copy-icon {
@@ -42,6 +46,7 @@ div {
   margin-left: 10px;
   transform: translateY(8px);
   cursor: pointer;
+  display: inline;
 }
 
 #tooltip {
@@ -90,4 +95,19 @@ h4 {
   background-color: #2ecc71;
   margin: 0;
   padding: 2vh;
+}
+
+@media screen and (max-width: 768px) {
+  h1.title {
+    font-size: 3.5em;
+  }
+
+  main {
+    height: 100vh;
+  }
+
+  .new-link-container {
+    width: 90vw;
+    transform: translate(-50%, -50%);
+  }
 }
