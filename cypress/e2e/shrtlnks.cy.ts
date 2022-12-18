@@ -68,6 +68,7 @@ describe("shrtlnk functionality", () => {
       expect((blockedUrl as BlockedUrl).url).to.eq(
         "https://shrtlnk.dev/developer"
       );
+      cy.task("deleteBlockedUrl", (blockedUrl as BlockedUrl).id);
     });
   });
 });

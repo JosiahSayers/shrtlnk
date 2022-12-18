@@ -98,6 +98,8 @@ export default function (on: any, config: any) {
     getFeedback: async () => db.feedback.findMany(),
     getLastBlockedUrl: async () =>
       db.blockedUrl.findFirst({ orderBy: { createdAt: "desc" } }),
+    deleteBlockedUrl: async (id: string) =>
+      db.blockedUrl.delete({ where: { id } }),
   });
   return config;
 }
