@@ -96,6 +96,8 @@ export default function (on: any, config: any) {
       return createPasswordResetForUser(user.id);
     },
     getFeedback: async () => db.feedback.findMany(),
+    getLastBlockedUrl: async () =>
+      db.blockedUrl.findFirst({ orderBy: { createdAt: "desc" } }),
   });
   return config;
 }

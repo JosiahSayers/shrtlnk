@@ -1,4 +1,4 @@
-import { Shrtlnk } from "@prisma/client";
+import { Shrtlnk, BlockedUrl } from "@prisma/client";
 
 describe("Home Page", () => {
   before(() => cy.visit("/"));
@@ -58,6 +58,17 @@ describe("shrtlnk functionality", () => {
   it("redirects to the not-found page when a shrtlnk key is not found", () => {
     cy.visit("/non-existent-key");
     cy.findByText("UH-OH! WE CAN'T FIND THAT SHORT LINK IN OUR DATABASE.");
+  });
+
+  it("Blocks unsafe URLs and logs them to the DB", () => {
+    cy.findByLabelText("URL TO SHORTEN:").type("shrtlnk.dev/developer");
+    cy.findByText("CREATE SHORT LINK").click();
+    cy.findByText("Something went wrong, please try again");
+    cy.task("getLastBlockedUrl").then((blockedUrl) => {
+      expect((blockedUrl as BlockedUrl).url).to.eq(
+        "https://shrtlnk.dev/developer"
+      );
+    });
   });
 });
 
