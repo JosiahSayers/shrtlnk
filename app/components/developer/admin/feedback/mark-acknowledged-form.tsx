@@ -20,7 +20,11 @@ export default function MarkAcknowledgedForm() {
 
   return (
     <Form method="post">
-      <Button type="submit" onClick={() => setFormHasBeenSubmitted(true)}>
+      <Button
+        type="submit"
+        onClick={() => setFormHasBeenSubmitted(true)}
+        id="mark-as-acknowledged"
+      >
         <CheckIcon fontSize="2xl" />
       </Button>
     </Form>

@@ -91,6 +91,7 @@ export default function FeedbackDetails() {
             <Button
               onClick={() => navigate("/developer/admin/feedback")}
               marginRight="6"
+              id="back-button"
             >
               <ArrowBackIcon fontSize="2xl" />
             </Button>

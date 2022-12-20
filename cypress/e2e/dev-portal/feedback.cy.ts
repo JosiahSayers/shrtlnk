@@ -1,5 +1,3 @@
-import { Feedback } from "@prisma/client";
-
 describe("Feedback Form", () => {
   before(() => cy.login());
   beforeEach(() => {
@@ -30,9 +28,7 @@ describe("Feedback Form", () => {
       "Your feedback has been recorded. Thank you for helping us improve this service for everyone."
     );
     cy.task("getFeedback").then((allFeedback) => {
-      const justSubmitted = (allFeedback as Feedback[]).find(
-        (f) => f.text === feedback
-      );
+      const justSubmitted = allFeedback.find((f) => f.text === feedback);
       expect(justSubmitted).not.to.be.undefined;
     });
   });
