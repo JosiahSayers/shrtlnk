@@ -23,6 +23,10 @@ const getLinks = () => [
     href: "change-user-role",
     title: "Change User Role",
   },
+  {
+    href: "feedback",
+    title: "User Feedback",
+  },
 ];
 
 type LoaderData = { links: ReturnType<typeof getLinks> };
