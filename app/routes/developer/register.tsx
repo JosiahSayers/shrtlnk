@@ -133,7 +133,7 @@ export default function SignupCard() {
           reloadDocument
         >
           <Stack spacing={4}>
-            <HStack>
+            <HStack alignItems="flex-start">
               <Box>
                 <TextInput
                   name="firstName"
