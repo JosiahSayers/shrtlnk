@@ -7,7 +7,8 @@ import { db } from "./utils/db.server";
 export async function createShrtlnk(
   url: string,
   apiKey: string,
-  eligibleForAd = true
+  eligibleForAd = true,
+  customKey?: string
 ): Promise<Shrtlnk | null> {
   const application = await db.application.findFirst({ where: { apiKey } });
   if (!application) {
@@ -31,9 +32,16 @@ export async function createShrtlnk(
   }
 
   let key: string;
-  do {
-    key = new ShortUniqueId({ dictionary: "alphanum_lower" }).randomUUID(6);
-  } while (await doesKeyExist(key));
+  console.log({ customKey });
+  if (customKey && await doesKeyExist(customKey)) {
+    throw new DuplicateKeyError();
+  } else if (customKey) {
+    key = customKey;
+  } else {
+    do {
+      key = new ShortUniqueId({ dictionary: "alphanum_lower" }).randomUUID(6);
+    } while (await doesKeyExist(key));
+  }
   return db.shrtlnk.create({
     data: { url, key, applicationId: application.id, eligibleForAd },
   });
@@ -66,3 +74,5 @@ function isValidUrl(url: string): boolean {
     return false;
   }
 }
+
+export class DuplicateKeyError extends Error {}
