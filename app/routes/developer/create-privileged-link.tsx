@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { z } from "zod";
 import TextInput from "~/components/developer/text-input";
-import { createShrtlnk } from "~/shrtlnk.server";
+import { createShrtlnk, DuplicateKeyError } from "~/shrtlnk.server";
 import { logger } from "~/utils/logger.server";
 import { requirePrivilegedRole } from "~/utils/session.server";
 
@@ -30,6 +30,13 @@ interface ActionData {
 
 const schema = z.object({
   url: z.string().url(),
+  customShort: z.string()
+    .max(20, { message: 'Custom URLs have a max length of 20 characters' })
+    .optional()
+    .refine(
+      val => !val || /^[a-zA-Z0-9_-]*$/g.test(val),
+      { message: 'Only the following characters are allowed: a-z, A-Z, 0-9, _, -' }
+    ),
 });
 const validator = withZod(schema);
 
@@ -54,17 +61,30 @@ export const action: ActionFunction = async ({ request }) => {
     link = await createShrtlnk(
       validationResult.data.url,
       process.env.API_KEY!,
-      false
+      false,
+      validationResult.data.customShort
     );
   } catch (e) {
     logger.error("Failed creating privileged link", e);
+    if (e instanceof DuplicateKeyError) {
+      return validationError({
+          fieldErrors: {
+            customShort: 'This key already exists, please choose another'
+          }
+        },
+        validationResult.submittedData
+      );
+    }
     // throw away unsafe URL error and return generic error
   }
 
   if (!link) {
     return json({
       errors: {},
-      values: { url: validationResult.data.url },
+      values: { 
+        url: validationResult.data.url,
+        customShort: validationResult.data.customShort
+      },
       formLevelError: "Something went wrong, please try again.",
     });
   }
@@ -113,6 +133,7 @@ export default function CreatePrivilegedLink() {
         >
           <Stack spacing={4}>
             <TextInput name="url" type="text" label="URL to shorten" />
+            <TextInput name="customShort" type="text" label="Custom Shortened URL (optional)" />
             <Stack spacing={10}>
               <Button
                 bg={"blue.400"}
