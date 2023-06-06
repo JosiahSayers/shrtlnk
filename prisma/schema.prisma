@@ -22,7 +22,7 @@ model Application {
   blockedUrls BlockedUrl[]
 
   @@unique([id, userId], name: "idAndUserId")
-  @@index([createdAt], type: Hash)
+  @@index([createdAt])
 }
 
 model Shrtlnk {
@@ -35,7 +35,7 @@ model Shrtlnk {
   application   Application?  @relation(fields: [applicationId], references: [id], onDelete: SetNull)
   loads         ShrtlnkLoad[]
 
-  @@index([createdAt], type: Hash)
+  @@index([createdAt])
 }
 
 model ShrtlnkLoad {
@@ -44,7 +44,7 @@ model ShrtlnkLoad {
   shrtlnkId String
   shrtlnk   Shrtlnk  @relation(fields: [shrtlnkId], references: [id], onDelete: Cascade)
 
-  @@index([createdAt], type: Hash)
+  @@index([createdAt])
 }
 
 model BlockedUrl {
@@ -85,7 +85,7 @@ model User {
   feedbackSubmitted       Feedback[]      @relation("feedback_submission")
   feedbackAcknowledged    Feedback[]      @relation("feedback_acknowledge")
 
-  @@index([createdAt], type: Hash)
+  @@index([createdAt])
 }
 
 model PasswordReset {
