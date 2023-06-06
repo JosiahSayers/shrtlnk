@@ -26,6 +26,3 @@ jobs:
 
     - name: Push migrations (production)
       run: DATABASE_URL=${{ secrets.DATABASE_URL }} npx prisma migrate deploy
-
-    - name: Push migrations (test)
-      run: DATABASE_URL=${{ secrets.TEST_DATABASE_URL }} npx prisma migrate deploy

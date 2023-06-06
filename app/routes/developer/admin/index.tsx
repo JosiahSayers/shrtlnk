@@ -1,4 +1,4 @@
-import { HStack, Select, Text } from "@chakra-ui/react";
+import { FormLabel, HStack, Select } from "@chakra-ui/react";
 import { json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import BarChartCard from "~/components/developer/admin/BarChartCard";
@@ -79,8 +79,9 @@ export default function AdminIndex() {
   return (
     <div className="container">
       <HStack justify="flex-end" mb="1rem">
-        <Text>Days to show: </Text>
+        <FormLabel htmlFor="days">Days to show:</FormLabel>
         <Select
+          id="days"
           bg="white"
           w={75}
           onChange={(event) => setSearchParams({ days: event.target.value })}
