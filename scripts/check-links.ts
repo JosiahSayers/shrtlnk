@@ -48,17 +48,28 @@ async function processThreats(
 
   console.log(`Found ${finalIds.length} threats, blocking them...`);
 
-  await db.blockedUrl.createMany({
-    data: links.map((link) => ({
-      url: link.url,
-      applicationId: link.applicationId!,
-      foundBy: process.env.FOUND_BY || "CRON Job",
-      linkCreatedAt: link.createdAt,
-    })),
-  });
+  await db.$transaction(async (transaction) => {
+    await transaction.blockedUrl.createMany({
+      data: links.map((link) => ({
+        url: link.url,
+        applicationId: link.applicationId!,
+        foundBy: process.env.FOUND_BY || "CRON Job",
+        linkCreatedAt: link.createdAt,
+      })),
+    });
 
-  await db.shrtlnk.deleteMany({
-    where: { id: { in: finalIds } },
+    await transaction.shrtlnk.deleteMany({
+      where: { id: { in: finalIds } },
+    });
+
+    for (const link of links) {
+      if (link.applicationId) {
+        await transaction.application.update({
+          where: { id: link.applicationId },
+          data: { totalLoads: { decrement: 1 } },
+        });
+      }
+    }
   });
 
   return finalIds.length;
