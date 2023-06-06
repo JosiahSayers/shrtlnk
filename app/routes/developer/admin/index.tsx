@@ -1,10 +1,16 @@
+import { FormLabel, HStack, Select } from "@chakra-ui/react";
 import { json, LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import BarChartCard from "~/components/developer/admin/BarChartCard";
 import LineChartCard from "~/components/developer/admin/LineChartCard";
 import { db } from "~/utils/db.server";
 
-export const loader: LoaderFunction = async () => {
+const defaultDaysToQuery = 10;
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const searchParams = new URL(request.url).searchParams;
+  const daysToQuery = searchParams.get("days") ?? defaultDaysToQuery;
+
   const data = {
     userStats: [
       { name: "Users", count: await db.user.count() },
@@ -22,28 +28,28 @@ export const loader: LoaderFunction = async () => {
     users: await db.$queryRaw`
         SELECT sequential_dates.date, COUNT("User".*) AS users_created
         FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
-          FROM generate_series(0, 30) AS sequential_dates(date)) sequential_dates
+          FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
         LEFT JOIN "User" ON "User"."createdAt"::DATE = sequential_dates.date
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
     appsCreated: await db.$queryRaw`
         SELECT sequential_dates.date, COUNT("Application".*) AS apps_created
           FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
-            FROM generate_series(0, 30) AS sequential_dates(date)) sequential_dates
+            FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
         LEFT JOIN "Application" ON "Application"."createdAt"::DATE = sequential_dates.date
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
     shrtlnks: await db.$queryRaw`
         SELECT sequential_dates.date, COUNT("Shrtlnk".*) AS shrtlnks_created
         FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
-          FROM generate_series(0, 30) AS sequential_dates(date)) sequential_dates
+          FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
         LEFT JOIN "Shrtlnk" ON "Shrtlnk"."createdAt"::DATE = sequential_dates.date
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
     shrtlnkLoads: await db.$queryRaw`
         SELECT sequential_dates.date, COUNT("ShrtlnkLoad".*) AS shrtlnks_loaded
         FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
-          FROM generate_series(0, 30) AS sequential_dates(date)) sequential_dates
+          FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
         LEFT JOIN "ShrtlnkLoad" ON "ShrtlnkLoad"."createdAt"::DATE = sequential_dates.date
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
@@ -68,9 +74,25 @@ export const loader: LoaderFunction = async () => {
 
 export default function AdminIndex() {
   const data = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <div className="container">
+      <HStack justify="flex-end" mb="1rem">
+        <FormLabel htmlFor="days">Days to show:</FormLabel>
+        <Select
+          id="days"
+          bg="white"
+          w={75}
+          onChange={(event) => setSearchParams({ days: event.target.value })}
+          value={searchParams.get("days") ?? defaultDaysToQuery}
+        >
+          {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => (
+            <option key={day}>{day}</option>
+          ))}
+        </Select>
+      </HStack>
+
       <LineChartCard
         title="Shrtlnks"
         data={data?.shrtlnks.map((shrtlnk: any) => ({

@@ -11,32 +11,23 @@ type ApplicationWithData = Application & {
 export async function getApplicationsWithCounts(
   userId: string
 ): Promise<ApplicationWithData[]> {
-  const applications = await db.application.findMany({
+  const apps = await db.application.findMany({
     where: { userId },
     include: {
       _count: {
-        select: { blockedUrls: true },
-      },
-      shrtlnks: {
-        include: {
-          _count: {
-            select: { loads: true },
-          },
+        select: {
+          blockedUrls: true,
+          shrtlnks: true,
         },
       },
     },
   });
 
-  return applications.map((app) => ({
+  return apps.map((app) => ({
     ...app,
-    shrtlnkLoads: app.shrtlnks.reduce(
-      (count, link) => count + link._count.loads,
-      0
-    ),
-    shrtlnksCreated: app.shrtlnks.length,
+    shrtlnkLoads: app.totalLoads,
+    shrtlnksCreated: app._count.shrtlnks,
     blockedUrls: app._count.blockedUrls,
-    shrtlnks: undefined,
-    _count: undefined,
   }));
 }
 
