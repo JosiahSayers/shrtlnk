@@ -1,15 +1,15 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { Button, Spinner } from "@chakra-ui/react";
-import { Form, useTransition } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import { useState } from "react";
 
 export default function MarkAcknowledgedForm() {
-  const transition = useTransition();
+  const navigation = useNavigation();
   const [formHasBeenSubmitted, setFormHasBeenSubmitted] = useState(false);
 
   if (
-    transition.state === "submitting" ||
-    (formHasBeenSubmitted && transition.state === "loading")
+    navigation.state === "submitting" ||
+    (formHasBeenSubmitted && navigation.state === "loading")
   ) {
     return (
       <Button disabled>

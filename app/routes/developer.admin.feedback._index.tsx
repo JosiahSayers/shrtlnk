@@ -70,7 +70,7 @@ export default function Feedback() {
     useLoaderData<LoaderData>();
   const navigate = useNavigate();
 
-  const isAcknowledged = (message: Feedback) =>
+  const isAcknowledged = (message: typeof messages[number]) =>
     message.acknowledgedAt && message.acknowledgedByUserId;
 
   return (

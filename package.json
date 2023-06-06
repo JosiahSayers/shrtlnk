@@ -14,7 +14,8 @@
     "db:drop": "node --require esbuild-register prisma/drop.ts",
     "db:migrate": "prisma db push",
     "clean-urls": "node --require esbuild-register scripts/check-links.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@axiomhq/axiom-node": "^0.10.0",
@@ -25,7 +26,7 @@
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.8.1",
     "@formdata-helper/remix": "^1.1.0",
-    "@prisma/client": "^4.7.1",
+    "@prisma/client": "^4.15.0",
     "@remix-run/node": "^1.3.3",
     "@remix-run/react": "^1.3.3",
     "@remix-run/vercel": "^1.3.3",
@@ -68,7 +69,7 @@
     "eslint-plugin-react": "^7.29.4",
     "jest": "^27.5.1",
     "jest-runner-tsc": "^1.6.0",
-    "prisma": "^4.7.1",
+    "prisma": "^4.15.0",
     "progress": "^2.0.3",
     "ts-jest": "^27.1.3",
     "ts-node": "^10.6.0",

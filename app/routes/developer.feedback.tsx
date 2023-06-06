@@ -15,7 +15,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useTransition,
+  useNavigation,
 } from "@remix-run/react";
 import { sentenceCase } from "change-case";
 import { useEffect } from "react";
@@ -60,7 +60,7 @@ export default function Feedback() {
   const actionData = useActionData();
   const toast = useToast();
   const navigate = useNavigate();
-  const { submission } = useTransition();
+  const { state } = useNavigation();
 
   useEffect(() => {
     if (actionData?.error) {
@@ -127,7 +127,7 @@ export default function Feedback() {
                 }}
                 type="submit"
                 onClick={() => toast.closeAll()}
-                isLoading={!!submission}
+                isLoading={state !== "idle"}
               >
                 Send Feedback
               </Button>

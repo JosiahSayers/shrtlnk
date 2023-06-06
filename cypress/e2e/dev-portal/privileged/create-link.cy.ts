@@ -5,10 +5,8 @@ describe("Create Privileged Link", () => {
   before(() => cy.login("privileged@test.com"));
   beforeEach(() => {
     cy.preserveAuthCookie();
-    cy.visit("/developer");
-    cy.findAllByText("Shorten Link (without ads)").filter(":visible").click();
+    cy.visit("/developer/create-privileged-link");
   });
-  after(() => cy.logout());
 
   it("shows the correct copy", () => {
     cy.findByText("Shorten Link");

@@ -13,7 +13,7 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import { useActionData, useTransition } from "@remix-run/react";
+import { useActionData, useNavigation } from "@remix-run/react";
 import { withZod } from "@remix-validated-form/with-zod";
 import { useEffect } from "react";
 import { ValidatedForm, validationError } from "remix-validated-form";
@@ -30,13 +30,13 @@ interface ActionData {
 
 const schema = z.object({
   url: z.string().url(),
-  customShort: z.string()
-    .max(20, { message: 'Custom URLs have a max length of 20 characters' })
+  customShort: z
+    .string()
+    .max(20, { message: "Custom URLs have a max length of 20 characters" })
     .optional()
-    .refine(
-      val => !val || /^[a-zA-Z0-9_-]*$/g.test(val),
-      { message: 'Only the following characters are allowed: a-z, A-Z, 0-9, _, -' }
-    ),
+    .refine((val) => !val || /^[a-zA-Z0-9_-]*$/g.test(val), {
+      message: "Only the following characters are allowed: a-z, A-Z, 0-9, _, -",
+    }),
 });
 const validator = withZod(schema);
 
@@ -67,10 +67,11 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (e) {
     logger.error("Failed creating privileged link", e);
     if (e instanceof DuplicateKeyError) {
-      return validationError({
+      return validationError(
+        {
           fieldErrors: {
-            customShort: 'This key already exists, please choose another'
-          }
+            customShort: "This key already exists, please choose another",
+          },
         },
         validationResult.submittedData
       );
@@ -81,9 +82,9 @@ export const action: ActionFunction = async ({ request }) => {
   if (!link) {
     return json({
       errors: {},
-      values: { 
+      values: {
         url: validationResult.data.url,
-        customShort: validationResult.data.customShort
+        customShort: validationResult.data.customShort,
       },
       formLevelError: "Something went wrong, please try again.",
     });
@@ -95,7 +96,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function CreatePrivilegedLink() {
   const actionData = useActionData<ActionData>();
   const toast = useToast();
-  const { submission } = useTransition();
+  const { state } = useNavigation();
 
   useEffect(() => {
     if (actionData?.formLevelError) {
@@ -133,7 +134,11 @@ export default function CreatePrivilegedLink() {
         >
           <Stack spacing={4}>
             <TextInput name="url" type="text" label="URL to shorten" />
-            <TextInput name="customShort" type="text" label="Custom Shortened URL (optional)" />
+            <TextInput
+              name="customShort"
+              type="text"
+              label="Custom Shortened URL (optional)"
+            />
             <Stack spacing={10}>
               <Button
                 bg={"blue.400"}
@@ -143,7 +148,7 @@ export default function CreatePrivilegedLink() {
                 _hover={{
                   bg: "blue.500",
                 }}
-                isLoading={!!submission}
+                isLoading={state !== "idle"}
               >
                 Create Shrtlnk
               </Button>

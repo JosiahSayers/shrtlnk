@@ -5,7 +5,7 @@ import {
   Form,
   useActionData,
   useLoaderData,
-  useTransition,
+  useNavigation,
 } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
@@ -59,7 +59,7 @@ export const action: ActionFunction = async ({ request }) => {
     where: { id: form.user },
     data: { role: form.selectedRole },
   });
-  if (form.selectedRole === 'Privileged') {
+  if (form.selectedRole === "Privileged") {
     await makeUserPrivilegedRoleEmail(user);
   }
   return json({ userUpdated: true });
@@ -69,7 +69,7 @@ export default function ChangeUserRole() {
   const { users, validRoles } = useLoaderData<LoaderData>();
   const [selectedUser, setSelectedUser] = useState(users[0]);
   const [selectedRole, setSelectedRole] = useState(users[0].role);
-  const { submission } = useTransition();
+  const { state } = useNavigation();
   const actionData = useActionData();
   const toast = useToast();
 
@@ -151,7 +151,7 @@ export default function ChangeUserRole() {
           color={"white"}
           type="submit"
           variant="solid"
-          isLoading={!!submission}
+          isLoading={state !== "idle"}
         >
           Change Role
         </Button>
