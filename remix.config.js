@@ -8,7 +8,7 @@ module.exports = {
   // so we default back to the standard build output.
   server: process.env.NODE_ENV === "development" ? undefined : "./server.js",
   ignoredRouteFiles: [".*", "*.test.ts"],
-  serverModuleFormat: "esm",
+  serverModuleFormat: "cjs",
   future: {
     v2_errorBoundary: true,
     v2_normalizeFormMethod: true,
