@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 import {
   ErrorBoundaryComponent,
   LinksFunction,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   Links,
@@ -18,12 +18,12 @@ import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
 import WebsiteTitle from "~/components/title";
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "shrtlnk - Simple Link Shortener",
-  viewport: "width=device-width,initial-scale=1",
-  propeller: "ca94f7201f84b75922ec54935ae6a1ce",
-});
+export const meta: V2_MetaFunction = () => [
+  { charset: "utf-8" },
+  { title: "shrtlnk - Simple Link Shortener" },
+  { name: "viewport", content: "width=device-width,initial-scale=1" },
+  { name: "propeller", content: "ca94f7201f84b75922ec54935ae6a1ce" },
+];
 
 export const links: LinksFunction = () => {
   return [
