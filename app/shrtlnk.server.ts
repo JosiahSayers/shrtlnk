@@ -33,7 +33,7 @@ export async function createShrtlnk(
 
   let key: string;
   console.log({ customKey });
-  if (customKey && await doesKeyExist(customKey)) {
+  if (customKey && (await doesKeyExist(customKey))) {
     throw new DuplicateKeyError();
   } else if (customKey) {
     key = customKey;
@@ -53,11 +53,17 @@ export async function getShrtlnk(
 ): Promise<Shrtlnk | null> {
   const link = await db.shrtlnk.findUnique({ where: { key } });
   if (link && createLoadEntry) {
-    await db.shrtlnkLoad.create({
-      data: {
-        shrtlnkId: link.id,
-      },
-    });
+    await db.$transaction([
+      db.shrtlnkLoad.create({
+        data: {
+          shrtlnkId: link.id,
+        },
+      }),
+      db.application.update({
+        where: { id: link.applicationId ?? undefined },
+        data: { totalLoads: { increment: 1 } },
+      }),
+    ]);
   }
   return link;
 }
