@@ -9,7 +9,7 @@ const defaultDaysToQuery = 10;
 
 export const loader: LoaderFunction = async ({ request }) => {
   const searchParams = new URL(request.url).searchParams;
-  const daysToQuery = searchParams.get("days") ?? defaultDaysToQuery;
+  const daysToQuery = Number(searchParams.get("days")) || defaultDaysToQuery;
 
   const data = {
     userStats: [
@@ -29,28 +29,28 @@ export const loader: LoaderFunction = async ({ request }) => {
         SELECT sequential_dates.date, COUNT("User".*) AS users_created
         FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
           FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
-        LEFT JOIN "User" ON "User"."createdAt"::DATE = sequential_dates.date
+        LEFT JOIN "User" ON "User"."createdAt" BETWEEN sequential_dates.date AND sequential_dates.date + INTERVAL '1 day'
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
     appsCreated: await db.$queryRaw`
         SELECT sequential_dates.date, COUNT("Application".*) AS apps_created
           FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
             FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
-        LEFT JOIN "Application" ON "Application"."createdAt"::DATE = sequential_dates.date
+        LEFT JOIN "Application" ON "Application"."createdAt" BETWEEN sequential_dates.date AND sequential_dates.date + INTERVAL '1 day'
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
     shrtlnks: await db.$queryRaw`
         SELECT sequential_dates.date, COUNT("Shrtlnk".*) AS shrtlnks_created
         FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
           FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
-        LEFT JOIN "Shrtlnk" ON "Shrtlnk"."createdAt"::DATE = sequential_dates.date
+        LEFT JOIN "Shrtlnk" ON "Shrtlnk"."createdAt" BETWEEN sequential_dates.date AND sequential_dates.date + INTERVAL '1 day'
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
     shrtlnkLoads: await db.$queryRaw`
         SELECT sequential_dates.date, COUNT("ShrtlnkLoad".*) AS shrtlnks_loaded
         FROM (SELECT (current_timestamp at time zone 'UTC')::date - sequential_dates.date AS DATE
           FROM generate_series(0, ${daysToQuery}::INT) AS sequential_dates(date)) sequential_dates
-        LEFT JOIN "ShrtlnkLoad" ON "ShrtlnkLoad"."createdAt"::DATE = sequential_dates.date
+        LEFT JOIN "ShrtlnkLoad" ON "ShrtlnkLoad"."createdAt" BETWEEN sequential_dates.date AND sequential_dates.date + INTERVAL '1 day'
         GROUP BY sequential_dates.date
         ORDER BY date ASC`,
   };
