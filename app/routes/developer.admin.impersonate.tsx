@@ -56,7 +56,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Impersonate() {
   const users = useLoaderData<CleanedUser[]>();
-  const [selected, setSelected] = useState<CleanedUser>(users[0]);
+  const [selected, setSelected] = useState<typeof users[number]>(users[0]);
   const { submission } = useTransition();
 
   return (

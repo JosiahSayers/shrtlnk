@@ -53,7 +53,7 @@ export default function DeveloperRoot() {
   }, [userInfo]);
 
   return (
-    <DevPortalContext.Provider value={{ userInfo }}>
+    <DevPortalContext.Provider value={{ userInfo } as any}>
       <NavBar />
       <ImpersonationBar />
       <Flex

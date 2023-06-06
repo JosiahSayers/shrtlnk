@@ -14,7 +14,8 @@
     "db:drop": "node --require esbuild-register prisma/drop.ts",
     "db:migrate": "prisma db push",
     "clean-urls": "node --require esbuild-register scripts/check-links.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@axiomhq/axiom-node": "^0.10.0",
