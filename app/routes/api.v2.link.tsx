@@ -1,6 +1,6 @@
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { getAppByApiKey } from "~/application.server";
-import { urlSchema } from "~/routes";
+import { urlSchema } from "~/routes/_index";
 import { createShrtlnk } from "~/shrtlnk.server";
 import { defaultCorsHeaders, jsonWithCors } from "~/utils/api-helpers.server";
 

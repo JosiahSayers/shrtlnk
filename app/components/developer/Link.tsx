@@ -1,6 +1,6 @@
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { Link as RemixLink } from "@remix-run/react";
-import { RemixLinkProps } from "@remix-run/react/components";
+import { RemixLinkProps } from "@remix-run/react/dist/components";
 
 export default function Link({ to, children }: RemixLinkProps) {
   return (
