@@ -1,3 +1,4 @@
+import { capitalCase } from "change-case";
 import {
   CartesianGrid,
   Legend,
@@ -49,6 +50,7 @@ export default function LineChartCard({
                 type="monotone"
                 dataKey={key}
                 stroke={colors[index]}
+                name={capitalCase(key)}
               />
             ))}
           </LineChart>
