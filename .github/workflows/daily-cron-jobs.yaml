@@ -2,6 +2,7 @@ name: Daily Cron Jobs
 on:
   schedule:
     - cron: '0 1 * * *'
+  workflow_dispatch:
 jobs:
   clean-links:
     runs-on: ubuntu-latest
