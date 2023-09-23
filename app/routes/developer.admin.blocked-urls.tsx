@@ -67,7 +67,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const [urlResults, totalResults] = await db.$transaction([
       db.blockedUrl.findMany(query),
-      db.blockedUrl.count({ ...query, take: undefined, skip: undefined, include: undefined }),
+      db.blockedUrl.count({
+        ...query,
+        take: undefined,
+        skip: undefined,
+        include: undefined,
+      }),
     ]);
     urls = urlResults;
     totalPages = Math.ceil(totalResults / pageSize);
@@ -116,7 +121,13 @@ export default function BlockedURLs() {
                 <Tr key={url.id}>
                   <Td>{new Date(url.createdAt).toLocaleString()}</Td>
                   <Td>{new Date(url.linkCreatedAt).toLocaleString()}</Td>
-                  <Td>{url.application.name}</Td>
+                  <Td>
+                    <Link
+                      to={`/developer/admin/application/${url.applicationId}`}
+                    >
+                      {url.application.name}
+                    </Link>
+                  </Td>
                   <Td>{url.foundBy}</Td>
                   <Td>{url.url}</Td>
                 </Tr>
