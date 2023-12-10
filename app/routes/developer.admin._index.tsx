@@ -4,10 +4,12 @@ import { useLoaderData, useSearchParams } from "@remix-run/react";
 import BarChartCard from "~/components/developer/admin/BarChartCard";
 import LineChartCard from "~/components/developer/admin/LineChartCard";
 import { db } from "~/utils/db.server";
+import { requireAdminRole } from "~/utils/session.server";
 
 const defaultDaysToQuery = 10;
 
 export const loader: LoaderFunction = async ({ request }) => {
+  await requireAdminRole(request);
   const searchParams = new URL(request.url).searchParams;
   const daysToQuery = Number(searchParams.get("days")) || defaultDaysToQuery;
 

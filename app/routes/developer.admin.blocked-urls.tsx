@@ -19,6 +19,7 @@ import Link from "~/components/developer/Link";
 import Pagination, {
   getPaginationData,
 } from "~/components/developer/pagination";
+import { requireAdminRole } from "~/utils/session.server";
 
 type LoaderData = {
   urls: Array<
@@ -36,6 +37,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+  await requireAdminRole(request);
   const { currentPage, pageSize, skip } = getPaginationData(request);
   const dateString = new URL(request.url).searchParams.get("utc_date");
   const commonQueryOptions = {
@@ -67,7 +69,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const [urlResults, totalResults] = await db.$transaction([
       db.blockedUrl.findMany(query),
-      db.blockedUrl.count({ ...query, take: undefined, skip: undefined, include: undefined }),
+      db.blockedUrl.count({
+        ...query,
+        take: undefined,
+        skip: undefined,
+        include: undefined,
+      }),
     ]);
     urls = urlResults;
     totalPages = Math.ceil(totalResults / pageSize);
@@ -116,7 +123,13 @@ export default function BlockedURLs() {
                 <Tr key={url.id}>
                   <Td>{new Date(url.createdAt).toLocaleString()}</Td>
                   <Td>{new Date(url.linkCreatedAt).toLocaleString()}</Td>
-                  <Td>{url.application.name}</Td>
+                  <Td>
+                    <Link
+                      to={`/developer/admin/application/${url.applicationId}`}
+                    >
+                      {url.application.name}
+                    </Link>
+                  </Td>
                   <Td>{url.foundBy}</Td>
                   <Td>{url.url}</Td>
                 </Tr>

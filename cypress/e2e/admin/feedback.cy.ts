@@ -54,6 +54,13 @@ describe("feedback", () => {
     );
   });
 
+  it("displays unread feedback count in the nav", () => {
+    cy.visit("/developer/admin/feedback");
+    cy.get('[href="/developer/admin/feedback"]')
+      .find(".chakra-badge")
+      .should("have.text", "2");
+  });
+
   describe("details", () => {
     it("allows an admin to mark a message as acknowledged", () => {
       cy.visit(`/developer/admin/feedback/${feedback1.id}`);

@@ -1,8 +1,10 @@
-import { LoaderFunction } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
+import { json, LoaderArgs } from "@remix-run/node";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { requireAdminRole } from "~/utils/session.server";
+import { db } from "~/utils/db.server";
+import AdminLink from "~/components/developer/admin/AdminLink";
 
-const getLinks = () => [
+const getLinks = async () => [
   {
     href: "",
     title: "Dashboard",
@@ -26,21 +28,19 @@ const getLinks = () => [
   {
     href: "feedback",
     title: "User Feedback",
+    notificationCount: await db.feedback.count({
+      where: { acknowledgedByUserId: null },
+    }),
   },
 ];
 
-type LoaderData = { links: ReturnType<typeof getLinks> };
-
-export const loader: LoaderFunction = async ({
-  request,
-}): Promise<LoaderData> => {
+export async function loader({ request }: LoaderArgs) {
   await requireAdminRole(request);
-  return { links: getLinks() };
-};
+  return json({ links: await getLinks() });
+}
 
 export default function Admin() {
-  const { links } = useLoaderData<LoaderData>();
-  const currentPath = useLocation().pathname.split("/developer/admin")[1];
+  const { links } = useLoaderData<typeof loader>();
 
   return (
     <div
@@ -65,17 +65,7 @@ export default function Admin() {
 
           <nav className="nav flex-column">
             {links.map((link) => (
-              <Link
-                className={`nav-link${
-                  currentPath === link.href || currentPath === `/${link.href}`
-                    ? " font-weight-bold"
-                    : ""
-                }`}
-                to={link.href}
-                key={link.title}
-              >
-                {link.title}
-              </Link>
+              <AdminLink {...link} key={link.href} />
             ))}
           </nav>
         </div>

@@ -19,6 +19,7 @@ import Pagination, {
 } from "~/components/developer/pagination";
 import { db } from "~/utils/db.server";
 import { logger } from "~/utils/logger.server";
+import { requireAdminRole } from "~/utils/session.server";
 
 interface LoaderData {
   messages: Awaited<ReturnType<typeof dbCall>>[0];
@@ -55,6 +56,7 @@ async function dbCall(skip: number, pageSize: number) {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  await requireAdminRole(request);
   const { currentPage, pageSize, skip } = getPaginationData(request);
   const [messages, totalUnread, totalMessages] = await dbCall(skip, pageSize);
   const totalPages = Math.ceil(totalMessages / pageSize);

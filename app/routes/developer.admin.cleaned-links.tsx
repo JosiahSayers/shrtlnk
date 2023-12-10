@@ -18,6 +18,7 @@ import Pagination, {
   getPaginationData,
 } from "~/components/developer/pagination";
 import { db } from "~/utils/db.server";
+import { requireAdminRole } from "~/utils/session.server";
 
 type LoaderData = {
   logs: Array<
@@ -32,6 +33,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+  await requireAdminRole(request);
   const { currentPage, pageSize, skip } = getPaginationData(request);
   const logs = await db.cleanLinksLog.findMany({
     orderBy: { createdAt: "desc" },
@@ -77,7 +79,7 @@ export default function CleanedLinks() {
     }
 
     return "";
-  }
+  };
 
   return (
     <div className="container">
@@ -95,10 +97,7 @@ export default function CleanedLinks() {
             </Thead>
             <Tbody>
               {logs.map((log) => (
-                <Tr
-                  key={log.id}
-                  backgroundColor={getBackgroundColor(log)}
-                >
+                <Tr key={log.id} backgroundColor={getBackgroundColor(log)}>
                   <Td>
                     <ChakraLink
                       as={Link}
