@@ -11,8 +11,10 @@ import { useLoaderData } from "@remix-run/react";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { BoxComponent } from "~/components/developer/box";
 import { db } from "~/utils/db.server";
+import { requireAdminRole } from "~/utils/session.server";
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params, request }: LoaderArgs) {
+  await requireAdminRole(request);
   const app = await db.application.findUnique({
     where: { id: params.id },
     include: { User: true },

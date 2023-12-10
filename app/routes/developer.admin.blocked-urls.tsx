@@ -19,6 +19,7 @@ import Link from "~/components/developer/Link";
 import Pagination, {
   getPaginationData,
 } from "~/components/developer/pagination";
+import { requireAdminRole } from "~/utils/session.server";
 
 type LoaderData = {
   urls: Array<
@@ -36,6 +37,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+  await requireAdminRole(request);
   const { currentPage, pageSize, skip } = getPaginationData(request);
   const dateString = new URL(request.url).searchParams.get("utc_date");
   const commonQueryOptions = {

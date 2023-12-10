@@ -44,7 +44,8 @@ async function dbCall(id: string) {
   });
 }
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
+  await requireAdminRole(request);
   const feedback = await dbCall(params.id!);
   if (!feedback) {
     return redirect("/developer/admin/feedback");

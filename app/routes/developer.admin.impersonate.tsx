@@ -22,7 +22,8 @@ type CleanedUser = {
   lastLoginSuccess: Date;
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  await requireAdminRole(request);
   const users = await db.user.findMany({ orderBy: { createdAt: "desc" } });
   return users.map(
     ({
