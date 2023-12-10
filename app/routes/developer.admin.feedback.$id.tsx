@@ -31,6 +31,7 @@ async function dbCall(id: string) {
         select: {
           firstName: true,
           lastName: true,
+          email: true,
         },
       },
       acknowledgedBy: {
@@ -108,7 +109,11 @@ export default function FeedbackDetails() {
           </HStack>
           <Box padding="2rem" textAlign="left">
             <Text fontWeight="bold">
-              From: {feedback.from.firstName} {feedback.from.lastName}
+              From: {feedback.from.firstName} {feedback.from.lastName} (
+              <a href={`mailto:${feedback.from.email}`}>
+                {feedback.from.email}
+              </a>
+              )
             </Text>
             <Text fontWeight="bold">Type: {sentenceCase(feedback.type)}</Text>
             <Text fontWeight="bold">
