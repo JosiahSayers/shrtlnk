@@ -40,7 +40,7 @@ describe("shrtlnk functionality", () => {
     cy.findByText("SUCCESS! HERE'S YOUR NEW LINK:");
   });
 
-  it("marks links as eligible for ads", () => {
+  it("marks links as not eligible for ads when the app has < 500 shrtlnk loads", () => {
     cy.findByLabelText("URL TO SHORTEN:").type("https://google.com");
     cy.findByText("CREATE SHORT LINK").click();
     cy.findByText("SUCCESS! HERE'S YOUR NEW LINK:");
@@ -50,7 +50,7 @@ describe("shrtlnk functionality", () => {
       cy.task("getShrtlnk", key).then((shrtlnk) => {
         expect(shrtlnk).not.to.be.null;
         expect(shrtlnk).not.to.be.undefined;
-        expect((shrtlnk as Shrtlnk).eligibleForAd).to.eq(true);
+        expect((shrtlnk as Shrtlnk).eligibleForAd).to.eq(false);
       });
     });
   });
