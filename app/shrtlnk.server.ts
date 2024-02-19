@@ -7,7 +7,7 @@ import { db } from "./utils/db.server";
 export async function createShrtlnk(
   url: string,
   apiKey: string,
-  eligibleForAd = true,
+  eligibleForAd?: boolean,
   customKey?: string
 ): Promise<Shrtlnk | null> {
   const application = await db.application.findFirst({ where: { apiKey } });
@@ -42,8 +42,16 @@ export async function createShrtlnk(
       key = new ShortUniqueId({ dictionary: "alphanum_lower" }).randomUUID(6);
     } while (await doesKeyExist(key));
   }
+
+  const finalEligibleForAd = eligibleForAd ?? application.totalLoads > 500;
+
   return db.shrtlnk.create({
-    data: { url, key, applicationId: application.id, eligibleForAd },
+    data: {
+      url,
+      key,
+      applicationId: application.id,
+      eligibleForAd: finalEligibleForAd,
+    },
   });
 }
 
