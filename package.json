@@ -18,7 +18,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@axiomhq/axiom-node": "^0.10.0",
+    "@axiomhq/axiom-node": "^0.12.0",
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.8",
     "@emotion/cache": "^11.10.5",
@@ -31,7 +31,7 @@
     "@remix-run/react": "^1.3.3",
     "@remix-run/vercel": "^1.3.3",
     "@remix-validated-form/with-zod": "^2.0.5",
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.1.1",
     "bcryptjs": "^2.4.3",
     "change-case": "^4.1.2",
     "framer-motion": "^6.2.10",
