@@ -24,7 +24,6 @@ declare global {
   namespace Cypress {
     interface Chainable {
       login(email?: string, password?: string): Chainable<Element>;
-      preserveAuthCookie(): Chainable<Element>;
       logout(): Chainable<Element>;
     }
   }

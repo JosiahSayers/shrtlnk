@@ -1,7 +1,6 @@
 describe("Admin Impersonate", () => {
-  before(() => cy.login("admin@test.com"));
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login("admin@test.com");
     cy.findAllByText("Admin Dashboard").filter(":visible").click();
     cy.findByText("Impersonate").click();
   });

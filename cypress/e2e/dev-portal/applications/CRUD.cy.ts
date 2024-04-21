@@ -1,6 +1,5 @@
 describe("Application CRUD", () => {
-  before(() => cy.login());
-  beforeEach(() => cy.preserveAuthCookie());
+  beforeEach(() => cy.login());
   after(() => cy.logout());
 
   describe("Creating an application", () => {

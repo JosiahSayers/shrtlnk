@@ -1,7 +1,6 @@
 describe("Admin Link Cleaning Log", () => {
-  before(() => cy.login("admin@test.com"));
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login("admin@test.com");
     cy.findAllByText("Admin Dashboard").filter(":visible").click();
     cy.findByText("Link Cleaning Log").click();
     cy.get("h2").should("be.visible").and("have.text", "Link Cleaning Log");

@@ -1,6 +1,5 @@
 describe("Admin Dashboard", () => {
-  before(() => cy.login("admin@test.com"));
-  beforeEach(() => cy.preserveAuthCookie());
+  beforeEach(() => cy.login("admin@test.com"));
   after(() => cy.logout());
 
   it("loads the dashboard page and expected graphs", () => {

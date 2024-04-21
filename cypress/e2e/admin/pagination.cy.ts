@@ -1,7 +1,6 @@
 describe("pagination", () => {
-  before(() => cy.login("admin@test.com"));
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login("admin@test.com");
     cy.findAllByText("Admin Dashboard").filter(":visible").click();
     cy.findAllByText("Blocked URLs").filter("a").click();
     cy.get("h2").should("be.visible").and("have.text", "Blocked URLs");
@@ -10,8 +9,8 @@ describe("pagination", () => {
 
   it("disables the previous button when on the first page", () => {
     cy.visit("/developer/admin/blocked-urls?pageSize=1&page=1");
-    cy.findByText("Back").should('be.disabled');
-    cy.findByText("Next").should('not.be.disabled');
+    cy.findByText("Back").should("be.disabled");
+    cy.findByText("Next").should("not.be.disabled");
   });
 
   it("disables the next button when on the last page", () => {
