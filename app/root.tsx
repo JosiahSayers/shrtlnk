@@ -14,6 +14,7 @@ import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
 import WebsiteTitle from "~/components/title";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import { SpeedInsights } from "@vercel/speed-insights/remix";
 
 export const meta: MetaFunction = () => [
   { charset: "utf-8" },
@@ -108,22 +109,23 @@ const Document = withEmotionCache(
           ))}
         </head>
         <body>
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
+          <ChakraProvider>
+            {children}
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+            <SpeedInsights />
+          </ChakraProvider>
         </body>
       </html>
     );
   }
 );
 
+export function Layout({ children }: { children: React.ReactNode }) {
+  return <Document>{children}</Document>;
+}
+
 export default function App() {
-  return (
-    <Document>
-      <ChakraProvider>
-        <Outlet />
-      </ChakraProvider>
-    </Document>
-  );
+  return <Outlet />;
 }
