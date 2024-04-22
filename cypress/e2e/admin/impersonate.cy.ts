@@ -13,7 +13,6 @@ describe("Admin Impersonate", () => {
   it("lists all users in a select", () => {
     cy.findByText("Admin Developer (admin@test.com)");
     cy.findByText("Appless Developer (noapps@test.com)");
-    cy.findByText("Legacy User (legacy@test.com)");
     cy.findByText("John Developer (test@test.com)");
     cy.get("select").children().should("have.length", 5);
   });

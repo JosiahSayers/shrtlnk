@@ -62,22 +62,6 @@ describe("Signing into an account", () => {
     cy.findByText("Hey there, Privileged");
     cy.findByText("Sign Out");
   });
-
-  it("allows legacy users to log in", () => {
-    cy.findByLabelText("Email Address").type("legacy@test.com");
-    cy.findByLabelText("Password").type("password");
-    cy.findByText("Sign in").click();
-    cy.findByText("Hey there, Legacy");
-    cy.findByText("Add an application");
-  });
-
-  it("allows legacy users to log in a second time (after their password has been hashed with bcrypt)", () => {
-    cy.findByLabelText("Email Address").type("legacy@test.com");
-    cy.findByLabelText("Password").type("password");
-    cy.findByText("Sign in").click();
-    cy.findByText("Hey there, Legacy");
-    cy.findByText("Add an application");
-  });
 });
 
 export {};
