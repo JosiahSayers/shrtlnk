@@ -1,4 +1,4 @@
-import { json, LoaderArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { requireAdminRole } from "~/utils/session.server";
 import { db } from "~/utils/db.server";
@@ -34,7 +34,7 @@ const getLinks = async () => [
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   await requireAdminRole(request);
   return json({ links: await getLinks() });
 }

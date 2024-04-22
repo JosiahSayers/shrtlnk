@@ -70,7 +70,7 @@ export default function ChangeUserRole() {
   const [selectedUser, setSelectedUser] = useState(users[0]);
   const [selectedRole, setSelectedRole] = useState(users[0].role);
   const { state } = useNavigation();
-  const actionData = useActionData();
+  const actionData = useActionData<typeof action>();
   const toast = useToast();
 
   useEffect(() => {

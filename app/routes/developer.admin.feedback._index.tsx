@@ -7,7 +7,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { Feedback } from "@prisma/client";
+import type { Feedback } from "@prisma/client";
 import { LoaderFunction, json } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { sentenceCase } from "change-case";

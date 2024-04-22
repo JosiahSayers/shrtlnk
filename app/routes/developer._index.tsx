@@ -1,9 +1,9 @@
 import { Flex, Heading, Stack, Text } from "@chakra-ui/react";
-import { LoaderFunction, redirect, V2_MetaFunction } from "@remix-run/node";
+import { LoaderFunction, redirect, MetaFunction } from "@remix-run/node";
 import Card from "~/components/developer/card";
 import { getUserSession } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   { title: "Developer Portal - shrtlnk - Simple Link Shortener" },
 ];
 

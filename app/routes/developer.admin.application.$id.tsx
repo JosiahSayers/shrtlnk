@@ -6,14 +6,14 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { json, LoaderArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
 import { BoxComponent } from "~/components/developer/box";
 import { db } from "~/utils/db.server";
 import { requireAdminRole } from "~/utils/session.server";
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   await requireAdminRole(request);
   const app = await db.application.findUnique({
     where: { id: params.id },

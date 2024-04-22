@@ -9,7 +9,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { CleanLinksLog } from "@prisma/client";
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, type SerializeFrom } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { DateTime } from "luxon";
 import AdminHeading from "~/components/developer/admin/AdminHeading";
@@ -69,7 +69,7 @@ export default function CleanedLinks() {
       zone: "UTC",
     }).toFormat("M/d/yyyy");
 
-  const getBackgroundColor = (log: CleanLinksLog) => {
+  const getBackgroundColor = (log: SerializeFrom<CleanLinksLog>) => {
     if (log.status === "failure") {
       return "red.100";
     }

@@ -56,8 +56,8 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Feedback() {
-  const { feedbackTypes } = useLoaderData();
-  const actionData = useActionData();
+  const { feedbackTypes } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const toast = useToast();
   const navigate = useNavigate();
   const { state } = useNavigation();
