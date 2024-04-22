@@ -5,7 +5,7 @@ import {
   LinksFunction,
   LoaderFunction,
   redirect,
-  V2_MetaFunction,
+  MetaFunction,
 } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
@@ -21,7 +21,7 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const meta: V2_MetaFunction = () => [{ title: "Success!" }];
+export const meta: MetaFunction = () => [{ title: "Success!" }];
 
 interface LoaderData {
   shrtlnk: Shrtlnk;

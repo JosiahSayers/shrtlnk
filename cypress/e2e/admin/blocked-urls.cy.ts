@@ -1,7 +1,6 @@
 describe("Admin Blocked URLs", () => {
-  before(() => cy.login("admin@test.com"));
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login("admin@test.com");
     cy.findAllByText("Admin Dashboard").filter(":visible").click();
     cy.findAllByText("Blocked URLs").filter("a").click();
     cy.get("h2").should("be.visible").and("have.text", "Blocked URLs");

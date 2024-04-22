@@ -75,7 +75,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Index() {
-  const actionData = useActionData();
+  const actionData = useActionData<typeof action>();
   const { error, getInputProps } = useField("url", { formId: "url-form" });
 
   return (

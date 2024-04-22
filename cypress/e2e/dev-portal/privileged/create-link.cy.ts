@@ -2,9 +2,8 @@ import { Shrtlnk } from "@prisma/client";
 import ShortUniqueId from "short-unique-id";
 
 describe("Create Privileged Link", () => {
-  before(() => cy.login("privileged@test.com"));
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login("privileged@test.com");
     cy.visit("/developer/create-privileged-link");
   });
 

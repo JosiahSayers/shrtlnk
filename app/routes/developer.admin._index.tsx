@@ -75,7 +75,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function AdminIndex() {
-  const data = useLoaderData();
+  const data = useLoaderData<typeof loader>();
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (

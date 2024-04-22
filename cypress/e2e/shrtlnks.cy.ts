@@ -1,7 +1,7 @@
 import { Shrtlnk, BlockedUrl } from "@prisma/client";
 
 describe("Home Page", () => {
-  before(() => cy.visit("/"));
+  beforeEach(() => cy.visit("/"));
 
   describe("Page content", () => {
     it("Renders the form", () => {

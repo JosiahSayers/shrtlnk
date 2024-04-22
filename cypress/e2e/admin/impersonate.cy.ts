@@ -1,7 +1,6 @@
 describe("Admin Impersonate", () => {
-  before(() => cy.login("admin@test.com"));
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login("admin@test.com");
     cy.findAllByText("Admin Dashboard").filter(":visible").click();
     cy.findByText("Impersonate").click();
   });
@@ -14,7 +13,6 @@ describe("Admin Impersonate", () => {
   it("lists all users in a select", () => {
     cy.findByText("Admin Developer (admin@test.com)");
     cy.findByText("Appless Developer (noapps@test.com)");
-    cy.findByText("Legacy User (legacy@test.com)");
     cy.findByText("John Developer (test@test.com)");
     cy.get("select").children().should("have.length", 5);
   });

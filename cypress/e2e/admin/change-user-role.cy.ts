@@ -4,10 +4,9 @@ describe("Change User Role", () => {
   let testUser: User;
   before(() => {
     cy.task("createUser").then((u) => (testUser = u as User));
-    cy.login("admin@test.com");
   });
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login("admin@test.com");
     cy.findAllByText("Admin Dashboard").filter(":visible").click();
     cy.findAllByText("Change User Role").filter("a").click();
     cy.get("h2").should("be.visible").and("have.text", "Change User Role");

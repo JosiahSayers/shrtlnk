@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export default function RedirectPage() {
-  const link = useLoaderData();
+  const link = useLoaderData<typeof loader>();
   const adSeconds = 10;
   const [timeoutRef, setTimeoutRef] = useState<ReturnType<typeof setTimeout>>();
 

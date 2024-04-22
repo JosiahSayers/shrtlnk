@@ -28,17 +28,17 @@ import "@testing-library/cypress/add-commands";
 
 const customCommands = {
   login: (email = "test@test.com", password = "password") => {
-    cy.visit("/developer/signin");
-    cy.findByLabelText("Email Address").type(email);
-    cy.findByLabelText("Password").type(password);
-    cy.findByText("Sign in").click();
-    cy.location("pathname", { timeout: 10000 }).should(
-      "include",
-      "/developer/applications"
-    );
-  },
-  preserveAuthCookie: () => {
-    Cypress.Cookies.preserveOnce("shrtlnk_session");
+    cy.session(email, () => {
+      cy.visit("/developer/signin");
+      cy.findByLabelText("Email Address").type(email);
+      cy.findByLabelText("Password").type(password);
+      cy.findByText("Sign in").click();
+      cy.location("pathname", { timeout: 10000 }).should(
+        "include",
+        "/developer/applications"
+      );
+    });
+    cy.visit("/developer/applications");
   },
   logout: () => {
     cy.visit("/developer/signout");

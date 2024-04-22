@@ -1,7 +1,6 @@
 describe("Feedback Form", () => {
-  before(() => cy.login());
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login();
     cy.findAllByText("Feedback").filter("a").filter(":visible").click();
   });
   after(() => cy.logout());

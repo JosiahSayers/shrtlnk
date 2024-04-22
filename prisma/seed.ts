@@ -19,24 +19,6 @@ async function seed() {
     create: user1Data,
   });
 
-  const legacyUserData = {
-    email: "legacy@test.com",
-    firstName: "Legacy",
-    lastName: "User",
-    password: "",
-    dotnetPassword:
-      "oI0q5vlL3nk7/NWIQQ49+A==.JKjrP/IU3815bwj+lWnVQZlXU529yFAbfenUEu3rQbA=", // password
-    dotnetSaltArray:
-      "[160,141,42,230,249,75,222,121,59,252,213,136,65,14,61,248]",
-    role: "Developer",
-    verified: true,
-  };
-  const legacyUser = await db.user.upsert({
-    where: { email: "legacy@test.com" },
-    update: legacyUserData,
-    create: legacyUserData,
-  });
-
   const noAppsUser = await db.user.upsert({
     where: { email: "noapps@test.com" },
     update: { ...user1Data, firstName: "Appless", email: "noapps@test.com" },
@@ -80,7 +62,7 @@ async function seed() {
     website: "shrtlnk.dev",
     apiKey: "shrtlnk-test-api-key",
     status: "Valid",
-    userId: legacyUser.id,
+    userId: user.id,
     createdAt: testDate,
   };
   const shrlnkWebsiteApplication = await db.application.upsert({

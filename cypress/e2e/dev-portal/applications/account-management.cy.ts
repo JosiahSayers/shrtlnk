@@ -1,7 +1,6 @@
 describe("Account management", () => {
-  before(() => cy.login());
   beforeEach(() => {
-    cy.preserveAuthCookie();
+    cy.login();
     cy.findByText("Hey there, John").click();
   });
   after(() => cy.logout());

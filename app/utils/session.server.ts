@@ -6,10 +6,6 @@ import { logger } from "~/utils/logger.server";
 
 import { db } from "./db.server";
 import {
-  authenticateLegacyUser,
-  isLegacyUser,
-} from "./legacy-authenticate.server";
-import {
   createPasswordResetForUser,
   doPasswordsMatch,
   hashPassword,
@@ -47,13 +43,7 @@ export async function signin({
     where: { id: user.id },
     data: { lastLoginAttempt: new Date() },
   });
-  let isAuthenticated: boolean;
-
-  if (isLegacyUser(user)) {
-    isAuthenticated = await authenticateLegacyUser(user, password);
-  } else {
-    isAuthenticated = await doPasswordsMatch(password, user.password);
-  }
+  const isAuthenticated = await doPasswordsMatch(password, user.password);
 
   user = await db.user.update({
     where: { id: user.id },

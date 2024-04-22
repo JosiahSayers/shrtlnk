@@ -66,7 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function SignIn() {
-  const { passwordResetStatus } = useLoaderData();
+  const { passwordResetStatus } = useLoaderData<typeof loader>();
   const actionData = useActionData<ActionData>();
   const [searchParams] = useSearchParams();
   const toast = useToast();

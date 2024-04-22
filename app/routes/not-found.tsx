@@ -1,7 +1,7 @@
-import { V2_MetaFunction } from "@remix-run/node";
+import { MetaFunction } from "@remix-run/node";
 import WebsiteTitle from "~/components/title";
 
-export const meta: V2_MetaFunction = () => [{ title: "Not Found!" }];
+export const meta: MetaFunction = () => [{ title: "Not Found!" }];
 
 export default function NotFound() {
   return (

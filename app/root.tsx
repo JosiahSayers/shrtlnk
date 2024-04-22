@@ -1,11 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { withEmotionCache } from "@emotion/react";
 import { useContext, useEffect } from "react";
-import {
-  ErrorBoundaryComponent,
-  LinksFunction,
-  V2_MetaFunction,
-} from "@remix-run/node";
+import { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -17,8 +13,10 @@ import {
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
 import WebsiteTitle from "~/components/title";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import { SpeedInsights } from "@vercel/speed-insights/remix";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   { charset: "utf-8" },
   { title: "shrtlnk - Simple Link Shortener" },
   { name: "viewport", content: "width=device-width,initial-scale=1" },
@@ -111,22 +109,23 @@ const Document = withEmotionCache(
           ))}
         </head>
         <body>
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
+          <ChakraProvider>
+            {children}
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+            <SpeedInsights />
+          </ChakraProvider>
         </body>
       </html>
     );
   }
 );
 
+export function Layout({ children }: { children: React.ReactNode }) {
+  return <Document>{children}</Document>;
+}
+
 export default function App() {
-  return (
-    <Document>
-      <ChakraProvider>
-        <Outlet />
-      </ChakraProvider>
-    </Document>
-  );
+  return <Outlet />;
 }
