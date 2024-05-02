@@ -60,7 +60,26 @@ export async function getShrtlnk(
   createLoadEntry = false
 ): Promise<Shrtlnk | null> {
   const link = await db.shrtlnk.findUnique({ where: { key } });
-  if (link && createLoadEntry) {
+  if (!link) {
+    return null;
+  }
+  const isSafe = await isUrlSafe(link.url);
+  if (!isSafe) {
+    await db.$transaction([
+      db.blockedUrl.create({
+        data: {
+          url: link.url,
+          applicationId: link.applicationId ?? "unknown",
+          foundBy: "Load Check",
+          linkCreatedAt: link.createdAt,
+        },
+      }),
+      db.shrtlnk.delete({ where: { id: link.id } }),
+    ]);
+    return null;
+  }
+
+  if (createLoadEntry) {
     await db.$transaction([
       db.shrtlnkLoad.create({
         data: {
