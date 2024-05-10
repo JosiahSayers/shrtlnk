@@ -18,6 +18,7 @@ import {
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
 import WebsiteTitle from "~/components/title";
+import AppLoadingBar from "~/components/AppLoadingBar";
 
 export const meta: V2_MetaFunction = () => [
   { charset: "utf-8" },
@@ -129,6 +130,7 @@ export default function App() {
   return (
     <Document>
       <ChakraProvider>
+        <AppLoadingBar />
         <Outlet />
       </ChakraProvider>
     </Document>
