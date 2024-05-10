@@ -1,3 +1,4 @@
+import { HStack, Spinner } from "@chakra-ui/react";
 import {
   Bar,
   BarChart,
@@ -16,6 +17,7 @@ type Props = {
   id: string;
   xAxisKey: string;
   dataKey: string;
+  loading?: boolean;
 };
 
 export default function BarChartCard({
@@ -26,20 +28,27 @@ export default function BarChartCard({
   id,
   xAxisKey,
   dataKey,
+  loading,
 }: Props) {
   return (
     <div className="card text-center mb-3">
       <div className="card-body">
         <h5 className="card-title">{title}</h5>
-        <ResponsiveContainer height={height}>
-          <BarChart width={width} height={height} data={data} id={id}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey={xAxisKey} />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey={dataKey} fill="#8884d8" />
-          </BarChart>
-        </ResponsiveContainer>
+        {loading ? (
+          <HStack justifyContent="center" alignItems="center" height={height}>
+            <Spinner size="xl" />
+          </HStack>
+        ) : (
+          <ResponsiveContainer height={height}>
+            <BarChart width={width} height={height} data={data} id={id}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey={xAxisKey} />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey={dataKey} fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );

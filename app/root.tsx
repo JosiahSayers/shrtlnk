@@ -13,6 +13,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
@@ -61,6 +62,9 @@ export const links: LinksFunction = () => {
 };
 
 export const ErrorBoundary: ErrorBoundaryComponent = () => {
+  const error = useRouteError();
+  console.log(error);
+
   return (
     <Document>
       <ChakraProvider>
