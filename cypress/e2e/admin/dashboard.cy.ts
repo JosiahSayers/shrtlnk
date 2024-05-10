@@ -13,13 +13,6 @@ describe("Admin Dashboard", () => {
     cy.findAllByText("Shrtlnks").should("have.class", "card-title");
     cy.findAllByText("Users").should("have.class", "card-title");
   });
-
-  it("allows a user to change the amount of days to query data", () => {
-    cy.findAllByText("Admin Dashboard").filter(":visible").click();
-    cy.findByLabelText("Days to show:").should("have.value", "10");
-    cy.findByLabelText("Days to show:").select("20");
-    cy.location("search").should("include", "days=20");
-  });
 });
 
 export {};

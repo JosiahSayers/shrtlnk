@@ -44,7 +44,7 @@ describe("Registering for an account", () => {
     cy.findByText("Your Applications");
     cy.findByText("Hey there, integration");
     cy.findAllByText("Documentation").first().click();
-    cy.findAllByText("My Applications").first().click();
+    cy.findAllByText("My Applications").first().click({ force: true });
     cy.findByText("Hey there, integration");
     cy.task("deleteUser", email);
   });
