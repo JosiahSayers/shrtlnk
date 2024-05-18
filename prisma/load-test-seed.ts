@@ -1,5 +1,4 @@
 import ShortUniqueId from "short-unique-id";
-import { doesKeyExist } from "~/shrtlnk.server";
 import { db } from "~/utils/db.server";
 
 const batchSize = 1000;
@@ -7,11 +6,6 @@ const batchSize = 1000;
 async function seed() {
   const totalToCreate = 1000000;
   let reportedProgress = 0;
-
-  let key: string;
-  do {
-    key = new ShortUniqueId({ dictionary: "alphanum_lower" }).randomUUID(6);
-  } while (await doesKeyExist(key));
 
   for (let i = 0; i < totalToCreate; i += batchSize) {
     const newProgress = Math.floor((i / totalToCreate) * 100);

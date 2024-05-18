@@ -95,7 +95,7 @@ export async function getShrtlnk(
   return link;
 }
 
-export async function doesKeyExist(key: string): Promise<boolean> {
+async function doesKeyExist(key: string): Promise<boolean> {
   return !!(await getShrtlnk(key));
 }
 
