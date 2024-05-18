@@ -1,15 +1,17 @@
 import { logger } from "~/utils/logger.server";
 
-const apiKey = process.env.SAFE_BROWSING_API_KEY;
-if (!apiKey) throw new Error("SAFE_BROWSING_API_KEY not defined");
-const apiUrl = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKey}`;
+function apiUrl() {
+  const apiKey = process.env.SAFE_BROWSING_API_KEY;
+  if (!apiKey) throw new Error("SAFE_BROWSING_API_KEY not defined");
+  return `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKey}`;
+}
 
 export const getUrlBatchResponses = async (
   urls: string[]
 ): Promise<SafeBrowsingApiResponse | null> => {
   try {
     const request = createRequest(urls);
-    const res = await fetch(apiUrl, {
+    const res = await fetch(apiUrl(), {
       body: JSON.stringify(request),
       method: "POST",
     });
@@ -29,7 +31,7 @@ export const getUrlBatchResponses = async (
 export const isUrlSafe = async (url: string): Promise<boolean> => {
   try {
     const request = createRequest(url);
-    const res = await fetch(apiUrl, {
+    const res = await fetch(apiUrl(), {
       body: JSON.stringify(request),
       method: "POST",
     });

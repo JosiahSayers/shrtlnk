@@ -36,6 +36,7 @@ model Shrtlnk {
   loads         ShrtlnkLoad[]
 
   @@index([createdAt])
+  @@index([url, applicationId])
 }
 
 model ShrtlnkLoad {
