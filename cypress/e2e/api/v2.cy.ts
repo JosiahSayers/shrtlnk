@@ -95,33 +95,34 @@ describe("API", () => {
   });
 
   it("returns the existing shrtlnk when one already exists for this URL, api-key combo", () => {
+    const url = `http://duplicatetest.com/${new Date().getTime()}`;
     cy.request({
       url: "/api/v2/link",
       method: "POST",
-      body: { url: "https://google.com/1" },
+      body: { url },
       headers: { "api-key": "shrtlnk-test-api-key" },
       failOnStatusCode: false,
     }).then((res) => {
-      expect(res.body.url).to.eq("https://google.com/1");
+      expect(res.body.url).to.eq(url);
       expect(typeof res.body.key).to.eq("string");
       expect(res.body.shrtlnk).to.eq(`https://shrtlnk.dev/${res.body.key}`);
       expect(res.status).to.eq(201);
+    });
 
-      cy.request({
-        url: "/api/v2/link",
-        method: "POST",
-        body: { url: "https://google.com/1" },
-        headers: { "api-key": "shrtlnk-test-api-key" },
-        failOnStatusCode: false,
-      }).then((res) => {
-        expect(res.body.message).to.eq(
-          "This URL was already stored for this app"
-        );
-        expect(res.body.url).to.eq("https://google.com/1");
-        expect(typeof res.body.key).to.eq("string");
-        expect(res.body.shrtlnk).to.eq(`https://shrtlnk.dev/${res.body.key}`);
-        expect(res.status).to.eq(200);
-      });
+    cy.request({
+      url: "/api/v2/link",
+      method: "POST",
+      body: { url },
+      headers: { "api-key": "shrtlnk-test-api-key" },
+      failOnStatusCode: false,
+    }).then((res) => {
+      expect(res.body.message).to.eq(
+        "This URL was already stored for this app"
+      );
+      expect(res.body.url).to.eq(url);
+      expect(typeof res.body.key).to.eq("string");
+      expect(res.body.shrtlnk).to.eq(`https://shrtlnk.dev/${res.body.key}`);
+      expect(res.status).to.eq(200);
     });
   });
 });
