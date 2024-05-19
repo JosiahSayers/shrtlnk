@@ -11,6 +11,7 @@
     "test": "jest",
     "cypress": "TZ=America/New_York CYPRESS_BASE_URL=${BASE_URL:=http://localhost:3000} cypress ${TEST_COMMAND:=open} --browser chrome",
     "db:seed": "node --require esbuild-register prisma/seed.ts",
+    "db:seed-load-test": "node --require esbuild-register prisma/load-test-seed.ts",
     "db:drop": "node --require esbuild-register prisma/drop.ts",
     "db:migrate": "prisma db push",
     "clean-urls": "node --require esbuild-register scripts/check-links.ts",

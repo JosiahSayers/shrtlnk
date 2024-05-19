@@ -13,10 +13,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
 import styles from "~/styles/root.css";
 import { ServerStyleContext, ClientStyleContext } from "./context";
 import WebsiteTitle from "~/components/title";
+import AppLoadingBar from "~/components/AppLoadingBar";
 
 export const meta: V2_MetaFunction = () => [
   { charset: "utf-8" },
@@ -61,6 +63,9 @@ export const links: LinksFunction = () => {
 };
 
 export const ErrorBoundary: ErrorBoundaryComponent = () => {
+  const error = useRouteError();
+  console.log(error);
+
   return (
     <Document>
       <ChakraProvider>
@@ -125,6 +130,7 @@ export default function App() {
   return (
     <Document>
       <ChakraProvider>
+        <AppLoadingBar />
         <Outlet />
       </ChakraProvider>
     </Document>

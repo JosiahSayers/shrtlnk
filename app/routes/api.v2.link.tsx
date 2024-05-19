@@ -3,6 +3,7 @@ import { getAppByApiKey } from "~/application.server";
 import { urlSchema } from "~/routes/_index";
 import { createShrtlnk } from "~/shrtlnk.server";
 import { defaultCorsHeaders, jsonWithCors } from "~/utils/api-helpers.server";
+import { db } from "~/utils/db.server";
 
 export const loader: LoaderFunction = () =>
   new Response(null, {
@@ -41,6 +42,25 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   try {
+    const existingLinkForApp = await db.shrtlnk.findFirst({
+      where: {
+        url: urlValidationResult.data,
+        applicationId: application.id,
+      },
+    });
+
+    if (existingLinkForApp) {
+      return jsonWithCors(
+        {
+          message: "This URL was already stored for this app",
+          url: existingLinkForApp.url,
+          key: existingLinkForApp.key,
+          shrtlnk: `https://shrtlnk.dev/${existingLinkForApp.key}`,
+        },
+        200
+      );
+    }
+
     const newShrtlnk = await createShrtlnk(
       urlValidationResult.data,
       application.apiKey
