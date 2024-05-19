@@ -80,14 +80,15 @@ describe("API", () => {
   });
 
   it("returns the expected success response", () => {
+    const url = `http://duplicatetest.com/${new Date().getTime()}`;
     cy.request({
       url: "/api/v2/link",
       method: "POST",
-      body: { url: "https://google.com" },
+      body: { url },
       headers: { "api-key": "shrtlnk-test-api-key" },
       failOnStatusCode: false,
     }).then((res) => {
-      expect(res.body.url).to.eq("https://google.com");
+      expect(res.body.url).to.eq(url);
       expect(typeof res.body.key).to.eq("string");
       expect(res.body.shrtlnk).to.eq(`https://shrtlnk.dev/${res.body.key}`);
       expect(res.status).to.eq(201);
