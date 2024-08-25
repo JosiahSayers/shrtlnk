@@ -20,6 +20,7 @@ import { ValidatedForm, validationError } from "remix-validated-form";
 import { z } from "zod";
 import TextInput from "~/components/developer/text-input";
 import { createShrtlnk, DuplicateKeyError } from "~/shrtlnk.server";
+import { db } from "~/utils/db.server";
 import { logger } from "~/utils/logger.server";
 import { requirePrivilegedRole } from "~/utils/session.server";
 
@@ -46,7 +47,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  await requirePrivilegedRole(request);
+  const user = await requirePrivilegedRole(request);
   const validationResult = await validator.validate(await request.formData());
 
   if (validationResult.error) {
@@ -64,6 +65,13 @@ export const action: ActionFunction = async ({ request }) => {
       false,
       validationResult.data.customShort
     );
+    await db.userActivity.create({
+      data: {
+        userId: user.id,
+        activity: "privileged-link.created",
+        note: `Link ID: ${link!.id}`,
+      },
+    });
   } catch (e) {
     logger.error("Failed creating privileged link", e);
     if (e instanceof DuplicateKeyError) {
