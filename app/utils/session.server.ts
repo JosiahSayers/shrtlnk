@@ -62,7 +62,20 @@ export async function signin({
       lastLoginSuccess: isAuthenticated ? new Date() : user.lastLoginSuccess,
     },
   });
+
+  await logSigninActivity(user.id, isAuthenticated);
+
   return isAuthenticated ? user : null;
+}
+
+async function logSigninActivity(userId: string, successful: boolean) {
+  const activity = successful ? "sign-in.successful" : "sign-in.failed";
+  await db.userActivity.create({
+    data: {
+      userId,
+      activity,
+    },
+  });
 }
 
 export async function updateName(
@@ -70,10 +83,22 @@ export async function updateName(
   lastName: string,
   id: string
 ) {
-  return db.user.update({
+  const user = await db.user.findUnique({ where: { id } });
+  const updatedUser = await db.user.update({
     where: { id },
     data: { firstName, lastName },
   });
+  await db.userActivity.create({
+    data: {
+      userId: user!.id,
+      activity: "name-updated",
+      note: `From ${user!.firstName} ${user!.lastName}, To ${
+        updatedUser.firstName
+      } ${updatedUser.lastName}`,
+    },
+  });
+
+  return updatedUser;
 }
 
 export async function changePassword(
@@ -83,12 +108,26 @@ export async function changePassword(
 ) {
   const user = await db.user.findUnique({ where: { id } });
   if (!(await doPasswordsMatch(currentPassword, user!.password))) {
+    await db.userActivity.create({
+      data: {
+        userId: user!.id,
+        activity: "password-updated.failed.current-password-mismatch",
+      },
+    });
     throw new Error("password mismatch");
   }
-  return db.user.update({
+  const updatedUser = await db.user.update({
     where: { id },
     data: { password: await hashPassword(newPassword) },
   });
+  await db.userActivity.create({
+    data: {
+      userId: user!.id,
+      activity: "password-updated",
+    },
+  });
+
+  return updatedUser;
 }
 
 export async function startPasswordReset(
@@ -284,6 +323,13 @@ export async function requireAdminRole(
   const user = await db.user.findUnique({ where: { id: userData.id } });
   const isAdmin = user?.role === "Admin";
   if (!isAdmin) {
+    await db.userActivity.create({
+      data: {
+        userId: userData.id,
+        activity: "access-denied.admin",
+        note: `Current role: ${user!.role}`,
+      },
+    });
     throw redirect(`/not-found`);
   }
   return user;
@@ -297,6 +343,13 @@ export async function requirePrivilegedRole(
   const user = await db.user.findUnique({ where: { id: userData.id } });
   const isPrivileged = user?.role === "Privileged" || user?.role === "Admin";
   if (!isPrivileged) {
+    await db.userActivity.create({
+      data: {
+        userId: userData.id,
+        activity: "access-denied.privileged",
+        note: `Current role: ${user!.role}`,
+      },
+    });
     throw redirect("/not-found");
   }
   return user;

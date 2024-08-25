@@ -46,7 +46,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  await requireAdminRole(request);
+  const admin = await requireAdminRole(request);
   const form = await parseForm<{ user: string; selectedRole: string }>(request);
   if (
     !form.user ||
@@ -58,6 +58,20 @@ export const action: ActionFunction = async ({ request }) => {
   const user = await db.user.update({
     where: { id: form.user },
     data: { role: form.selectedRole },
+  });
+  await db.userActivity.createMany({
+    data: [
+      {
+        userId: admin.id,
+        activity: "admin-actions.updated-user-role",
+        note: `Updated user ID: ${user.id}. new role: ${form.selectedRole}`,
+      },
+      {
+        userId: user.id,
+        activity: "role-changed",
+        note: `new role: ${form.selectedRole}`,
+      },
+    ],
   });
   if (form.selectedRole === "Privileged") {
     await makeUserPrivilegedRoleEmail(user);
